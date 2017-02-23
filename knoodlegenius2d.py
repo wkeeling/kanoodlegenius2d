@@ -33,10 +33,16 @@ class Knoodle:
 
     def flip_x(self):
         """Flip the knoodle over on the x axis."""
+        x_conversions = {
+            Orientation.SE: Orientation.NE,
+            Orientation.NE: Orientation.SE,
+            Orientation.NW: Orientation.SW,
+            Orientation.SW: Orientation.NW,
+            Orientation.E: Orientation.E,
+            Orientation.W: Orientation.W
+        }
         for part in self.parts:
-            if part.orientation:
-                part.rotate()
-                part.rotate()
+            part.orientation = x_conversions.get(part.orientation)
         self.side = next(self._sides)
 
     def flip_y(self):
@@ -69,23 +75,11 @@ class Hole:
 
     def __init__(self):
         self.filled = False
-        self._neighbours = {}
+        self.neighbours = {}  # Add a neighbour with Orientation key, Hole val
 
-    def add_neighbour(self, hole, orientation):
-        self._neighbours[orientation] = hole
 
-    def neighbour_at(self, orientation):
-        """Get the neighbouring hole at the specified orientation.
-
-        Args:
-            orientation:
-                The orientation to get the neighbour for.
-        Returns:
-            The neighbouring hole, or None if no neighbouring hole
-            at the specified orientation.
-
-        """
-        self._neighbours.get(orientation)
+class Board:
+    """Manually wire up each hole on the board adding its neighbours."""
 
 
 class Orientation:

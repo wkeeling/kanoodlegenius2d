@@ -19,6 +19,10 @@ class OrientationTest(TestCase):
 
         self.assertEqual(o, Orientation.NE)
 
+    def test_invalid_orientation(self):
+        with self.assertRaises(ValueError):
+            Orientation.rotate('foobar')
+
 
 class PartTest(TestCase):
 
@@ -61,11 +65,13 @@ class KnoodleTest(TestCase):
         part2 = Part()
         part3 = Part()
         part4 = Part()
+        part5 = Part()
         part1.link(part2, Orientation.SE)
         part2.link(part3, Orientation.SE)
         part3.link(part4, Orientation.NE)
+        part4.link(part5, Orientation.E)
 
-        knoodle = Knoodle(Knoodle.RED, part1, part2, part3, part4)
+        knoodle = Knoodle(Knoodle.RED, part1, part2, part3, part4, part5)
 
         knoodle.flip_x()
 
@@ -73,5 +79,6 @@ class KnoodleTest(TestCase):
         self.assertEqual(part2.orientation, Orientation.NE)
         self.assertEqual(part3.orientation, Orientation.NE)
         self.assertEqual(part4.orientation, Orientation.SE)
+        self.assertEqual(part5.orientation, Orientation.E)
 
 
