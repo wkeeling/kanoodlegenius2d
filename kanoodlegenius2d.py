@@ -2,7 +2,7 @@ import collections
 import itertools
 
 
-class Knoodle:
+class PuzzlePiece:
 
     LIGHT_BLUE = 1
     DARK_BLUE = 2
@@ -13,14 +13,14 @@ class Knoodle:
     PINK = 7
 
     def __init__(self, colour, *parts):
-        """Initialise a new Knoodle with a colour and one or more linked
+        """Initialise a new PuzzlePiece with a colour and one or more linked
         parts that constitute it.
 
         Args:
             colour:
-                The colour of this Knoodle.
+                The colour of this PuzzlePiece.
             parts:
-                One or more linked parts that make up this Knoodle.
+                One or more linked parts that make up this PuzzlePiece.
         """
         self.parts = parts
         self.colour = colour
@@ -32,7 +32,7 @@ class Knoodle:
             part.rotate()
 
     def flip_x(self):
-        """Flip the knoodle over on the x axis."""
+        """Flip the puzzle piece over on the x axis."""
         x_conversions = {
             Orientation.SE: Orientation.NE,
             Orientation.NE: Orientation.SE,
@@ -46,8 +46,18 @@ class Knoodle:
         self.side = next(self._sides)
 
     def flip_y(self):
-        """Flip the knoodle over on the y axis."""
+        """Flip the puzzle piece over on the y axis."""
         self.side = next(self._sides)
+        y_conversions = {
+            Orientation.SE: Orientation.SW,
+            Orientation.NE: Orientation.NW,
+            Orientation.NW: Orientation.NE,
+            Orientation.SW: Orientation.SE,
+            Orientation.E: Orientation.W,
+            Orientation.W: Orientation.E
+        }
+        for part in self.parts:
+            part.orientation = y_conversions.get(part.orientation)
 
     def __iter__(self):
         return iter(self.parts)

@@ -1,9 +1,9 @@
 from unittest.case import TestCase
 
-from knoodlegenius2d import (Knoodle,
-                             Orientation,
-                             Part,
-                             Side)
+from kanoodlegenius2d import (PuzzlePiece,
+                              Orientation,
+                              Part,
+                              Side)
 
 
 class OrientationTest(TestCase):
@@ -43,7 +43,7 @@ class PartTest(TestCase):
         self.assertEqual(child.orientation, Orientation.W)
 
 
-class KnoodleTest(TestCase):
+class PuzzlePieceTest(TestCase):
 
     def test_flip_x(self):
         part1 = Part()
@@ -52,11 +52,11 @@ class KnoodleTest(TestCase):
         part1.link(part2, Orientation.NE)
         part2.link(part3, Orientation.NE)
 
-        knoodle = Knoodle(Knoodle.RED, part1, part2, part3)
+        piece = PuzzlePiece(PuzzlePiece.RED, part1, part2, part3)
 
-        knoodle.flip_x()
+        piece.flip_x()
 
-        self.assertEqual(knoodle.side, Side.B)
+        self.assertEqual(piece.side, Side.B)
         self.assertEqual(part2.orientation, Orientation.SE)
         self.assertEqual(part3.orientation, Orientation.SE)
 
@@ -71,14 +71,32 @@ class KnoodleTest(TestCase):
         part3.link(part4, Orientation.NE)
         part4.link(part5, Orientation.E)
 
-        knoodle = Knoodle(Knoodle.RED, part1, part2, part3, part4, part5)
+        piece = PuzzlePiece(PuzzlePiece.RED, part1, part2, part3, part4, part5)
 
-        knoodle.flip_x()
+        piece.flip_x()
 
-        self.assertEqual(knoodle.side, Side.B)
+        self.assertEqual(piece.side, Side.B)
         self.assertEqual(part2.orientation, Orientation.NE)
         self.assertEqual(part3.orientation, Orientation.NE)
         self.assertEqual(part4.orientation, Orientation.SE)
         self.assertEqual(part5.orientation, Orientation.E)
+
+    def test_flip_y(self):
+        part1 = Part()
+        part2 = Part()
+        part3 = Part()
+        part4 = Part()
+        part1.link(part2, Orientation.NE)
+        part2.link(part3, Orientation.NE)
+        part3.link(part4, Orientation.E)
+
+        piece = PuzzlePiece(PuzzlePiece.RED, part1, part2, part3, part4)
+
+        piece.flip_y()
+
+        self.assertEqual(piece.side, Side.B)
+        self.assertEqual(part2.orientation, Orientation.NW)
+        self.assertEqual(part3.orientation, Orientation.NW)
+        self.assertEqual(part4.orientation, Orientation.W)
 
 
