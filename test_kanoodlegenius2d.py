@@ -1,8 +1,9 @@
 from unittest.case import TestCase
 
-from kanoodlegenius2d import (PuzzlePiece,
+from kanoodlegenius2d import (Board,
                               Orientation,
                               Part,
+                              PuzzlePiece,
                               Side)
 
 
@@ -100,3 +101,24 @@ class PuzzlePieceTest(TestCase):
         self.assertEqual(part4.orientation, Orientation.W)
 
 
+class BoardTest(TestCase):
+
+    def test_iterate_holes(self):
+        self.fail("Implement")
+
+    def test_iterate_empty_holes(self):
+        self.fail("Implement")
+
+    def test_place_piece_in_hole1(self):
+        self.fail("Implement")
+
+    def test_hole1_neighbours(self):
+        board = Board()
+        hole1 = board[0]
+
+        self.assertIsNotNone(hole1.neighbours.get(Orientation.E))
+        self.assertIsNotNone(hole1.neighbours.get(Orientation.SE))
+        self.assertIsNotNone(hole1.neighbours.get(Orientation.SW))
+        self.assertIsNone(hole1.neighbours.get(Orientation.W))
+        self.assertIsNone(hole1.neighbours.get(Orientation.NW))
+        self.assertIsNone(hole1.neighbours.get(Orientation.NE))
