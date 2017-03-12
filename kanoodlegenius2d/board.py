@@ -215,6 +215,11 @@ class Board:
     holes[34].neighbours[Orientation.NW] = holes[29]
     holes[34].neighbours[Orientation.NE] = holes[30]
 
+    def __init__(self):
+        """Initialise the board, and mark all holes as empty."""
+        for hole in self.holes:
+            hole.empty = True
+
     def place(self, piece, hole_pos):
         """Place a puzzle piece on the board in the specified hole.
 
@@ -232,6 +237,7 @@ class Board:
         """
         pass
 
+    @property
     def empties(self):
         """Return an iterator over the empty holes on the board.
 

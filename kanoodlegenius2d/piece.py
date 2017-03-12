@@ -66,18 +66,14 @@ class PuzzlePiece:
 
 class Part:
 
-    def __init__(self):
-        # A child part linked to us.
-        self.part = None
-        # Our orientation relative to our parent.
-        self.orientation = None
-
-    def link(self, part, orientation):
-        self.part = part
-        self.part.orientation = orientation
+    def __init__(self, orientation=None):
+        # Our starting orientation relative to a neighbour.
+        self.orientation = orientation
 
     def rotate(self):
-        """Rotate ourselves clockwise by one degree relative to our parent."""
+        """Rotate ourselves clockwise by one degree relative to our starting
+        orientation.
+        """
         if self.orientation:
             self.orientation = Orientation.rotate(self.orientation)
 
