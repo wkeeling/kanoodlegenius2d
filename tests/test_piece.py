@@ -1,28 +1,9 @@
-from unittest.case import TestCase
+from unittest import TestCase
 
-from kanoodlegenius2d import (Board,
-                              Orientation,
-                              Part,
-                              PuzzlePiece,
-                              Side)
-
-
-class OrientationTest(TestCase):
-
-    def test_rotate_one_degree(self):
-        o = Orientation.rotate(Orientation.E)
-
-        self.assertEqual(o, Orientation.SE)
-
-    def test_rotate_two_degrees(self):
-        o = Orientation.rotate(Orientation.W)
-        o = Orientation.rotate(o)
-
-        self.assertEqual(o, Orientation.NE)
-
-    def test_invalid_orientation(self):
-        with self.assertRaises(ValueError):
-            Orientation.rotate('foobar')
+from kanoodlegenius2d.orientation import Orientation
+from kanoodlegenius2d.piece import (Part,
+                                    PuzzlePiece,
+                                    Side)
 
 
 class PartTest(TestCase):
@@ -99,26 +80,3 @@ class PuzzlePieceTest(TestCase):
         self.assertEqual(part2.orientation, Orientation.NW)
         self.assertEqual(part3.orientation, Orientation.NW)
         self.assertEqual(part4.orientation, Orientation.W)
-
-
-class BoardTest(TestCase):
-
-    def test_iterate_holes(self):
-        self.fail("Implement")
-
-    def test_iterate_empty_holes(self):
-        self.fail("Implement")
-
-    def test_place_piece_in_hole1(self):
-        self.fail("Implement")
-
-    def test_hole1_neighbours(self):
-        board = Board()
-        hole1 = board[0]
-
-        self.assertIsNotNone(hole1.neighbours.get(Orientation.E))
-        self.assertIsNotNone(hole1.neighbours.get(Orientation.SE))
-        self.assertIsNotNone(hole1.neighbours.get(Orientation.SW))
-        self.assertIsNone(hole1.neighbours.get(Orientation.W))
-        self.assertIsNone(hole1.neighbours.get(Orientation.NW))
-        self.assertIsNone(hole1.neighbours.get(Orientation.NE))
