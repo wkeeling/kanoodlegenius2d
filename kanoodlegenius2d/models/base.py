@@ -1,10 +1,14 @@
+import logging
 import os
 
 from peewee import (Model,
                     SqliteDatabase)
 
+import kanoodlegenius2d.models
 
-database = None
+_LOG = logging.getLogger(__name__)
+
+database = SqliteDatabase(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
 
 
 def initialise():
@@ -12,8 +16,11 @@ def initialise():
     and establish a connection.
     """
     global database
-    database = SqliteDatabase(os.path.join(os.path.expanduser('~'),
-                                           '.kanoodlegenius2d.db'))
+    database.connect()
+    for k, v in vars(kanoodlegenius2d.models).items():
+        if isinstance(v, type) and issubclass(v, BaseModel):
+            _LOG.debug('Creating table {}'.format(k))
+            v.create_table(fail_silently=True)  # Don't error if the tables already exist
 
 
 def shutdown():
