@@ -5,7 +5,7 @@ from peewee import (Model,
                     SqliteDatabase)
 
 import kanoodlegenius2d.models
-from .noodle import Noodle
+from .orientation import Orientation
 
 _LOG = logging.getLogger(__name__)
 
@@ -16,6 +16,7 @@ def initialise():
     """Initialise the database, creating the database tables if they don't already
     exist, and set up initial data.
     """
+    from .noodle import Noodle
     global database
     database.connect()
 
@@ -26,14 +27,20 @@ def initialise():
             getattr(v, 'create_table')(fail_silently=True)  # Don't error if the tables already exist
 
     # Set up the initial data where is does not already exist
-    light_green = Noodle.create(name='light_green')
-    dark_green = Noodle.create(name='dark_green')
-    light_blue = Noodle.create(name='light_blue')
-    dark_blue = Noodle.create(name='dark_blue')
-    yellow = Noodle.create(name='yellow')
-    red = Noodle.create(name='red')
-    pink = Noodle.create(name='pink')
-
+    light_green = Noodle.create(name='light_green', part1=Orientation.SE, part2=Orientation.NE, part3=Orientation.E,
+                                part4=Orientation.NE)
+    dark_green = Noodle.create(name='dark_green', part1=Orientation.NE, part2=Orientation.SE, part3=Orientation.E,
+                               part4=Orientation.NE)
+    light_blue = Noodle.create(name='light_blue', part1=Orientation.SE, part2=Orientation.NE, part3=Orientation.E,
+                               part4=Orientation.E)
+    dark_blue = Noodle.create(name='dark_blue', part1=Orientation.E, part2=Orientation.E, part3=Orientation.NE,
+                              part4=Orientation.NE)
+    yellow = Noodle.create(name='yellow', part1=Orientation.NE, part2=Orientation.NE, part3=Orientation.SE,
+                           part4=Orientation.NE)
+    red = Noodle.create(name='red', part1=Orientation.NE, part2=Orientation.SE, part3=Orientation.NE,
+                        part4=Orientation.SE)
+    pink = Noodle.create(name='pink', part1=Orientation.NE, part2=Orientation.NW, part3=Orientation.E,
+                         part4=Orientation.NE)
 
 
 def shutdown():

@@ -13,5 +13,3 @@ class Noodle(BaseModel):
     part2 = FixedCharField(max_length=2)
     part3 = FixedCharField(max_length=2)
     part4 = FixedCharField(max_length=2)
-    part5 = FixedCharField(max_length=2)
-    part6 = FixedCharField(max_length=2)
