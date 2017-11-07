@@ -1,4 +1,4 @@
-from .orientation import Orientation
+from .models.orientation import Orientation
 
 
 class Hole:
