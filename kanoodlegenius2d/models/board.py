@@ -7,5 +7,9 @@ from .puzzle import Puzzle
 
 class Board(BaseModel):
     """Represents the board that a player is solving a puzzle on."""
-    player = ForeignKeyField(Player)
+    player = ForeignKeyField(Player, related_name='boards')
     puzzle = ForeignKeyField(Puzzle)
+
+    def initialise(self, puzzle):
+        # Create a BoardNoodle based on each PuzzleNoode
+        pass

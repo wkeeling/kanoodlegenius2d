@@ -6,4 +6,4 @@ from .game import Game
 
 class Level(BaseModel):
     """Represents a level within the game."""
-    game = ForeignKeyField(Game)
+    game = ForeignKeyField(Game, related_name='levels')

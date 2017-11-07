@@ -8,4 +8,4 @@ class Puzzle(BaseModel):
     """Represents a Kanoodle Genius puzzle, which is basically a
     board preconfigured with some noodles.
     """
-    level = ForeignKeyField(Level)
+    level = ForeignKeyField(Level, 'puzzles')
