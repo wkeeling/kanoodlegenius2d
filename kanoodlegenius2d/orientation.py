@@ -20,7 +20,7 @@ class Orientation:
                                           Orientation.E])
 
         if start not in orientations:
-            raise ValueError('Invalid orientation %s' % start)
+            raise ValueError('Invalid orientation {}'.format(start))
 
         while True:
             orientations.rotate()
