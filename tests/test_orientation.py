@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from kanoodlegenius2d.orientation import Orientation
+from kanoodlegenius2d.models.orientation import Orientation
 
 
 class OrientationTest(TestCase):
