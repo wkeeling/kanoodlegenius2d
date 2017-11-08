@@ -17,6 +17,8 @@ def initialise():
     exist, and set up initial data.
     """
     from .noodle import Noodle
+    from .level import Level
+    from .puzzle import Puzzle
     global database
     database.connect()
 
@@ -27,20 +29,50 @@ def initialise():
             getattr(v, 'create_table')(fail_silently=True)  # Don't error if the tables already exist
 
     # Set up the initial data where is does not already exist
-    light_green = Noodle.create(name='light_green', part1=Orientation.SE, part2=Orientation.NE, part3=Orientation.E,
-                                part4=Orientation.NE)
-    dark_green = Noodle.create(name='dark_green', part1=Orientation.NE, part2=Orientation.SE, part3=Orientation.E,
-                               part4=Orientation.NE)
-    light_blue = Noodle.create(name='light_blue', part1=Orientation.SE, part2=Orientation.NE, part3=Orientation.E,
-                               part4=Orientation.E)
-    dark_blue = Noodle.create(name='dark_blue', part1=Orientation.E, part2=Orientation.E, part3=Orientation.NE,
-                              part4=Orientation.NE)
-    yellow = Noodle.create(name='yellow', part1=Orientation.NE, part2=Orientation.NE, part3=Orientation.SE,
-                           part4=Orientation.NE)
-    red = Noodle.create(name='red', part1=Orientation.NE, part2=Orientation.SE, part3=Orientation.NE,
-                        part4=Orientation.SE)
-    pink = Noodle.create(name='pink', part1=Orientation.NE, part2=Orientation.NW, part3=Orientation.E,
-                         part4=Orientation.NE)
+    Noodle.create(designation='A', code='light_green',
+                  part1=Orientation.SE,
+                  part2=Orientation.NE,
+                  part3=Orientation.E,
+                  part4=Orientation.NE)
+    Noodle.create(designation='B', code='yellow',
+                  part1=Orientation.NE,
+                  part2=Orientation.NE,
+                  part3=Orientation.SE,
+                  part4=Orientation.NE)
+    Noodle.create(designation='C', code='dark_blue',
+                  part1=Orientation.E,
+                  part2=Orientation.E,
+                  part3=Orientation.NE,
+                  part4=Orientation.NE)
+    Noodle.create(designation='D', code='light_blue',
+                  part1=Orientation.E,
+                  part2=Orientation.E,
+                  part3=Orientation.NE,
+                  part4=Orientation.SE)
+    Noodle.create(designation='E', code='red',
+                  part1=Orientation.NE,
+                  part2=Orientation.SE,
+                  part3=Orientation.NE,
+                  part4=Orientation.SE)
+    Noodle.create(designation='G', code='dark_green',
+                  part1=Orientation.NE,
+                  part2=Orientation.SE,
+                  part3=Orientation.E,
+                  part4=Orientation.NE)
+    Noodle.create(designation='F', code='pink',
+                  part1=Orientation.NE,
+                  part2=Orientation.NW,
+                  part3=Orientation.E,
+                  part4=Orientation.NE)
+
+    level1 = Level.create(number=1, name='Super Pro')
+    level2 = Level.create(number=2, name='Champ')
+    level3 = Level.create(number=3, name='Whiz')
+
+    puzzle = Puzzle.create(level=level1, number=1)
+    light_blue = Noodle.get(Noodle.designation == 'D')
+    light_blue.rotate(increment=3)
+    puzzle.place(light_blue, position=3)
 
 
 def shutdown():
