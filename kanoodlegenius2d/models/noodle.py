@@ -2,6 +2,7 @@ from peewee import (CharField,
                     FixedCharField)
 
 from .base import BaseModel
+from .orientation import Orientation
 
 
 class Noodle(BaseModel):
@@ -22,3 +23,8 @@ class Noodle(BaseModel):
             increment:
                 The number of increments to rotate the noodle by.
         """
+        for _ in range(increment):
+            self.part1 = Orientation.rotate(self.part1)
+            self.part2 = Orientation.rotate(self.part2)
+            self.part3 = Orientation.rotate(self.part3)
+            self.part4 = Orientation.rotate(self.part4)

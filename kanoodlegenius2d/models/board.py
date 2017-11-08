@@ -10,6 +10,6 @@ class Board(BaseModel):
     player = ForeignKeyField(Player, related_name='boards')
     puzzle = ForeignKeyField(Puzzle)
 
-    def initialise(self, puzzle):
+    def setup(self, puzzle):
         # Create a BoardNoodle based on each PuzzleNoode
         pass

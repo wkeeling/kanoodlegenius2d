@@ -3,7 +3,6 @@ from peewee import (ForeignKeyField,
 
 from .base import BaseModel
 from .level import Level
-from .puzzlenoodle import PuzzleNoodle
 
 
 class Puzzle(BaseModel):
@@ -22,5 +21,6 @@ class Puzzle(BaseModel):
             position:
                 The position of the root part of the noodle on the puzzle.
         """
+        from .puzzlenoodle import PuzzleNoodle
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position, part1=noodle.part1,
                             part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)

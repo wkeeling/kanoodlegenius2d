@@ -3,7 +3,8 @@ import sqlite3
 from unittest import TestCase
 
 from kanoodlegenius2d.models import (Game,
-                                     initialise)
+                                     initialise,
+                                     shutdown)
 
 
 class InitialiseTest(TestCase):
@@ -19,6 +20,7 @@ class InitialiseTest(TestCase):
         self._datafile_path = os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db')
 
     def tearDown(self):
+        shutdown()
         try:
             os.remove(self._datafile_path)
         except OSError:
@@ -36,6 +38,7 @@ class StartNewGameTest(TestCase):
         initialise()
 
     def tearDown(self):
+        shutdown()
         try:
             os.remove(self._datafile_path)
         except OSError:

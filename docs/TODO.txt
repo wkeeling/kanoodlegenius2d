@@ -1,2 +1,8 @@
-- Add tests for individual model methods that are coming into existence (e.g. Noodle.rotate())
+- Add tests for individual model methods that are coming into existence
+    - Puzzle.place()
+    - Board.setup()
+    - Board.place()  (subtly different to Puzzle.place() as this is called by the player, and so will need to validate
+        that the board can accommodate the noodle in its specified configuration)
 - Perhaps move setup data code out of base.py
+- Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
+function and class level

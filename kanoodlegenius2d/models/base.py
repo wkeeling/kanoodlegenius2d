@@ -70,7 +70,7 @@ def initialise():
     level3 = Level.create(number=3, name='Whiz')
 
     puzzle = Puzzle.create(level=level1, number=1)
-    light_blue = Noodle.get(Noodle.designation == 'D')
+    light_blue = Noodle.get(Noodle.code == 'light_blue')
     light_blue.rotate(increment=3)
     puzzle.place(light_blue, position=3)
 
