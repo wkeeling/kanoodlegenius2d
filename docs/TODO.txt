@@ -1,0 +1,2 @@
+- Add tests for individual model methods that are coming into existence (e.g. Noodle.rotate())
+- Perhaps move setup data code out of base.py
