@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from kanoodlegenius2d.board import Board
-from kanoodlegenius2d.models.orientation import Orientation
+from kanoodlegenius2d.orientation import Orientation
 from kanoodlegenius2d.piece import (Part,
                                     PuzzlePiece)
 
