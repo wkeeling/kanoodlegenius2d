@@ -86,3 +86,7 @@ class BaseModel(Model):
     """Base model that all concrete model classes should inherit from."""
     class Meta:
         database = database
+
+
+class PositionUnavailableException(Exception):
+    """Indicates that a position on the board is unavailable (in use by another noodle)."""
