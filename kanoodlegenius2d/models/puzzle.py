@@ -19,7 +19,8 @@ class Puzzle(BaseModel):
             noodle:
                 The noodle instance to place on the puzzle.
             position:
-                The position of the root part of the noodle on the puzzle.
+                The hole position to place the root part of the noodle on to.
+                Board hole positions begin at 0.
         """
         from .puzzlenoodle import PuzzleNoodle
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position, part1=noodle.part1,
