@@ -8,7 +8,8 @@ from peewee import (CharField,
                     Model,
                     SqliteDatabase)
 
-from kanoodlegenius2d.orientation import Orientation
+from kanoodlegenius2d import holes
+from .orientation import Orientation
 
 _LOG = logging.getLogger(__name__)
 
@@ -35,10 +36,10 @@ def initialise():
                   part3=Orientation.E,
                   part4=Orientation.NE)
     Noodle.create(designation='B', code='yellow',
-                  part1=Orientation.NE,
-                  part2=Orientation.NE,
-                  part3=Orientation.SE,
-                  part4=Orientation.NE)
+                  part1=Orientation.E,
+                  part2=Orientation.E,
+                  part3=Orientation.NW,
+                  part4=Orientation.E)
     Noodle.create(designation='C', code='dark_blue',
                   part1=Orientation.E,
                   part2=Orientation.E,
@@ -118,7 +119,29 @@ class Level(BaseModel):
         return '<Level: {} ({})>'.format(self.number, self.name)
 
 
-class Noodle(BaseModel):
+class PartPositionMixin:
+    def get_part_positions(self, root_position):
+        """Get the hole positions of each part of the noodle based on the
+        root position.
+
+        Args:
+            root_position:
+                The position of the root part.
+
+        Returns:
+            A list of the hole position integers representing each part of
+            the noodle.
+        """
+        positions = [root_position]
+        positions.append(holes.find_position(positions[-1], self.part1))
+        positions.append(holes.find_position(positions[-1], self.part2))
+        positions.append(holes.find_position(positions[-1], self.part3))
+        positions.append(holes.find_position(positions[-1], self.part4))
+
+        return positions
+
+
+class Noodle(PartPositionMixin, BaseModel):
     """Represents a noodle - a puzzle piece."""
     designation = FixedCharField(max_length=1)
     code = CharField()
@@ -168,7 +191,19 @@ class Puzzle(BaseModel):
             position:
                 The hole position to place the root part of the noodle on to.
                 Board hole positions begin at 0.
+        Raises:
+            PositionOccupiedException:
+                If any of the positions targeted by the specified noodle's parts
+                are occupied.
         """
+        puzzle_noodles = PuzzleNoodle.select().where(PuzzleNoodle.puzzle == self)
+        if puzzle_noodles:
+            occupied_positions = set()
+            for puzzle_noodle in puzzle_noodles:
+                occupied_positions.update(puzzle_noodle.get_part_positions(puzzle_noodle.position))
+            overlap = occupied_positions & set(noodle.get_part_positions(position))
+            if overlap:
+                raise PositionUnavailableException('Positions {} are occupied'.format(overlap))
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position, part1=noodle.part1,
                             part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
 
@@ -189,7 +224,7 @@ class BoardNoodle(BaseModel):
     noodle = ForeignKeyField(Noodle)
 
 
-class PuzzleNoodle(BaseModel):
+class PuzzleNoodle(PartPositionMixin, BaseModel):
     """Represents an instance of a Noodle preconfigured on a
     puzzle board.
     """
@@ -203,6 +238,11 @@ class PuzzleNoodle(BaseModel):
     part3 = FixedCharField(max_length=2)
     part4 = FixedCharField(max_length=2)
 
+    def __str__(self):
+        return '<PuzzleNoodle: {}>'.format(self.id)
+
 
 class PositionUnavailableException(Exception):
-    """Indicates that a position on the board is unavailable (in use by another noodle)."""
+    """Indicates that a position on the board is occupied (in use by another noodle)
+    or the position itself is not on the board.
+    """
