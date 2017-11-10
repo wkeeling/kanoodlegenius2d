@@ -30,37 +30,37 @@ def initialise():
             getattr(v, 'create_table')(fail_silently=True)  # Don't error if the tables already exist
 
     # Set up the initial data where is does not already exist
-    Noodle.create(designation='A', code='light_green',
+    Noodle.create(designation='A', colour='light_green',
                   part1=Orientation.SE,
                   part2=Orientation.NE,
                   part3=Orientation.E,
                   part4=Orientation.NE)
-    Noodle.create(designation='B', code='yellow',
+    Noodle.create(designation='B', colour='yellow',
                   part1=Orientation.E,
                   part2=Orientation.E,
                   part3=Orientation.NW,
                   part4=Orientation.E)
-    Noodle.create(designation='C', code='dark_blue',
+    Noodle.create(designation='C', colour='dark_blue',
                   part1=Orientation.E,
                   part2=Orientation.E,
                   part3=Orientation.NE,
                   part4=Orientation.NE)
-    Noodle.create(designation='D', code='light_blue',
+    Noodle.create(designation='D', colour='light_blue',
                   part1=Orientation.E,
                   part2=Orientation.E,
                   part3=Orientation.NE,
                   part4=Orientation.SE)
-    Noodle.create(designation='E', code='red',
+    Noodle.create(designation='E', colour='red',
                   part1=Orientation.NE,
                   part2=Orientation.SE,
                   part3=Orientation.NE,
                   part4=Orientation.SE)
-    Noodle.create(designation='G', code='dark_green',
+    Noodle.create(designation='G', colour='dark_green',
                   part1=Orientation.NE,
                   part2=Orientation.SE,
                   part3=Orientation.E,
                   part4=Orientation.NE)
-    Noodle.create(designation='F', code='pink',
+    Noodle.create(designation='F', colour='pink',
                   part1=Orientation.NE,
                   part2=Orientation.NW,
                   part3=Orientation.E,
@@ -71,7 +71,7 @@ def initialise():
     level3 = Level.create(number=3, name='Whiz')
 
     puzzle = Puzzle.create(level=level1, number=1)
-    light_blue = Noodle.get(Noodle.code == 'light_blue')
+    light_blue = Noodle.get(Noodle.colour == 'light_blue')
     light_blue.rotate(increment=3)
     puzzle.place(light_blue, position=3)
 
@@ -134,12 +134,15 @@ class PartPositionMixin:
             the noodle.
         """
         if root_position is None:
-            root_position = self.position
+            root_position = getattr(self, 'position')
+
         positions = [root_position]
-        positions.append(holes.find_position(positions[-1], self.part1))
-        positions.append(holes.find_position(positions[-1], self.part2))
-        positions.append(holes.find_position(positions[-1], self.part3))
-        positions.append(holes.find_position(positions[-1], self.part4))
+
+        for i in range(1, 5):
+            position = holes.find_position(positions[-1], getattr(self, 'part{}'.format(i)))
+            if position is None:
+                raise PositionUnavailableException('The position for part {} is off the board'.format(i))
+            positions.append(position)
 
         return positions
 
@@ -147,7 +150,7 @@ class PartPositionMixin:
 class Noodle(PartPositionMixin, BaseModel):
     """Represents a noodle - a puzzle piece."""
     designation = FixedCharField(max_length=1)
-    code = CharField()
+    colour = CharField()
 
     # The default orientations of each part (excluding the root), relative to one another
     part1 = FixedCharField(max_length=2)
@@ -167,6 +170,9 @@ class Noodle(PartPositionMixin, BaseModel):
             self.part2 = Orientation.rotate(self.part2)
             self.part3 = Orientation.rotate(self.part3)
             self.part4 = Orientation.rotate(self.part4)
+
+    def __str__(self):
+        return '<Noodle: {}>'.format(self.colour)
 
 
 class Player(BaseModel):
@@ -199,16 +205,28 @@ class Puzzle(BaseModel):
                 If any of the positions targeted by the specified noodle's parts
                 are occupied.
         """
+        if position not in range(35):
+            raise PositionUnavailableException('Position {} is not on the board')
+
+        target_positions = set(noodle.get_part_positions(position))
         puzzle_noodles = PuzzleNoodle.select().where(PuzzleNoodle.puzzle == self)
+
         if puzzle_noodles:
             occupied_positions = set()
+
             for puzzle_noodle in puzzle_noodles:
                 occupied_positions.update(puzzle_noodle.get_part_positions())
-            overlap = occupied_positions & set(noodle.get_part_positions(position))
+
+            overlap = occupied_positions & target_positions
+
             if overlap:
                 raise PositionUnavailableException('Positions {} are occupied'.format(overlap))
+
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position, part1=noodle.part1,
                             part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
+
+    def __str__(self):
+        return '<Puzzle: {}>'.format(self.number)
 
 
 class Board(BaseModel):
@@ -225,6 +243,9 @@ class BoardNoodle(BaseModel):
     """Represents an instance of a noodle on a player's board."""
     board = ForeignKeyField(Board, related_name='noodles')
     noodle = ForeignKeyField(Noodle)
+
+    def __str__(self):
+        return '<BoardNoodle: {}>'.format(self.id)
 
 
 class PuzzleNoodle(PartPositionMixin, BaseModel):

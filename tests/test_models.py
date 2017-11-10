@@ -60,13 +60,13 @@ class NoodleTest(TestCase):
 
     def test_rotate_noodle_single_increment(self):
         with test_database(test_db, (Noodle,), create_tables=True):
-            Noodle.create(designation='D', code='light_blue',
+            Noodle.create(designation='D', colour='light_blue',
                           part1=Orientation.E,
                           part2=Orientation.E,
                           part3=Orientation.NE,
                           part4=Orientation.SE)
 
-            light_blue = Noodle.get(Noodle.code == 'light_blue')
+            light_blue = Noodle.get(Noodle.colour == 'light_blue')
             light_blue.rotate()
 
             self.assertEqual(light_blue.part1, Orientation.SE)
@@ -76,13 +76,13 @@ class NoodleTest(TestCase):
 
     def test_rotate_noodle_multiple_increments(self):
         with test_database(test_db, (Noodle,), create_tables=True):
-            Noodle.create(designation='D', code='light_blue',
+            Noodle.create(designation='D', colour='light_blue',
                           part1=Orientation.E,
                           part2=Orientation.E,
                           part3=Orientation.NE,
                           part4=Orientation.SE)
 
-            light_blue = Noodle.get(Noodle.code == 'light_blue')
+            light_blue = Noodle.get(Noodle.colour == 'light_blue')
             light_blue.rotate(3)
 
             self.assertEqual(light_blue.part1, Orientation.W)
@@ -90,12 +90,23 @@ class NoodleTest(TestCase):
             self.assertEqual(light_blue.part3, Orientation.SW)
             self.assertEqual(light_blue.part4, Orientation.NW)
 
+    def test_get_part_positions(self):
+        noodle = Noodle(designation='D', code='light_blue',
+                        part1=Orientation.E,
+                        part2=Orientation.E,
+                        part3=Orientation.NE,
+                        part4=Orientation.SE)
+
+        positions = noodle.get_part_positions(5)
+
+        self.assertEqual(positions, [5, 6, 7, 3, 8])
+
 
 class PuzzleTest(TestCase):
 
     def test_place_noodle(self):
         with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
-            light_blue = Noodle.create(designation='D', code='light_blue',
+            light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
                                        part3=Orientation.NE,
@@ -113,13 +124,13 @@ class PuzzleTest(TestCase):
 
     def test_place_raises_exception_when_root_position_occupied(self):
         with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
-            light_blue = Noodle.create(designation='D', code='light_blue',
+            light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
                                        part3=Orientation.NE,
                                        part4=Orientation.SE)
-            yellow = Noodle.create(designation='B', code='yellow',
-                                   part1=Orientation.NE,
+            yellow = Noodle.create(designation='B', colour='yellow',
+                                   part1=Orientation.E,
                                    part2=Orientation.NE,
                                    part3=Orientation.SE,
                                    part4=Orientation.NE)
@@ -132,12 +143,12 @@ class PuzzleTest(TestCase):
 
     def test_place_raises_exception_when_child_position_occupied(self):
         with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
-            light_blue = Noodle.create(designation='D', code='light_blue',
+            light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
                                        part3=Orientation.NE,
                                        part4=Orientation.SE)
-            yellow = Noodle.create(designation='B', code='yellow',
+            yellow = Noodle.create(designation='B', colour='yellow',
                                    part1=Orientation.E,
                                    part2=Orientation.E,
                                    part3=Orientation.NW,
@@ -147,13 +158,35 @@ class PuzzleTest(TestCase):
             puzzle.place(light_blue, 5)
 
             with self.assertRaises(PositionUnavailableException):
-                puzzle.place(yellow, 10)
+                puzzle.place(yellow, 11)
 
     def test_place_raises_exception_when_root_position_off_board(self):
-        self.fail('Implement')
+        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+            light_blue = Noodle.create(designation='D', colour='light_blue',
+                                       part1=Orientation.E,
+                                       part2=Orientation.E,
+                                       part3=Orientation.NE,
+                                       part4=Orientation.SE)
+
+            level = Level.create(number=1, name='test level')
+            puzzle = Puzzle.create(level=level, number=1)
+
+            with self.assertRaises(PositionUnavailableException):
+                puzzle.place(light_blue, 37)
 
     def test_place_raises_exception_when_child_position_off_board(self):
-        self.fail('Implement')
+        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+            light_blue = Noodle.create(designation='D', colour='light_blue',
+                                       part1=Orientation.E,
+                                       part2=Orientation.E,
+                                       part3=Orientation.NE,
+                                       part4=Orientation.SE)
+
+            level = Level.create(number=1, name='test level')
+            puzzle = Puzzle.create(level=level, number=1)
+
+            with self.assertRaises(PositionUnavailableException):
+                puzzle.place(light_blue, 0)
 
 
 class PuzzleNoodleTest(TestCase):
