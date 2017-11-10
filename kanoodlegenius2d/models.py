@@ -120,18 +120,21 @@ class Level(BaseModel):
 
 
 class PartPositionMixin:
-    def get_part_positions(self, root_position):
+    def get_part_positions(self, root_position=None):
         """Get the hole positions of each part of the noodle based on the
         root position.
 
         Args:
             root_position:
-                The position of the root part.
+                The position of the root part. If not specified the root
+                position will be discovered from the subclass.
 
         Returns:
             A list of the hole position integers representing each part of
             the noodle.
         """
+        if root_position is None:
+            root_position = self.position
         positions = [root_position]
         positions.append(holes.find_position(positions[-1], self.part1))
         positions.append(holes.find_position(positions[-1], self.part2))
@@ -200,7 +203,7 @@ class Puzzle(BaseModel):
         if puzzle_noodles:
             occupied_positions = set()
             for puzzle_noodle in puzzle_noodles:
-                occupied_positions.update(puzzle_noodle.get_part_positions(puzzle_noodle.position))
+                occupied_positions.update(puzzle_noodle.get_part_positions())
             overlap = occupied_positions & set(noodle.get_part_positions(position))
             if overlap:
                 raise PositionUnavailableException('Positions {} are occupied'.format(overlap))
