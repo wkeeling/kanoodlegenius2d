@@ -1,6 +1,6 @@
 import logging
 
-from .orientation import Orientation
+from kanoodlegenius2d import orientation
 
 _LOG = logging.getLogger(__name__)
 
@@ -11,8 +11,7 @@ def setup():
     from kanoodlegenius2d.models import (BaseModel,
                                          Level,
                                          Noodle,
-                                         Puzzle,
-                                         PuzzleNoodle)
+                                         Puzzle)
     # Create the tables if they do not already exist
     for k, v in vars(models).items():
         if isinstance(v, type) and issubclass(v, BaseModel):
@@ -21,40 +20,40 @@ def setup():
 
     # Set up the initial data where is does not already exist
     Noodle.create(designation='A', colour='light_green',
-                  part1=Orientation.E,
-                  part2=Orientation.NE,
-                  part3=Orientation.NE,
-                  part4=Orientation.SE)
+                  part1=orientation.E,
+                  part2=orientation.NE,
+                  part3=orientation.NE,
+                  part4=orientation.SE)
     Noodle.create(designation='B', colour='yellow',
-                  part1=Orientation.E,
-                  part2=Orientation.NE,
-                  part3=Orientation.SE,
-                  part4=Orientation.NE)
+                  part1=orientation.E,
+                  part2=orientation.NE,
+                  part3=orientation.SE,
+                  part4=orientation.NE)
     Noodle.create(designation='C', colour='dark_blue',
-                  part1=Orientation.E,
-                  part2=Orientation.E,
-                  part3=Orientation.NE,
-                  part4=Orientation.NE)
+                  part1=orientation.E,
+                  part2=orientation.E,
+                  part3=orientation.NE,
+                  part4=orientation.NE)
     Noodle.create(designation='D', colour='light_blue',
-                  part1=Orientation.E,
-                  part2=Orientation.E,
-                  part3=Orientation.NE,
-                  part4=Orientation.SE)
+                  part1=orientation.E,
+                  part2=orientation.E,
+                  part3=orientation.NE,
+                  part4=orientation.SE)
     Noodle.create(designation='E', colour='red',
-                  part1=Orientation.NE,
-                  part2=Orientation.SE,
-                  part3=Orientation.NE,
-                  part4=Orientation.SE)
+                  part1=orientation.NE,
+                  part2=orientation.SE,
+                  part3=orientation.NE,
+                  part4=orientation.SE)
     Noodle.create(designation='F', colour='pink',
-                  part1=Orientation.E,
-                  part2=Orientation.NE,
-                  part3=Orientation.SE,
-                  part4=Orientation.E)
+                  part1=orientation.E,
+                  part2=orientation.NE,
+                  part3=orientation.SE,
+                  part4=orientation.E)
     Noodle.create(designation='G', colour='dark_green',
-                  part1=Orientation.NE,
-                  part2=Orientation.SE,
-                  part3=Orientation.E,
-                  part4=Orientation.NE)
+                  part1=orientation.NE,
+                  part2=orientation.SE,
+                  part3=orientation.E,
+                  part4=orientation.NE)
 
     level1 = Level.create(number=1, name='Super Pro')
     level2 = Level.create(number=2, name='Champ')

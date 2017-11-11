@@ -16,7 +16,7 @@ from kanoodlegenius2d.models import (Board,
                                      PuzzleNoodle,
                                      PositionUnavailableException,
                                      shutdown)
-from kanoodlegenius2d.orientation import Orientation
+from kanoodlegenius2d import orientation
 
 test_db = SqliteDatabase(':memory:')
 
@@ -64,41 +64,41 @@ class NoodleTest(TestCase):
     def test_rotate_noodle_single_increment(self):
         with test_database(test_db, (Noodle,), create_tables=True):
             Noodle.create(designation='D', colour='light_blue',
-                          part1=Orientation.E,
-                          part2=Orientation.E,
-                          part3=Orientation.NE,
-                          part4=Orientation.SE)
+                          part1=orientation.E,
+                          part2=orientation.E,
+                          part3=orientation.NE,
+                          part4=orientation.SE)
 
             light_blue = Noodle.get(Noodle.colour == 'light_blue')
             light_blue.rotate()
 
-            self.assertEqual(light_blue.part1, Orientation.SE)
-            self.assertEqual(light_blue.part2, Orientation.SE)
-            self.assertEqual(light_blue.part3, Orientation.E)
-            self.assertEqual(light_blue.part4, Orientation.SW)
+            self.assertEqual(light_blue.part1, orientation.SE)
+            self.assertEqual(light_blue.part2, orientation.SE)
+            self.assertEqual(light_blue.part3, orientation.E)
+            self.assertEqual(light_blue.part4, orientation.SW)
 
     def test_rotate_noodle_multiple_increments(self):
         with test_database(test_db, (Noodle,), create_tables=True):
             Noodle.create(designation='D', colour='light_blue',
-                          part1=Orientation.E,
-                          part2=Orientation.E,
-                          part3=Orientation.NE,
-                          part4=Orientation.SE)
+                          part1=orientation.E,
+                          part2=orientation.E,
+                          part3=orientation.NE,
+                          part4=orientation.SE)
 
             light_blue = Noodle.get(Noodle.colour == 'light_blue')
             light_blue.rotate(3)
 
-            self.assertEqual(light_blue.part1, Orientation.W)
-            self.assertEqual(light_blue.part2, Orientation.W)
-            self.assertEqual(light_blue.part3, Orientation.SW)
-            self.assertEqual(light_blue.part4, Orientation.NW)
+            self.assertEqual(light_blue.part1, orientation.W)
+            self.assertEqual(light_blue.part2, orientation.W)
+            self.assertEqual(light_blue.part3, orientation.SW)
+            self.assertEqual(light_blue.part4, orientation.NW)
 
     def test_get_part_positions(self):
         noodle = Noodle(designation='D', code='light_blue',
-                        part1=Orientation.E,
-                        part2=Orientation.E,
-                        part3=Orientation.NE,
-                        part4=Orientation.SE)
+                        part1=orientation.E,
+                        part2=orientation.E,
+                        part3=orientation.NE,
+                        part4=orientation.SE)
 
         positions = noodle.get_part_positions(5)
 
@@ -106,17 +106,17 @@ class NoodleTest(TestCase):
 
     def test_flip(self):
         noodle = Noodle(designation='D', code='light_blue',
-                        part1=Orientation.E,
-                        part2=Orientation.E,
-                        part3=Orientation.NE,
-                        part4=Orientation.SE)
+                        part1=orientation.E,
+                        part2=orientation.E,
+                        part3=orientation.NE,
+                        part4=orientation.SE)
 
         noodle.flip()
 
-        self.assertEqual(noodle.part1, Orientation.W)
-        self.assertEqual(noodle.part2, Orientation.W)
-        self.assertEqual(noodle.part3, Orientation.NW)
-        self.assertEqual(noodle.part4, Orientation.SW)
+        self.assertEqual(noodle.part1, orientation.W)
+        self.assertEqual(noodle.part2, orientation.W)
+        self.assertEqual(noodle.part3, orientation.NW)
+        self.assertEqual(noodle.part4, orientation.SW)
 
 
 class BoardTest(TestCase):
@@ -125,10 +125,10 @@ class BoardTest(TestCase):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=Orientation.E,
-                                       part2=Orientation.E,
-                                       part3=Orientation.NE,
-                                       part4=Orientation.SE)
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
 
             board.place(light_blue, 5)
 
@@ -142,15 +142,15 @@ class BoardTest(TestCase):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=Orientation.E,
-                                       part2=Orientation.E,
-                                       part3=Orientation.NE,
-                                       part4=Orientation.SE)
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
             yellow = Noodle.create(designation='B', colour='yellow',
-                                   part1=Orientation.E,
-                                   part2=Orientation.NE,
-                                   part3=Orientation.SE,
-                                   part4=Orientation.NE)
+                                   part1=orientation.E,
+                                   part2=orientation.NE,
+                                   part3=orientation.SE,
+                                   part4=orientation.NE)
             board.place(light_blue, 5)
 
             with self.assertRaises(PositionUnavailableException):
@@ -160,15 +160,15 @@ class BoardTest(TestCase):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=Orientation.E,
-                                       part2=Orientation.E,
-                                       part3=Orientation.NE,
-                                       part4=Orientation.SE)
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
             yellow = Noodle.create(designation='B', colour='yellow',
-                                   part1=Orientation.E,
-                                   part2=Orientation.E,
-                                   part3=Orientation.NW,
-                                   part4=Orientation.E)
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NW,
+                                   part4=orientation.E)
             board.place(light_blue, 5)
 
             with self.assertRaises(PositionUnavailableException):
@@ -178,10 +178,10 @@ class BoardTest(TestCase):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=Orientation.E,
-                                       part2=Orientation.E,
-                                       part3=Orientation.NE,
-                                       part4=Orientation.SE)
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
 
             with self.assertRaises(PositionUnavailableException):
                 board.place(light_blue, 37)
@@ -190,10 +190,10 @@ class BoardTest(TestCase):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=Orientation.E,
-                                       part2=Orientation.E,
-                                       part3=Orientation.NE,
-                                       part4=Orientation.SE)
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
 
             with self.assertRaises(PositionUnavailableException):
                 board.place(light_blue, 0)
@@ -212,10 +212,10 @@ class PuzzleNoodleTest(TestCase):
 
     def test_get_part_positions(self):
         puzzle_noodle = PuzzleNoodle(position=5,
-                                     part1=Orientation.E,
-                                     part2=Orientation.E,
-                                     part3=Orientation.NE,
-                                     part4=Orientation.SE)
+                                     part1=orientation.E,
+                                     part2=orientation.E,
+                                     part3=orientation.NE,
+                                     part4=orientation.SE)
 
         positions = puzzle_noodle.get_part_positions()
 
@@ -226,10 +226,10 @@ class BoardNoodleTest(TestCase):
 
     def test_get_part_positions(self):
         board_noodle = BoardNoodle(position=5,
-                                   part1=Orientation.E,
-                                   part2=Orientation.E,
-                                   part3=Orientation.NE,
-                                   part4=Orientation.SE)
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
 
         positions = board_noodle.get_part_positions()
 

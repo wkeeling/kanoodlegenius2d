@@ -10,7 +10,7 @@ from peewee import (CharField,
 
 from kanoodlegenius2d import data
 from kanoodlegenius2d import holes
-from .orientation import Orientation
+from kanoodlegenius2d import orientation
 
 _LOG = logging.getLogger(__name__)
 
@@ -120,20 +120,20 @@ class Noodle(PartPositionMixin, BaseModel):
                 The number of increments to rotate the noodle by.
         """
         for _ in range(increment):
-            self.part1 = Orientation.rotate(self.part1)
-            self.part2 = Orientation.rotate(self.part2)
-            self.part3 = Orientation.rotate(self.part3)
-            self.part4 = Orientation.rotate(self.part4)
+            self.part1 = orientation.rotate(self.part1)
+            self.part2 = orientation.rotate(self.part2)
+            self.part3 = orientation.rotate(self.part3)
+            self.part4 = orientation.rotate(self.part4)
 
     def flip(self):
         """Flip the noodle 180 degrees on its Y axis."""
         y_conversions = {
-            Orientation.SE: Orientation.SW,
-            Orientation.NE: Orientation.NW,
-            Orientation.NW: Orientation.NE,
-            Orientation.SW: Orientation.SE,
-            Orientation.E: Orientation.W,
-            Orientation.W: Orientation.E
+            orientation.SE: orientation.SW,
+            orientation.NE: orientation.NW,
+            orientation.NW: orientation.NE,
+            orientation.SW: orientation.SE,
+            orientation.E: orientation.W,
+            orientation.W: orientation.E
         }
         self.part1 = y_conversions[self.part1]
         self.part2 = y_conversions[self.part2]

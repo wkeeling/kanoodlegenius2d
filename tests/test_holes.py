@@ -1,13 +1,13 @@
 from unittest import TestCase
 
-from kanoodlegenius2d.holes import (find_position,
-                                    Orientation)
+from kanoodlegenius2d.holes import find_position
+from kanoodlegenius2d import orientation
 
 
 class FindPositionTest(TestCase):
 
     def test_neighbour_positions_hole0(self):
-        self.assertEqual(find_position(0, Orientation.E), 1)
+        self.assertEqual(find_position(0, orientation.E), 1)
 
     def test_hole15_neighbours(self):
         self.fail('implement')
@@ -22,7 +22,7 @@ class FindPositionTest(TestCase):
         self.fail('implement')
 
     def test_invalid_position(self):
-        self.assertIsNone(find_position(100, Orientation.E))
+        self.assertIsNone(find_position(100, orientation.E))
 
     def test_no_neighbour(self):
-        self.assertIsNone(find_position(0, Orientation.W))
+        self.assertIsNone(find_position(0, orientation.W))
