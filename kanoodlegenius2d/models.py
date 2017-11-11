@@ -125,6 +125,21 @@ class Noodle(PartPositionMixin, BaseModel):
             self.part3 = Orientation.rotate(self.part3)
             self.part4 = Orientation.rotate(self.part4)
 
+    def flip(self):
+        """Flip the noodle 180 degrees on its Y axis."""
+        y_conversions = {
+            Orientation.SE: Orientation.SW,
+            Orientation.NE: Orientation.NW,
+            Orientation.NW: Orientation.NE,
+            Orientation.SW: Orientation.SE,
+            Orientation.E: Orientation.W,
+            Orientation.W: Orientation.E
+        }
+        self.part1 = y_conversions[self.part1]
+        self.part2 = y_conversions[self.part2]
+        self.part3 = y_conversions[self.part3]
+        self.part4 = y_conversions[self.part4]
+
     def __str__(self):
         return '<Noodle: {}>'.format(self.colour)
 
@@ -146,13 +161,13 @@ class Puzzle(BaseModel):
     number = IntegerField()
 
     def place(self, noodle, position):
-        """Place the specified noodle onto the Puzzle at the specified position.
+        """Place the specified noodle onto the puzzle at the specified position.
 
         Args:
             noodle:
-                The Noodle to place on the Puzzle.
+                The noodle to place on the puzzle.
             position:
-                The puzzle position to place the Noodle's root part onto.
+                The puzzle position to place the noodle's root part onto.
         """
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position,
                             part1=noodle.part1,
@@ -225,7 +240,7 @@ class BoardNoodle(PartPositionMixin, BaseModel):
 
 
 class PuzzleNoodle(PartPositionMixin, BaseModel):
-    """Represents an instance of a Noodle preconfigured on a
+    """Represents an instance of a noodle preconfigured on a
     puzzle board.
     """
     puzzle = ForeignKeyField(Puzzle, related_name='noodles')

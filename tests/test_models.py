@@ -104,6 +104,20 @@ class NoodleTest(TestCase):
 
         self.assertEqual(positions, [5, 6, 7, 3, 8])
 
+    def test_flip(self):
+        noodle = Noodle(designation='D', code='light_blue',
+                        part1=Orientation.E,
+                        part2=Orientation.E,
+                        part3=Orientation.NE,
+                        part4=Orientation.SE)
+
+        noodle.flip()
+
+        self.assertEqual(noodle.part1, Orientation.W)
+        self.assertEqual(noodle.part2, Orientation.W)
+        self.assertEqual(noodle.part3, Orientation.NW)
+        self.assertEqual(noodle.part4, Orientation.SW)
+
 
 class BoardTest(TestCase):
 
@@ -204,5 +218,19 @@ class PuzzleNoodleTest(TestCase):
                                      part4=Orientation.SE)
 
         positions = puzzle_noodle.get_part_positions()
+
+        self.assertEqual(positions, [5, 6, 7, 3, 8])
+
+
+class BoardNoodleTest(TestCase):
+
+    def test_get_part_positions(self):
+        board_noodle = BoardNoodle(position=5,
+                                   part1=Orientation.E,
+                                   part2=Orientation.E,
+                                   part3=Orientation.NE,
+                                   part4=Orientation.SE)
+
+        positions = board_noodle.get_part_positions()
 
         self.assertEqual(positions, [5, 6, 7, 3, 8])
