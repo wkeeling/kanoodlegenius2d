@@ -145,6 +145,21 @@ class Puzzle(BaseModel):
     level = ForeignKeyField(Level, 'puzzles')
     number = IntegerField()
 
+    def place(self, noodle, position):
+        """Place the specified noodle onto the Puzzle at the specified position.
+
+        Args:
+            noodle:
+                The Noodle to place on the Puzzle.
+            position:
+                The puzzle position to place the Noodle's root part onto.
+        """
+        PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position,
+                            part1=noodle.part1,
+                            part2=noodle.part2,
+                            part3=noodle.part3,
+                            part4=noodle.part4)
+
     def __str__(self):
         return '<Puzzle: {}>'.format(self.number)
 

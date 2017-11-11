@@ -11,7 +11,8 @@ def setup():
     from kanoodlegenius2d.models import (BaseModel,
                                          Level,
                                          Noodle,
-                                         Puzzle)
+                                         Puzzle,
+                                         PuzzleNoodle)
     # Create the tables if they do not already exist
     for k, v in vars(models).items():
         if isinstance(v, type) and issubclass(v, BaseModel):
@@ -60,5 +61,15 @@ def setup():
     level3 = Level.create(number=3, name='Whiz')
 
     puzzle = Puzzle.create(level=level1, number=1)
+
     light_blue = Noodle.get(Noodle.colour == 'light_blue')
     light_blue.rotate(increment=3)
+    puzzle.place(light_blue, position=3)
+
+    dark_green = Noodle.get(Noodle.colour == 'dark_green')
+    puzzle.place(dark_green, position=9)
+
+    light_green = Noodle.get(Noodle.colour == 'light_green')
+    # Need to implement "flip" on the noodle for this one
+
+
