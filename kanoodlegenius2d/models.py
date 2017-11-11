@@ -51,6 +51,8 @@ class Game(BaseModel):
         Args:
             player_name:
                 The name of the player starting the game.
+        Returns:
+            The Board instance preconfigured with noodles, and ready to go.
         """
         game = Game.create()
         player = Player.create(name=player_name, game=game)
@@ -59,7 +61,7 @@ class Game(BaseModel):
         board = Board.create(player=player, puzzle=first_puzzle)  # Creates an empty board referencing player/puzzle
         board.setup(first_puzzle)  # Sets up the noodles on the board based on the puzzle
 
-        return game
+        return board
 
 
 class Level(BaseModel):

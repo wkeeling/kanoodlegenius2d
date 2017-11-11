@@ -45,7 +45,7 @@ class StartNewGameTest(TestCase):
 
     def test_start_new_game(self):
         """Test assemble the model objects needed to begin a new game."""
-        game = Game.start('test_player')
+        board = Game.start('test_player')
 
     def setUp(self):
         self._datafile_path = os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db')
