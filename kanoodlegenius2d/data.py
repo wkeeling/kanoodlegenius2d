@@ -70,6 +70,12 @@ def setup():
     puzzle.place(dark_green, position=9)
 
     light_green = Noodle.get(Noodle.colour == 'light_green')
-    # Need to implement "flip" on the noodle for this one
+    light_green.flip()
+    light_green.rotate(increment=3)
+    puzzle.place(light_green, position=15)
+
+    red = Noodle.get(Noodle.colour == 'red')
+    red.rotate()
+    puzzle.place(red, position=20)
 
 
