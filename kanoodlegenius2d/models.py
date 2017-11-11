@@ -191,12 +191,21 @@ class Puzzle(BaseModel):
     level = ForeignKeyField(Level, 'puzzles')
     number = IntegerField()
 
+    def __str__(self):
+        return '<Puzzle: {}>'.format(self.number)
+
+
+class Board(BaseModel):
+    """Represents the board that a player is solving a puzzle on."""
+    player = ForeignKeyField(Player, related_name='boards')
+    puzzle = ForeignKeyField(Puzzle)
+
     def place(self, noodle, position):
-        """Place a noodle onto the puzzle in the specified position.
+        """Place a noodle onto the board in the specified position.
 
         Args:
             noodle:
-                The noodle instance to place on the puzzle.
+                The noodle instance to place on the board.
             position:
                 The hole position to place the root part of the noodle on to.
                 Board hole positions begin at 0.
@@ -209,40 +218,38 @@ class Puzzle(BaseModel):
             raise PositionUnavailableException('Position {} is not on the board')
 
         target_positions = set(noodle.get_part_positions(position))
-        puzzle_noodles = PuzzleNoodle.select().where(PuzzleNoodle.puzzle == self)
+        board_noodles = BoardNoodle.select().where(BoardNoodle.board == self)
 
-        if puzzle_noodles:
+        if board_noodles:
             occupied_positions = set()
 
-            for puzzle_noodle in puzzle_noodles:
-                occupied_positions.update(puzzle_noodle.get_part_positions())
+            for board_noodle in board_noodles:
+                occupied_positions.update(board_noodle.get_part_positions())
 
             overlap = occupied_positions & target_positions
 
             if overlap:
                 raise PositionUnavailableException('Positions {} are occupied'.format(overlap))
 
-        PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position, part1=noodle.part1,
-                            part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
-
-    def __str__(self):
-        return '<Puzzle: {}>'.format(self.number)
-
-
-class Board(BaseModel):
-    """Represents the board that a player is solving a puzzle on."""
-    player = ForeignKeyField(Player, related_name='boards')
-    puzzle = ForeignKeyField(Puzzle)
+        BoardNoodle.create(board=self, noodle=noodle, position=position, part1=noodle.part1,
+                           part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
 
     def setup(self, puzzle):
         # Create a BoardNoodle based on each PuzzleNoode
         pass
 
 
-class BoardNoodle(BaseModel):
+class BoardNoodle(PartPositionMixin, BaseModel):
     """Represents an instance of a noodle on a player's board."""
     board = ForeignKeyField(Board, related_name='noodles')
     noodle = ForeignKeyField(Noodle)
+    # The position of the root part on the board
+    position = IntegerField()
+    # The orientations of each part (excluding the root), relative to one another
+    part1 = FixedCharField(max_length=2)
+    part2 = FixedCharField(max_length=2)
+    part3 = FixedCharField(max_length=2)
+    part4 = FixedCharField(max_length=2)
 
     def __str__(self):
         return '<BoardNoodle: {}>'.format(self.id)
@@ -254,7 +261,7 @@ class PuzzleNoodle(PartPositionMixin, BaseModel):
     """
     puzzle = ForeignKeyField(Puzzle, related_name='noodles')
     noodle = ForeignKeyField(Noodle)
-    # The position of the root part on the puzzle board
+    # The position of the root part on the puzzle
     position = IntegerField()
     # The orientations of each part (excluding the root), relative to one another
     part1 = FixedCharField(max_length=2)

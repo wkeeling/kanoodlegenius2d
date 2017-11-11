@@ -5,10 +5,13 @@ from unittest import TestCase
 from peewee import SqliteDatabase
 from playhouse.test_utils import test_database
 
-from kanoodlegenius2d.models import (Game,
+from kanoodlegenius2d.models import (Board,
+                                     BoardNoodle,
+                                     Game,
                                      initialise,
                                      Level,
                                      Noodle,
+                                     Player,
                                      Puzzle,
                                      PuzzleNoodle,
                                      PositionUnavailableException,
@@ -102,28 +105,28 @@ class NoodleTest(TestCase):
         self.assertEqual(positions, [5, 6, 7, 3, 8])
 
 
-class PuzzleTest(TestCase):
+class BoardTest(TestCase):
 
     def test_place_noodle(self):
-        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+            board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
                                        part3=Orientation.NE,
                                        part4=Orientation.SE)
-            level = Level.create(number=1, name='test level')
-            puzzle = Puzzle.create(level=level, number=1)
 
-            puzzle.place(light_blue, 5)
+            board.place(light_blue, 5)
 
-            puzzle_noodle = PuzzleNoodle.get(PuzzleNoodle.position == 5)
-            self.assertEqual(puzzle_noodle.part1, light_blue.part1)
-            self.assertEqual(puzzle_noodle.part2, light_blue.part2)
-            self.assertEqual(puzzle_noodle.part3, light_blue.part3)
-            self.assertEqual(puzzle_noodle.part4, light_blue.part4)
+            board_noodle = BoardNoodle.get(BoardNoodle.position == 5)
+            self.assertEqual(board_noodle.part1, light_blue.part1)
+            self.assertEqual(board_noodle.part2, light_blue.part2)
+            self.assertEqual(board_noodle.part3, light_blue.part3)
+            self.assertEqual(board_noodle.part4, light_blue.part4)
 
     def test_place_raises_exception_when_root_position_occupied(self):
-        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+            board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
@@ -134,15 +137,14 @@ class PuzzleTest(TestCase):
                                    part2=Orientation.NE,
                                    part3=Orientation.SE,
                                    part4=Orientation.NE)
-            level = Level.create(number=1, name='test level')
-            puzzle = Puzzle.create(level=level, number=1)
-            puzzle.place(light_blue, 5)
+            board.place(light_blue, 5)
 
             with self.assertRaises(PositionUnavailableException):
-                puzzle.place(yellow, 5)
+                board.place(yellow, 5)
 
     def test_place_raises_exception_when_child_position_occupied(self):
-        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+            board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
@@ -153,40 +155,43 @@ class PuzzleTest(TestCase):
                                    part2=Orientation.E,
                                    part3=Orientation.NW,
                                    part4=Orientation.E)
-            level = Level.create(number=1, name='test level')
-            puzzle = Puzzle.create(level=level, number=1)
-            puzzle.place(light_blue, 5)
+            board.place(light_blue, 5)
 
             with self.assertRaises(PositionUnavailableException):
-                puzzle.place(yellow, 11)
+                board.place(yellow, 11)
 
     def test_place_raises_exception_when_root_position_off_board(self):
-        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+            board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
                                        part3=Orientation.NE,
                                        part4=Orientation.SE)
 
-            level = Level.create(number=1, name='test level')
-            puzzle = Puzzle.create(level=level, number=1)
-
             with self.assertRaises(PositionUnavailableException):
-                puzzle.place(light_blue, 37)
+                board.place(light_blue, 37)
 
     def test_place_raises_exception_when_child_position_off_board(self):
-        with test_database(test_db, (Level, Puzzle, PuzzleNoodle, Noodle), create_tables=True):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+            board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=Orientation.E,
                                        part2=Orientation.E,
                                        part3=Orientation.NE,
                                        part4=Orientation.SE)
 
-            level = Level.create(number=1, name='test level')
-            puzzle = Puzzle.create(level=level, number=1)
-
             with self.assertRaises(PositionUnavailableException):
-                puzzle.place(light_blue, 0)
+                board.place(light_blue, 0)
+
+    def _create_board(self):
+        level = Level.create(number=1, name='test level')
+        puzzle = Puzzle.create(level=level, number=1)
+        game = Game.create()
+        player = Player.create(name='test', game=game)
+        board = Board.create(player=player, puzzle=puzzle)
+
+        return board
 
 
 class PuzzleNoodleTest(TestCase):
