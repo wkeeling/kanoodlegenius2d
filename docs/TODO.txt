@@ -1,12 +1,5 @@
 - Add tests for individual model methods that are coming into existence
-    - Puzzle.place() -- could validate that noodle fits and raise exception if not. Base.py could then repeatedly call place() after rotating the noodle until it fits.
     - Board.setup()
-    - Board.place()
-    - If code similar between Puzzle.place() and Board.place() then extract common to mixin class.
-- Perhaps move setup data code out of base.py
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
-- PuzzleNoodle and BoardNoodle should have a helper function get_part_positions() which returns a list of all parts positions
-    implemented using the root position and Hole.lookup_position() for each part.
-- Get Noodle orientations correct
 - Make Orientation module level
