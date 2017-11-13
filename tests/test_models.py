@@ -278,25 +278,31 @@ class BoardTest(TestCase):
 
     def test_undo_place(self):
         """Test that the previous place noodle action can be undone."""
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()
             light_blue = Noodle.create(designation='D', colour='light_blue',
                                        part1=orientation.E,
                                        part2=orientation.E,
                                        part3=orientation.NE,
                                        part4=orientation.SE)
+            board.place(light_blue, position=5)
+            yellow = Noodle.create(designation='B', colour='yellow',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NW,
+                                   part4=orientation.E)
+            board.place(yellow, position=20)
 
-            board.place(light_blue, 5)
-
-            BoardNoodle.get(BoardNoodle.position == 5)  # Should not raise a DoesNotExist
+            BoardNoodle.get(BoardNoodle.position == 20)  # Should not raise a DoesNotExist
 
             board.undo()
 
             with self.assertRaises(BoardNoodle.DoesNotExist):
-                BoardNoodle.get(BoardNoodle.position == 5)  # Noodle has been removed so will raise DoesNotExist
+                BoardNoodle.get(BoardNoodle.position == 20)  # Noodle has been removed so will raise DoesNotExist
 
     def test_undo_no_place_does_nothing(self):
         """Test that attempting to undo when no place has occurred does nothing."""
+        self.fail('Implement')
 
     def _create_board(self):
         level = Level.create(number=1, name='test level')

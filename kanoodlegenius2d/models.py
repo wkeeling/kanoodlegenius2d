@@ -163,7 +163,7 @@ class Puzzle(BaseModel):
     level = ForeignKeyField(Level, related_name='puzzles')
     number = IntegerField()
 
-    def place(self, noodle, position):
+    def place(self, noodle, *, position):
         """Place the specified noodle onto the puzzle at the specified position.
 
         Args:
@@ -187,7 +187,7 @@ class Board(BaseModel):
     player = ForeignKeyField(Player, related_name='boards')
     puzzle = ForeignKeyField(Puzzle)
 
-    def place(self, noodle, position):
+    def place(self, noodle, *, position):
         """Place a noodle onto the board in the specified position.
 
         Args:
@@ -235,6 +235,14 @@ class Board(BaseModel):
             noodle.part3 = puzzle_noodle.part3
             noodle.part4 = puzzle_noodle.part4
             self.place(noodle, puzzle_noodle.position)
+
+    def undo(self):
+        """Undo the last place operation."""
+        puzzle_noodles = [noodle.noodle for noodle in self.puzzle.noodles]
+        for board_noodle in self.noodles.order_by(BoardNoodle.id.desc()):
+            if board_noodle.noodle not in puzzle_noodles:
+                board_noodle.delete_instance()
+                break
 
     def __str__(self):
         return '<Board: {}>'.format(self.id)
