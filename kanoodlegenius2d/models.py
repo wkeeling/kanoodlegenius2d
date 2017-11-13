@@ -223,8 +223,13 @@ class Board(BaseModel):
 
         The puzzle acts as a template.
         """
-        for noodle in self.puzzle.noodles:
-            self.place(noodle.noodle, noodle.position)
+        for puzzle_noodle in self.puzzle.noodles:
+            noodle = puzzle_noodle.noodle
+            noodle.part1 = puzzle_noodle.part1
+            noodle.part2 = puzzle_noodle.part2
+            noodle.part3 = puzzle_noodle.part3
+            noodle.part4 = puzzle_noodle.part4
+            self.place(noodle, puzzle_noodle.position)
 
     def __str__(self):
         return '<Board: {}>'.format(self.id)
