@@ -2,7 +2,8 @@ import os
 import sqlite3
 from unittest import TestCase
 
-from peewee import SqliteDatabase
+from peewee import (IntegrityError,
+                    SqliteDatabase)
 from playhouse.test_utils import test_database
 
 from kanoodlegenius2d.models import (Board,
@@ -290,3 +291,14 @@ class BoardNoodleTest(TestCase):
         positions = board_noodle.get_part_positions()
 
         self.assertEqual(positions, [5, 6, 7, 3, 8])
+
+
+class PlayerTest(TestCase):
+
+    def test_player_with_same_name_raises_exception(self):
+        with test_database(test_db, (Game, Player)):
+            game = Game.create()
+            Player.create(name='test player', game=game)
+            game = Game.create()
+            with self.assertRaises(IntegrityError):
+                Player.create(name='test player', game=game)
