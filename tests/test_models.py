@@ -93,7 +93,7 @@ class GameIntegrationTest(TestCase):
         """Test that the games a listed in reverse chronological
         order of last played.
         """
-        games = Game.get_by_last_played()
+        games = Game.by_last_played()
         self.fail('Implement')
 
     def test_resume_game(self):
