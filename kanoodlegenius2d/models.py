@@ -45,7 +45,7 @@ class BaseModel(Model):
 
 class Game(BaseModel):
     """Represents a single Kanoodle Genius game for a given player."""
-    last_played = DateTimeField()
+    last_played = DateTimeField(default=datetime.now())
 
     @staticmethod
     def start(player_name):
@@ -57,7 +57,7 @@ class Game(BaseModel):
         Returns:
             The Board instance preconfigured with noodles, and ready to go.
         """
-        game = Game.create(last_played=datetime.now())
+        game = Game.create()
         player = Player.create(name=player_name, game=game)
 
         first_puzzle = Level.select().where(Level.number == 1).join(Puzzle).where(Puzzle.number == 1)
