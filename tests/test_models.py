@@ -90,6 +90,11 @@ class GameTest(TestCase):
         games = Game.get_by_last_played()
         self.fail('Implement')
 
+    def test_resume_game(self):
+        """Test that the game can be resumed for a player."""
+        board = Game.resume('test player')
+        self.fail('Implement')
+
     def setUp(self):
         self._datafile_path = os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db')
         initialise()
@@ -261,6 +266,14 @@ class BoardTest(TestCase):
             with self.assertRaises(PositionUnavailableException):
                 board.place(light_blue, 0)
 
+    def test_reset_board(self):
+        """Test reset the board back to the initial state."""
+        self.fail('Implement')
+
+    def test_undo_place(self):
+        """Test that the previous place noodle action can be undone."""
+        self.fail('Implement')
+
     def _create_board(self):
         level = Level.create(number=1, name='test level')
         puzzle = Puzzle.create(level=level, number=1)
@@ -308,3 +321,7 @@ class PlayerTest(TestCase):
             game = Game.create()
             with self.assertRaises(IntegrityError):
                 Player.create(name='test player', game=game)
+
+    def test_delete_player(self):
+        """Test that a player is soft deleted."""
+        self.fail('Implement')
