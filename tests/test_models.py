@@ -42,7 +42,7 @@ class InitialiseTest(TestCase):
             pass
 
 
-class GameTest(TestCase):
+class GameIntegrationTest(TestCase):
 
     def test_start_new_game(self):
         """Test assemble the model objects needed to begin a new game."""
@@ -81,7 +81,13 @@ class GameTest(TestCase):
         """Test that the last played date is set on a game when a
         player places a piece on the board.
         """
-        self.fail('Implement')
+        board = Game.start('test_player')
+        first_played = board.player.game.last_played  # Set when the game was started
+
+        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        board.place(dark_blue, 32)
+
+        self.assertNotEqual(board.player.game.last_played, first_played)
 
     def test_get_games_ordered_by_last_played(self):
         """Test that the games a listed in reverse chronological

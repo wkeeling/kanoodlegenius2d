@@ -220,6 +220,8 @@ class Board(BaseModel):
 
         BoardNoodle.create(board=self, noodle=noodle, position=position, part1=noodle.part1,
                            part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
+        self.player.game.last_played = datetime.now()
+        self.player.game.save()
 
     def setup(self):
         """Set up the board based on the puzzle it is referencing.
