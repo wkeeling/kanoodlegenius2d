@@ -59,7 +59,7 @@ class Game(BaseModel):
 
         first_puzzle = Level.select().where(Level.number == 1).join(Puzzle).where(Puzzle.number == 1)
         board = Board.create(player=player, puzzle=first_puzzle)  # Creates an empty board referencing player/puzzle
-        board.setup(first_puzzle)  # Sets up the noodles on the board based on the puzzle
+        board.setup()  # Sets up the noodles on the board based on the puzzle
 
         return board
 

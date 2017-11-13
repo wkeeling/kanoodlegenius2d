@@ -41,11 +41,47 @@ class InitialiseTest(TestCase):
             pass
 
 
-class StartNewGameTest(TestCase):
+class GameTest(TestCase):
 
     def test_start_new_game(self):
         """Test assemble the model objects needed to begin a new game."""
         board = Game.start('test_player')
+
+        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        board.place(dark_blue, 32)  # Placed OK
+
+        yellow = Noodle.get(Noodle.colour == 'yellow')
+        yellow.rotate(increment=2)
+        try:
+            board.place(yellow, 7)  # Not placed OK
+        except PositionUnavailableException:
+            pass
+
+        board_noodles = board.noodles
+        self.assertEqual(len(board_noodles), 5)
+
+    def test_complete_puzzle_1(self):
+        """Test complete the first puzzle, checking that the board
+        indicates that the puzzle was completed successfully.
+        """
+        self.fail('Implement')
+
+    def test_complete_game(self):
+        """Test that the game indicates that it is fully complete."""
+        self.fail('Implement')
+
+    def test_last_played(self):
+        """Test that the last played date is set on a game when a
+        player places a piece on the board.
+        """
+        self.fail('Implement')
+
+    def test_get_games_ordered_by_last_played(self):
+        """Test that the games a listed in reverse chronological
+        order of last played.
+        """
+        games = Game.get_by_last_played()
+        self.fail('Implement')
 
     def setUp(self):
         self._datafile_path = os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db')
