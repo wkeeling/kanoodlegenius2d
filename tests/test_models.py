@@ -121,6 +121,24 @@ class NoodleTest(TestCase):
 
 class BoardTest(TestCase):
 
+    def test_setup(self):
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
+            board = self._create_board()
+            light_blue = Noodle.create(designation='D', colour='light_blue',
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
+            light_blue.rotate(increment=3)
+            board.puzzle.place(light_blue, position=3)
+            board.setup()
+
+            self.assertEqual(len(board.noodles), 1)
+            self.assertEqual(board.noodles[0].part1, orientation.E)
+            self.assertEqual(board.noodles[0].part2, orientation.E)
+            self.assertEqual(board.noodles[0].part3, orientation.NE)
+            self.assertEqual(board.noodles[0].part4, orientation.SE)
+
     def test_place_noodle(self):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
             board = self._create_board()

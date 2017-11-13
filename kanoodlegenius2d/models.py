@@ -57,7 +57,7 @@ class Game(BaseModel):
         game = Game.create()
         player = Player.create(name=player_name, game=game)
 
-        first_puzzle = Level.select()[0].puzzles[0]
+        first_puzzle = Level.select().where(Level.number == 1).join(Puzzle).where(Puzzle.number == 1)
         board = Board.create(player=player, puzzle=first_puzzle)  # Creates an empty board referencing player/puzzle
         board.setup(first_puzzle)  # Sets up the noodles on the board based on the puzzle
 
@@ -157,7 +157,7 @@ class Puzzle(BaseModel):
     """Represents a Kanoodle Genius puzzle, which is basically a
     board preconfigured with some noodles.
     """
-    level = ForeignKeyField(Level, 'puzzles')
+    level = ForeignKeyField(Level, related_name='puzzles')
     number = IntegerField()
 
     def place(self, noodle, position):
@@ -218,9 +218,16 @@ class Board(BaseModel):
         BoardNoodle.create(board=self, noodle=noodle, position=position, part1=noodle.part1,
                            part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
 
-    def setup(self, puzzle):
-        # Create a BoardNoodle based on each PuzzleNoode
-        pass
+    def setup(self):
+        """Set up the board based on the puzzle it is referencing.
+
+        The puzzle acts as a template.
+        """
+        for noodle in self.puzzle.noodles:
+            self.place(noodle.noodle, noodle.position)
+
+    def __str__(self):
+        return '<Board: {}>'.format(self.id)
 
 
 class BoardNoodle(PartPositionMixin, BaseModel):
