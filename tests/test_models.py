@@ -61,6 +61,12 @@ class GameTest(TestCase):
         board_noodles = board.noodles
         self.assertEqual(len(board_noodles), 5)
 
+    def test_start_new_game_sets_last_played(self):
+        """Test that the last played date is set when a new game is started."""
+        board = Game.start('test_player')
+
+        self.assertIsNotNone(board.player.game.last_played)
+
     def test_complete_puzzle_1(self):
         """Test complete the first puzzle, checking that the board
         indicates that the puzzle was completed successfully.

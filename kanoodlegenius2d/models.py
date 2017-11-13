@@ -1,7 +1,9 @@
+from datetime import datetime
 import logging
 import os
 
 from peewee import (CharField,
+                    DateTimeField,
                     FixedCharField,
                     ForeignKeyField,
                     IntegerField,
@@ -43,6 +45,7 @@ class BaseModel(Model):
 
 class Game(BaseModel):
     """Represents a single Kanoodle Genius game for a given player."""
+    last_played = DateTimeField()
 
     @staticmethod
     def start(player_name):
@@ -54,7 +57,7 @@ class Game(BaseModel):
         Returns:
             The Board instance preconfigured with noodles, and ready to go.
         """
-        game = Game.create()
+        game = Game.create(last_played=datetime.now())
         player = Player.create(name=player_name, game=game)
 
         first_puzzle = Level.select().where(Level.number == 1).join(Puzzle).where(Puzzle.number == 1)
