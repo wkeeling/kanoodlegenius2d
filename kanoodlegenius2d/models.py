@@ -55,16 +55,40 @@ class Game(BaseModel):
             player_name:
                 The name of the player starting the game.
         Returns:
-            The Board instance preconfigured with noodles, and ready to go.
+            The board instance preconfigured with noodles, and ready to go.
         """
         game = Game.create()
         player = Player.create(name=player_name, game=game)
 
-        first_puzzle = Level.select().where(Level.number == 1).join(Puzzle).where(Puzzle.number == 1)
+        first_puzzle = Puzzle.get(Puzzle.number == 1)
         board = Board.create(player=player, puzzle=first_puzzle)  # Creates an empty board referencing player/puzzle
         board.setup()  # Sets up the noodles on the board based on the puzzle
 
         return board
+
+    @staticmethod
+    def resume(player_name):
+        """Convenience method to resume a previous game for a player.
+
+        Args:
+            player_name:
+                The name of the player resuming the game.
+        Returns:
+            The board instance holding the previous state of the game.
+        """
+        player = Player.get(Player.name == player_name)
+        boards = player.boards.order_by(Board.id)
+        return boards[-1]
+
+    @staticmethod
+    def by_last_played():
+        """Get all games in reverse chronological order of last played (so
+        most recent first.
+
+        Returns:
+            An iterator of games ordered by reverse chronological order of last played.
+        """
+        return Game.select().order_by(-Game.last_played)
 
 
 class Level(BaseModel):

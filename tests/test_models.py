@@ -49,12 +49,12 @@ class GameIntegrationTest(TestCase):
         board = Game.start('test_player')
 
         dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
-        board.place(dark_blue, 32)  # Placed OK
+        board.place(dark_blue, position=32)  # Placed OK
 
         yellow = Noodle.get(Noodle.colour == 'yellow')
         yellow.rotate(increment=2)
         try:
-            board.place(yellow, 7)  # Not placed OK
+            board.place(yellow, position=7)  # Not placed OK
         except PositionUnavailableException:
             pass
 
@@ -77,6 +77,17 @@ class GameIntegrationTest(TestCase):
         """Test that the game indicates that it is fully complete."""
         self.fail('Implement')
 
+    def test_get_games_ordered_by_last_played(self):
+        """Test that the games a listed in reverse chronological
+        order of last played.
+        """
+        board1 = Game.start('player1')
+        board2 = Game.start('player2')
+
+        games = list(Game.by_last_played())
+
+        self.assertEqual(games, [board2.player.game, board1.player.game])
+
     def test_last_played(self):
         """Test that the last played date is set on a game when a
         player places a piece on the board.
@@ -85,21 +96,21 @@ class GameIntegrationTest(TestCase):
         first_played = board.player.game.last_played  # Set when the game was started
 
         dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
-        board.place(dark_blue, 32)
+        board.place(dark_blue, position=32)
 
         self.assertNotEqual(board.player.game.last_played, first_played)
 
-    def test_get_games_ordered_by_last_played(self):
-        """Test that the games a listed in reverse chronological
-        order of last played.
-        """
-        games = Game.by_last_played()
-        self.fail('Implement')
-
     def test_resume_game(self):
         """Test that the game can be resumed for a player."""
-        board = Game.resume('test player')
-        self.fail('Implement')
+        board1 = Game.start('player1')
+        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        board1.place(dark_blue, position=32)
+
+        board2 = Game.start('player2')
+        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        board2.place(dark_blue, position=32)
+
+        self.assertEqual(Game.resume('player1'), board1)
 
     def setUp(self):
         self._datafile_path = os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db')
@@ -204,7 +215,7 @@ class BoardTest(TestCase):
                                        part3=orientation.NE,
                                        part4=orientation.SE)
 
-            board.place(light_blue, 5)
+            board.place(light_blue, position=5)
 
             board_noodle = BoardNoodle.get(BoardNoodle.position == 5)
             self.assertEqual(board_noodle.part1, light_blue.part1)
@@ -225,10 +236,10 @@ class BoardTest(TestCase):
                                    part2=orientation.NE,
                                    part3=orientation.SE,
                                    part4=orientation.NE)
-            board.place(light_blue, 5)
+            board.place(light_blue, position=5)
 
             with self.assertRaises(PositionUnavailableException):
-                board.place(yellow, 5)
+                board.place(yellow, position=5)
 
     def test_place_raises_exception_when_child_position_occupied(self):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
@@ -243,10 +254,10 @@ class BoardTest(TestCase):
                                    part2=orientation.E,
                                    part3=orientation.NW,
                                    part4=orientation.E)
-            board.place(light_blue, 5)
+            board.place(light_blue, position=5)
 
             with self.assertRaises(PositionUnavailableException):
-                board.place(yellow, 11)
+                board.place(yellow, position=11)
 
     def test_place_raises_exception_when_root_position_off_board(self):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
@@ -258,7 +269,7 @@ class BoardTest(TestCase):
                                        part4=orientation.SE)
 
             with self.assertRaises(PositionUnavailableException):
-                board.place(light_blue, 37)
+                board.place(light_blue, position=37)
 
     def test_place_raises_exception_when_child_position_off_board(self):
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
@@ -270,7 +281,7 @@ class BoardTest(TestCase):
                                        part4=orientation.SE)
 
             with self.assertRaises(PositionUnavailableException):
-                board.place(light_blue, 0)
+                board.place(light_blue, position=0)
 
     def test_undo_place(self):
         """Test that the previous place noodle action can be undone."""
