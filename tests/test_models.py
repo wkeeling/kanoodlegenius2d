@@ -363,3 +363,22 @@ class PlayerTest(TestCase):
     def test_delete_player(self):
         """Test that a player is soft deleted."""
         self.fail('Implement')
+
+
+class PuzzleTest(TestCase):
+
+    def test_next_puzzle(self):
+        with test_database(test_db, (Level, Puzzle)):
+            level = Level.create(number=1, name='Super Pro')
+            puzzle1 = Puzzle.create(level=level, number=1)
+            puzzle2 = Puzzle.create(level=level, number=2)
+
+            self.assertEqual(puzzle1.next_puzzle(), puzzle2)
+
+    def test_no_next_puzzle(self):
+        with test_database(test_db, (Level, Puzzle)):
+            level = Level.create(number=1, name='Super Pro')
+            Puzzle.create(level=level, number=1)
+            puzzle2 = Puzzle.create(level=level, number=2)
+
+            self.assertIsNone(puzzle2.next_puzzle())

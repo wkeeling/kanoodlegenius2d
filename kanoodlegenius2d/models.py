@@ -178,6 +178,18 @@ class Puzzle(BaseModel):
                             part3=noodle.part3,
                             part4=noodle.part4)
 
+    def next_puzzle(self):
+        """Get the next puzzle.
+
+        Returns:
+            The next puzzle, or None if no next puzzle (end of game).
+        """
+        try:
+            return Puzzle.get(Puzzle.number == self.number+1)
+        except Puzzle.DoesNotExist:
+            # End of game
+            return None
+
     def __str__(self):
         return '<Puzzle: {}>'.format(self.number)
 
