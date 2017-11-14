@@ -272,10 +272,6 @@ class BoardTest(TestCase):
             with self.assertRaises(PositionUnavailableException):
                 board.place(light_blue, 0)
 
-    def test_reset_board(self):
-        """Test reset the board back to the initial state."""
-        self.fail('Implement')
-
     def test_undo_place(self):
         """Test that the previous place noodle action can be undone."""
         with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle), create_tables=True):
