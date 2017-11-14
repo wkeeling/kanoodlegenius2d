@@ -281,7 +281,7 @@ class BoardTest(TestCase):
                                        part2=orientation.E,
                                        part3=orientation.NE,
                                        part4=orientation.SE)
-            board.place(light_blue, position=5)
+            board.puzzle.place(light_blue, position=5)
             yellow = Noodle.create(designation='B', colour='yellow',
                                    part1=orientation.E,
                                    part2=orientation.E,
@@ -298,7 +298,19 @@ class BoardTest(TestCase):
 
     def test_undo_no_place_does_nothing(self):
         """Test that attempting to undo when no place has occurred does nothing."""
-        self.fail('Implement')
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle),
+                           create_tables=True):
+            board = self._create_board()
+            light_blue = Noodle.create(designation='D', colour='light_blue',
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
+            board.puzzle.place(light_blue, position=5)
+
+            board.undo()  # Nothing to undo, because undo does not remove puzzle noddles (only board noodles)
+
+            PuzzleNoodle.get(PuzzleNoodle.position == 5)  # Should not raise a DoesNotExist
 
     def _create_board(self):
         level = Level.create(number=1, name='test level')
