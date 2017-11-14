@@ -234,7 +234,7 @@ class Board(BaseModel):
             noodle.part2 = puzzle_noodle.part2
             noodle.part3 = puzzle_noodle.part3
             noodle.part4 = puzzle_noodle.part4
-            self.place(noodle, puzzle_noodle.position)
+            self.place(noodle, position=puzzle_noodle.position)
 
     def undo(self):
         """Undo the last place operation."""
