@@ -373,7 +373,13 @@ class PlayerTest(TestCase):
 
     def test_delete_player(self):
         """Test that a player is soft deleted."""
-        self.fail('Implement')
+        with test_database(test_db, (Game, Player)):
+            game = Game.create()
+            player = Player.create(name='test player', game=game)
+            player.soft_delete()
+
+            deleted_player = Player.get(Player.name == 'test player')
+            self.assertTrue(deleted_player.deleted)
 
 
 class PuzzleTest(TestCase):

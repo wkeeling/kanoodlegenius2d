@@ -2,7 +2,8 @@ from datetime import datetime
 import logging
 import os
 
-from peewee import (CharField,
+from peewee import (BooleanField,
+                    CharField,
                     DateTimeField,
                     FixedCharField,
                     ForeignKeyField,
@@ -175,6 +176,14 @@ class Player(BaseModel):
     """Represents a player playing the game."""
     game = ForeignKeyField(Game)
     name = CharField(max_length=10, unique=True)
+    deleted = BooleanField(default=False)
+
+    def soft_delete(self):
+        """Mark a player as deleted, but do not physically delete the
+        database record.
+        """
+        self.deleted = True
+        self.save()
 
     def __str__(self):
         return '<Player: {}>'.format(self.name)
