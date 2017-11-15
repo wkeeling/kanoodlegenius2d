@@ -48,10 +48,10 @@ class GameIntegrationTest(TestCase):
         """Test assemble the model objects needed to begin a new game."""
         board = Game.start('test_player')
 
-        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        dark_blue = Noodle.dark_blue()
         board.place(dark_blue, position=32)  # Placed OK
 
-        yellow = Noodle.get(Noodle.colour == 'yellow')
+        yellow = Noodle.yellow()
         yellow.rotate(increment=2)
         try:
             board.place(yellow, position=7)  # Not placed OK
@@ -95,7 +95,7 @@ class GameIntegrationTest(TestCase):
         board = Game.start('test_player')
         first_played = board.player.game.last_played  # Set when the game was started
 
-        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        dark_blue = Noodle.dark_blue()
         board.place(dark_blue, position=32)
 
         self.assertNotEqual(board.player.game.last_played, first_played)
@@ -103,11 +103,11 @@ class GameIntegrationTest(TestCase):
     def test_resume_game(self):
         """Test that the game can be resumed for a player."""
         board1 = Game.start('player1')
-        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        dark_blue = Noodle.dark_blue()
         board1.place(dark_blue, position=32)
 
         board2 = Game.start('player2')
-        dark_blue = Noodle.get(Noodle.colour == 'dark_blue')
+        dark_blue = Noodle.dark_blue()
         board2.place(dark_blue, position=32)
 
         self.assertEqual(Game.resume('player1'), board1)
@@ -134,7 +134,7 @@ class NoodleTest(TestCase):
                           part3=orientation.NE,
                           part4=orientation.SE)
 
-            light_blue = Noodle.get(Noodle.colour == 'light_blue')
+            light_blue = Noodle.light_blue()
             light_blue.rotate()
 
             self.assertEqual(light_blue.part1, orientation.SE)
@@ -150,7 +150,7 @@ class NoodleTest(TestCase):
                           part3=orientation.NE,
                           part4=orientation.SE)
 
-            light_blue = Noodle.get(Noodle.colour == 'light_blue')
+            light_blue = Noodle.light_blue()
             light_blue.rotate(3)
 
             self.assertEqual(light_blue.part1, orientation.W)

@@ -140,6 +140,34 @@ class Noodle(PartPositionMixin, BaseModel):
     part3 = FixedCharField(max_length=2)
     part4 = FixedCharField(max_length=2)
 
+    @staticmethod
+    def light_green():
+        return Noodle.get(Noodle.colour == 'light_green')
+
+    @staticmethod
+    def yellow():
+        return Noodle.get(Noodle.colour == 'yellow')
+
+    @staticmethod
+    def dark_blue():
+        return Noodle.get(Noodle.colour == 'dark_blue')
+
+    @staticmethod
+    def light_blue():
+        return Noodle.get(Noodle.colour == 'light_blue')
+
+    @staticmethod
+    def red():
+        return Noodle.get(Noodle.colour == 'red')
+
+    @staticmethod
+    def pink():
+        return Noodle.get(Noodle.colour == 'pink')
+
+    @staticmethod
+    def dark_green():
+        return Noodle.get(Noodle.colour == 'dark_green')
+
     def rotate(self, increment=1):
         """Rotate the noodle clockwise by the specified number of increments.
 
