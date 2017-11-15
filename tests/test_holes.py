@@ -9,18 +9,6 @@ class FindPositionTest(TestCase):
     def test_neighbour_positions_hole0(self):
         self.assertEqual(find_position(0, orientation.E), 1)
 
-    def test_hole15_neighbours(self):
-        self.fail('implement')
-
-    def test_hole23_neighbours(self):
-        self.fail('implement')
-
-    def test_hole27_neighbours(self):
-        self.fail('implement')
-
-    def test_hole31_neighbours(self):
-        self.fail('implement')
-
     def test_invalid_position(self):
         self.assertIsNone(find_position(100, orientation.E))
 
