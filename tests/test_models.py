@@ -71,7 +71,19 @@ class GameIntegrationTest(TestCase):
         """Test complete the first puzzle, checking that the board
         indicates that the puzzle was completed successfully.
         """
-        self.fail('Implement')
+        board = Game.start('test_player')
+
+        dark_blue = Noodle.dark_blue()
+        board.place(dark_blue, position=32)
+        pink = Noodle.pink()
+        pink.rotate(5)
+        board.place(pink, position=29)
+        yellow = Noodle.yellow()
+        yellow.flip()
+        yellow.rotate(increment=2)
+        board.place(yellow, position=17)
+
+        self.assertTrue(board.complete)
 
     def test_complete_game(self):
         """Test that the game indicates that it is fully complete."""

@@ -317,6 +317,15 @@ class Board(BaseModel):
                 board_noodle.delete_instance()
                 break
 
+    @property
+    def complete(self):
+        """Whether the puzzle has been completed.
+
+        Returns:
+            True if the puzzle is complete, False otherwise.
+        """
+        return self.noodles.count() == 7
+
     def __str__(self):
         return '<Board: {}>'.format(self.id)
 
