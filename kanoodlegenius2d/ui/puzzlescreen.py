@@ -16,7 +16,7 @@ class BoardFrame(tk.Frame):
     def __init__(self, master=None, cnf=None, **kw):
         if cnf is None:
             cnf = {}
-        super().__init__(master, cnf, width=480, height=480, bg='black', relief='sunken', **kw)
+        super().__init__(master, cnf, width=480, height=480, bg='black', **kw)
 
         # self._board = tk.Canvas
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
     puzzle_screen = PuzzleScreen(root)
-    puzzle_screen.pack()
+    puzzle_screen.pack(fill='x')
     board = BoardFrame(puzzle_screen)
-    board.pack()
+    board.pack(side='left')
     root.mainloop()
