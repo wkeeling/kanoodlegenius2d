@@ -13,7 +13,7 @@ class PuzzleScreen(tk.Frame):
         board_and_noodle = tk.Frame(self)
         board_and_noodle.pack(side='top', fill='x')
         board_frame = BoardFrame(board_and_noodle, width=500, height=440, bg='black')
-        noodle_frame = NoodleFrame(board_and_noodle, width=300, height=440, bg='gray')
+        noodle_frame = NoodleFrame(board_and_noodle, width=300, height=440, bg='black')
         board_frame.pack(side='left')
         noodle_frame.pack(side='left')
         status_frame = StatusFrame(self, width=800, height=40, bg='black')
@@ -27,7 +27,9 @@ class BoardFrame(tk.Frame):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        # self._board = tk.Canvas
+        self._canvas = tk.Canvas(self, width=500, height=440, bg='black')
+        self._canvas.pack()
+        self._canvas.create_oval(10, 10, 50, 50, outline='gray', width=2)
 
 
 class NoodleFrame(tk.Frame):
