@@ -12,11 +12,11 @@ class PuzzleScreen(tk.Frame):
 
         board_and_noodle = tk.Frame(self, bg='black')
         board_and_noodle.pack(side='top', fill='x')
-        board_frame = BoardFrame(board_and_noodle, width=500, height=440, bg='black')
-        noodle_frame = NoodleFrame(board_and_noodle, width=300, height=440, bg='black')
+        board_frame = BoardFrame(board_and_noodle, width=440, height=420, bg='black')
+        noodle_frame = NoodleFrame(board_and_noodle, width=360, height=420, bg='black')
         board_frame.pack(side='left')
         noodle_frame.pack(side='left')
-        status_frame = StatusFrame(self, width=800, height=40, bg='black')
+        status_frame = StatusFrame(self, width=800, height=60, bg='black')
         status_frame.pack()
 
 
@@ -27,9 +27,20 @@ class BoardFrame(tk.Frame):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        self._canvas = tk.Canvas(self, width=500, height=440, bg='black', highlightbackground='black')
+        self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
-        self._canvas.create_oval(10, 10, 50, 50, outline='gray', width=2)
+        self._draw_row(110, 40, 4)
+        self._draw_row(82, 88, 5)
+        self._draw_row(54, 135, 6)
+        self._draw_row(82, 182, 5)
+        self._draw_row(54, 230, 6)
+        self._draw_row(82, 278, 5)
+        self._draw_row(110, 326, 4)
+
+    def _draw_row(self, tl_x, tl_y, num):
+        for i in range(num):
+            self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55, outline='gray', width=2)
+            tl_x += 56
 
 
 class NoodleFrame(tk.Frame):
