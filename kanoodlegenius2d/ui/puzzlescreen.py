@@ -34,6 +34,8 @@ class BoardFrame(tk.Frame):
         for i, hole in enumerate(holes):
             self._canvas.tag_bind(hole, '<ButtonPress-1>', self._create_on_hole_press(i, hole))
 
+        self._hole_pressed = False
+
     def _draw_board(self):
         x, y = 110, 38
         x_incr, y_incr = 28, 48
@@ -69,11 +71,14 @@ class BoardFrame(tk.Frame):
 
     def _create_on_hole_press(self, index, hole):
         def _on_hole_press(event):
-            self._canvas.itemconfig(hole, outline='yellow')
+            if not self._hole_pressed:
+                self._canvas.itemconfig(hole, outline='yellow')
+                self._hole_pressed = True
 
-            def revert():
-                self._canvas.itemconfig(hole, outline='gray')
-            self.after(500, revert)
+                def revert():
+                    self._canvas.itemconfig(hole, outline='gray')
+                    self._hole_pressed = False
+                self.after(500, revert)
 
         return _on_hole_press
 
