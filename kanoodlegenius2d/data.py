@@ -61,19 +61,19 @@ def setup():
 
     puzzle = Puzzle.create(level=level1, number=1)
 
-    light_blue = Noodle.get(Noodle.colour == 'light_blue')
+    light_blue = Noodle.light_blue()
     light_blue.rotate(increment=3)
     puzzle.place(light_blue, position=3)
 
-    dark_green = Noodle.get(Noodle.colour == 'dark_green')
+    dark_green = Noodle.dark_green()
     puzzle.place(dark_green, position=9)
 
-    light_green = Noodle.get(Noodle.colour == 'light_green')
+    light_green = Noodle.light_green()
     light_green.flip()
     light_green.rotate(increment=3)
     puzzle.place(light_green, position=15)
 
-    red = Noodle.get(Noodle.colour == 'red')
+    red = Noodle.red()
     red.rotate()
     puzzle.place(red, position=20)
 
