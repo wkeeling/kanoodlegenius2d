@@ -29,13 +29,30 @@ class BoardFrame(tk.Frame):
 
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
-        self._draw_row(110, 40, 4)
-        self._draw_row(82, 88, 5)
-        self._draw_row(54, 135, 6)
-        self._draw_row(82, 182, 5)
-        self._draw_row(54, 230, 6)
-        self._draw_row(82, 278, 5)
-        self._draw_row(110, 326, 4)
+        self._draw_board()
+
+    def _draw_board(self):
+        x, y = 110, 38
+        x_incr, y_incr = 28, 48
+        self._draw_row(x, y, 4)
+        x -= x_incr
+        y += y_incr
+        self._draw_row(x, y, 5)
+        x -= x_incr
+        y += y_incr
+        self._draw_row(x, y, 6)
+        x += x_incr
+        y += y_incr
+        self._draw_row(x, y, 5)
+        x -= x_incr
+        y += y_incr
+        self._draw_row(x, y, 6)
+        x += x_incr
+        y += y_incr
+        self._draw_row(x, y, 5)
+        x += x_incr
+        y += y_incr
+        self._draw_row(x, y, 4)
 
     def _draw_row(self, tl_x, tl_y, num):
         for i in range(num):
