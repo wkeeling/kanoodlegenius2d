@@ -29,35 +29,53 @@ class BoardFrame(tk.Frame):
 
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
-        self._draw_board()
+        holes = self._draw_board()
+
+        for i, hole in enumerate(holes):
+            self._canvas.tag_bind(hole, '<ButtonPress-1>', self._create_on_hole_press(i, hole))
 
     def _draw_board(self):
         x, y = 110, 38
         x_incr, y_incr = 28, 48
-        self._draw_row(x, y, 4)
+        holes = []
+        holes.extend(self._draw_row(x, y, 4))
         x -= x_incr
         y += y_incr
-        self._draw_row(x, y, 5)
+        holes.extend(self._draw_row(x, y, 5))
         x -= x_incr
         y += y_incr
-        self._draw_row(x, y, 6)
+        holes.extend(self._draw_row(x, y, 6))
         x += x_incr
         y += y_incr
-        self._draw_row(x, y, 5)
+        holes.extend(self._draw_row(x, y, 5))
         x -= x_incr
         y += y_incr
-        self._draw_row(x, y, 6)
+        holes.extend(self._draw_row(x, y, 6))
         x += x_incr
         y += y_incr
-        self._draw_row(x, y, 5)
+        holes.extend(self._draw_row(x, y, 5))
         x += x_incr
         y += y_incr
-        self._draw_row(x, y, 4)
+        holes.extend(self._draw_row(x, y, 4))
+        return holes
 
     def _draw_row(self, tl_x, tl_y, num):
+        holes = []
         for i in range(num):
-            self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55, outline='gray', width=2)
+            hole_id = self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55, outline='gray', fill='black', width=2)
+            holes.append(hole_id)
             tl_x += 56
+        return holes
+
+    def _create_on_hole_press(self, index, hole):
+        def _on_hole_press(event):
+            self._canvas.itemconfig(hole, outline='yellow')
+
+            def revert():
+                self._canvas.itemconfig(hole, outline='gray')
+            self.after(500, revert)
+
+        return _on_hole_press
 
 
 class NoodleFrame(tk.Frame):
