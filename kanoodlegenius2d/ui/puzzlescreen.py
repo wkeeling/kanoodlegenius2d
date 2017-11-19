@@ -44,7 +44,7 @@ class BoardFrame(tk.Frame):
         self._noodle_frame = noodle_frame
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
-        self._draw_board()
+        self._holes = self._draw_board()
 
         self._hole_pressed = False
 
@@ -75,6 +75,8 @@ class BoardFrame(tk.Frame):
         for i, hole in enumerate(holes):
             self._canvas.tag_bind(hole, '<ButtonPress-1>', self._create_on_hole_press(i, hole))
 
+        return holes
+
     def _draw_row(self, tl_x, tl_y, num):
         holes = []
         for i in range(num):
@@ -82,6 +84,10 @@ class BoardFrame(tk.Frame):
             holes.append(hole_id)
             tl_x += 56
         return holes
+
+    def _draw_puzzle_noodles(self):
+        for puzzle_noodle in self._board.puzzle.noodles:
+            root = self._holes[puzzle_noodle.position]
 
     def _create_on_hole_press(self, index, hole):
         def _on_hole_press(_):
