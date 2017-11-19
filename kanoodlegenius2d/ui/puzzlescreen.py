@@ -99,12 +99,12 @@ class NoodleSelectionFrame(tk.Frame):
     """The frame of the PuzzleScreen that allows a noodle to be selected."""
 
     orientation_offsets = {
-        orientation.E: (55, 0),
-        orientation.SE: (28, 47),
-        orientation.SW: (-27, 50),
+        orientation.E: (56, 0),
+        orientation.SE: (28, 48),
+        orientation.SW: (-28, 48),
         orientation.W: (-56, 0),
         orientation.NW: (-28, -48),
-        orientation.NE: (27, -48)
+        orientation.NE: (28, -48)
     }
 
     def __init__(self, board, master=None, cnf=None, **kw):
@@ -123,13 +123,7 @@ class NoodleSelectionFrame(tk.Frame):
 
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
-
-        prev = tk.Button(control_frame, text='Prev', highlightbackground='black',
-                         command=self._prev_noodle)
-        prev.pack(side='left')
-        nxt = tk.Button(control_frame, text='Next', highlightbackground='black',
-                        command=self._next_noodle)
-        nxt.pack(side='right')
+        self._init_buttons(control_frame)
 
     def _draw_noodle(self):
         noodle_parts = []
@@ -149,6 +143,22 @@ class NoodleSelectionFrame(tk.Frame):
             # Now that a new part has been drawn, re-centre the noodle as it currently stands
             self._recentre(noodle_parts)
 
+    def _init_buttons(self, control_frame):
+        prev_button = tk.Button(control_frame, text='Prev', highlightbackground='black',
+                                command=self._prev_noodle)
+        prev_button.grid(row=0, column=0)
+        nxt_button = tk.Button(control_frame, text='Next', highlightbackground='black',
+                               command=self._next_noodle)
+        nxt_button.grid(row=0, column=1)
+
+        rotate_button = tk.Button(control_frame, text='Rotate', highlightbackground='black',
+                                  command=self._rotate_noodle)
+        rotate_button.grid(row=1, column=0)
+
+        flip_button = tk.Button(control_frame, text='Flip', highlightbackground='black',
+                                command=self._flip_noodle)
+        flip_button.grid(row=1, column=1)
+
     def _next_noodle(self):
         self._canvas.delete('all')
         self._selectable_noodles.rotate()
@@ -157,6 +167,16 @@ class NoodleSelectionFrame(tk.Frame):
     def _prev_noodle(self):
         self._canvas.delete('all')
         self._selectable_noodles.rotate(-1)
+        self._draw_noodle()
+
+    def _rotate_noodle(self):
+        self._canvas.delete('all')
+        self._selectable_noodles[0].rotate()
+        self._draw_noodle()
+
+    def _flip_noodle(self):
+        self._canvas.delete('all')
+        self._selectable_noodles[0].flip()
         self._draw_noodle()
 
     def _recentre(self, noodle_parts):
