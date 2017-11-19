@@ -7,6 +7,9 @@ from kanoodlegenius2d.models import (initialise,
 from kanoodlegenius2d import orientation
 
 
+HIGHLIGHT_COLOUR = 'yellow'
+
+
 class PuzzleScreen(tk.Frame):
     """Represents the main screen of the game where a player interacts with
     a puzzle board and selects noodles to place.
@@ -81,9 +84,9 @@ class BoardFrame(tk.Frame):
         return holes
 
     def _create_on_hole_press(self, index, hole):
-        def _on_hole_press(event):
+        def _on_hole_press(_):
             if not self._hole_pressed:
-                self._canvas.itemconfig(hole, outline='yellow')
+                self._canvas.itemconfig(hole, outline=HIGHLIGHT_COLOUR)
                 self._hole_pressed = True
 
                 def revert():
@@ -146,7 +149,7 @@ class NoodleSelectionFrame(tk.Frame):
             self._recentre(noodle_parts)
 
         for i, part in enumerate(noodle_parts):
-            self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, part))
+            self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
         canvas_width = int(self._canvas.config()['width'][4])
@@ -157,9 +160,18 @@ class NoodleSelectionFrame(tk.Frame):
         for part in noodle_parts:
             self._canvas.move(part, x_offset, y_offset)
 
-    def _create_on_part_press(self, index, part):
-        def _on_part_press(event):
-            self._canvas.itemconfig(part, outline='yellow')
+    def _create_on_part_press(self, index, noodle_parts):
+        def _on_part_press(_):
+            # TODO: the outline='red' should be replaced with self._selectable_noodles[0].colour
+            for part in noodle_parts:
+                self._canvas.itemconfig(part, outline='red')
+
+            if self._selected_part == noodle_parts[index]:
+                self._canvas.itemconfig(noodle_parts[index], outline='red')
+                self._selected_part = None
+            else:
+                self._canvas.itemconfig(noodle_parts[index], outline=HIGHLIGHT_COLOUR)
+                self._selected_part = noodle_parts[index]
 
         return _on_part_press
 
