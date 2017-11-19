@@ -41,10 +41,7 @@ class BoardFrame(tk.Frame):
         self._noodle_frame = noodle_frame
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
-        holes = self._draw_board()
-
-        for i, hole in enumerate(holes):
-            self._canvas.tag_bind(hole, '<ButtonPress-1>', self._create_on_hole_press(i, hole))
+        self._draw_board()
 
         self._hole_pressed = False
 
@@ -71,7 +68,9 @@ class BoardFrame(tk.Frame):
         x += x_incr
         y += y_incr
         holes.extend(self._draw_row(x, y, 4))
-        return holes
+
+        for i, hole in enumerate(holes):
+            self._canvas.tag_bind(hole, '<ButtonPress-1>', self._create_on_hole_press(i, hole))
 
     def _draw_row(self, tl_x, tl_y, num):
         holes = []
@@ -99,12 +98,12 @@ class NoodleSelectionFrame(tk.Frame):
     """The frame of the PuzzleScreen that allows a noodle to be selected."""
 
     orientation_offsets = {
-        orientation.E: (56, 0),
-        orientation.SE: (28, 48),
-        orientation.SW: (-28, 48),
-        orientation.W: (-56, 0),
-        orientation.NW: (-28, -48),
-        orientation.NE: (28, -48)
+        orientation.E: (57, 0),
+        orientation.SE: (29, 49),
+        orientation.SW: (-29, 49),
+        orientation.W: (-57, 0),
+        orientation.NW: (-29, -49),
+        orientation.NE: (29, -49)
     }
 
     def __init__(self, board, master=None, cnf=None, **kw):
@@ -119,17 +118,20 @@ class NoodleSelectionFrame(tk.Frame):
         noodle_frame.pack(side='top')
         self._canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='black', highlightbackground='white')
         self._canvas.pack()
-        self._draw_noodle()
 
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
         self._init_buttons(control_frame)
+        self._draw_noodle()
+
+        # The part of the noodle that a user has pressed (0 - 4)
+        self._selected_part = None
 
     def _draw_noodle(self):
         noodle_parts = []
         noodle = self._selectable_noodles[0]
 
-        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill='red'))
+        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill='red', outline='red', width=2))
         orientations = noodle.part1, noodle.part2, noodle.part3, noodle.part4
 
         for o in orientations:
@@ -139,9 +141,27 @@ class NoodleSelectionFrame(tk.Frame):
                                                          coords[1] + offsets[1],
                                                          coords[0] + offsets[0] + 55,
                                                          coords[1] + offsets[1] + 55,
-                                                         fill='red'))
+                                                         fill='red', outline='red', width=2))
             # Now that a new part has been drawn, re-centre the noodle as it currently stands
             self._recentre(noodle_parts)
+
+        for i, part in enumerate(noodle_parts):
+            self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, part))
+
+    def _recentre(self, noodle_parts):
+        canvas_width = int(self._canvas.config()['width'][4])
+        canvas_height = int(self._canvas.config()['height'][4])
+        bbox = self._canvas.bbox(*noodle_parts)
+        x_offset = ((canvas_width - (bbox[2] - bbox[0])) // 2) - bbox[0]
+        y_offset = ((canvas_height - (bbox[3] - bbox[1])) // 2) - bbox[1]
+        for part in noodle_parts:
+            self._canvas.move(part, x_offset, y_offset)
+
+    def _create_on_part_press(self, index, part):
+        def _on_part_press(event):
+            self._canvas.itemconfig(part, outline='yellow')
+
+        return _on_part_press
 
     def _init_buttons(self, control_frame):
         nxt_button = tk.Button(control_frame, text='Next', highlightbackground='black',
@@ -171,14 +191,29 @@ class NoodleSelectionFrame(tk.Frame):
         self._selectable_noodles[0].flip()
         self._draw_noodle()
 
-    def _recentre(self, noodle_parts):
-        canvas_width = int(self._canvas.config()['width'][4])
-        canvas_height = int(self._canvas.config()['height'][4])
-        bbox = self._canvas.bbox(*noodle_parts)
-        x_offset = ((canvas_width - (bbox[2] - bbox[0])) // 2) - bbox[0]
-        y_offset = ((canvas_height - (bbox[3] - bbox[1])) // 2) - bbox[1]
-        for part in noodle_parts:
-            self._canvas.move(part, x_offset, y_offset)
+    def accept(self):
+        """Accept the currently selected noodle and part and remove them
+        from the current list of selectable noodles.
+
+        Returns:
+            A 2-tuple consisting of the currently selected noodle
+            and the part that was pressed (an integer in the range
+            1 - 4).
+        """
+        noodle, part = self._selectable_noodles.popleft(), self._selected_part
+        self._draw_noodle()
+        return noodle, part
+
+    def reject(self, noodle):
+        """Reject accepting a noodle and place it back into the list of
+        selectable noodles.
+
+        Args:
+            noodle:
+                The noodle being rejected.
+        """
+        self._selectable_noodles.insert(0, noodle)
+        self._draw_noodle()
 
 
 class StatusFrame(tk.Frame):
