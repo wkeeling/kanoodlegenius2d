@@ -7,7 +7,7 @@ from kanoodlegenius2d.models import (initialise,
 from kanoodlegenius2d import orientation
 
 
-HIGHLIGHT_COLOUR = 'yellow'
+HIGHLIGHT_COLOUR = 'white'
 
 
 class PuzzleScreen(tk.Frame):
