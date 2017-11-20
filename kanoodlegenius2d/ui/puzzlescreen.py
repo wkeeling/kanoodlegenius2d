@@ -4,7 +4,8 @@ import tkinter as tk
 from kanoodlegenius2d.models import (initialise,
                                      Game,
                                      Noodle)
-from kanoodlegenius2d import orientation
+from kanoodlegenius2d import (holes,
+                              orientation)
 
 
 HIGHLIGHT_COLOUR = 'white'
@@ -45,49 +46,54 @@ class BoardFrame(tk.Frame):
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
         self._holes = self._draw_board()
+        self._draw_puzzle_noodles()
 
         self._hole_pressed = False
 
     def _draw_board(self):
         x, y = 110, 38
         x_incr, y_incr = 29, 49
-        holes = []
-        holes.extend(self._draw_row(x, y, 4))
+        holes_ = []
+        holes_.extend(self._draw_row(x, y, 4))
         x -= x_incr
         y += y_incr
-        holes.extend(self._draw_row(x, y, 5))
+        holes_.extend(self._draw_row(x, y, 5))
         x -= x_incr
         y += y_incr
-        holes.extend(self._draw_row(x, y, 6))
+        holes_.extend(self._draw_row(x, y, 6))
         x += x_incr
         y += y_incr
-        holes.extend(self._draw_row(x, y, 5))
+        holes_.extend(self._draw_row(x, y, 5))
         x -= x_incr
         y += y_incr
-        holes.extend(self._draw_row(x, y, 6))
+        holes_.extend(self._draw_row(x, y, 6))
         x += x_incr
         y += y_incr
-        holes.extend(self._draw_row(x, y, 5))
+        holes_.extend(self._draw_row(x, y, 5))
         x += x_incr
         y += y_incr
-        holes.extend(self._draw_row(x, y, 4))
+        holes_.extend(self._draw_row(x, y, 4))
 
-        for i, hole in enumerate(holes):
+        for i, hole in enumerate(holes_):
             self._canvas.tag_bind(hole, '<ButtonPress-1>', self._create_on_hole_press(i, hole))
 
-        return holes
+        return holes_
 
     def _draw_row(self, tl_x, tl_y, num):
-        holes = []
+        holes_ = []
         for i in range(num):
             hole_id = self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55, outline='gray', fill='black', width=2)
-            holes.append(hole_id)
+            holes_.append(hole_id)
             tl_x += 56
-        return holes
+        return holes_
 
     def _draw_puzzle_noodles(self):
         for puzzle_noodle in self._board.puzzle.noodles:
-            root = self._holes[puzzle_noodle.position]
+            last_position = puzzle_noodle.position
+            self._canvas.itemconfig(self._holes[last_position], fill=puzzle_noodle.noodle.colour)
+            for part in puzzle_noodle.parts:
+                last_position = holes.find_position(last_position, part)
+                self._canvas.itemconfig(self._holes[last_position], fill=puzzle_noodle.noodle.colour)
 
     def _create_on_hole_press(self, index, hole):
         def _on_hole_press(_):
