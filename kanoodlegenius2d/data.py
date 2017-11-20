@@ -19,37 +19,37 @@ def setup():
             getattr(v, 'create_table')(fail_silently=True)  # Don't error if the tables already exist
 
     # Set up the initial data where is does not already exist
-    Noodle.create(designation='A', colour='light_green',
+    Noodle.create(designation='A', colour='#00cc00',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='B', colour='yellow',
+    Noodle.create(designation='B', colour='ffff00',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.NE)
-    Noodle.create(designation='C', colour='dark_blue',
+    Noodle.create(designation='C', colour='333399',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.NE)
-    Noodle.create(designation='D', colour='light_blue',
+    Noodle.create(designation='D', colour='00ccff',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='E', colour='red',
+    Noodle.create(designation='E', colour='ff0000',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='F', colour='pink',
+    Noodle.create(designation='F', colour='ff00ff',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.E)
-    Noodle.create(designation='G', colour='dark_green',
+    Noodle.create(designation='G', colour='006600',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.E,

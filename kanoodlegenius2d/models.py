@@ -142,31 +142,31 @@ class Noodle(PartPositionMixin, BaseModel):
 
     @staticmethod
     def light_green():
-        return Noodle.get(Noodle.colour == 'light_green')
+        return Noodle.get(Noodle.designation == 'A')
 
     @staticmethod
     def yellow():
-        return Noodle.get(Noodle.colour == 'yellow')
+        return Noodle.get(Noodle.designation == 'B')
 
     @staticmethod
     def dark_blue():
-        return Noodle.get(Noodle.colour == 'dark_blue')
+        return Noodle.get(Noodle.designation == 'C')
 
     @staticmethod
     def light_blue():
-        return Noodle.get(Noodle.colour == 'light_blue')
+        return Noodle.get(Noodle.designation == 'D')
 
     @staticmethod
     def red():
-        return Noodle.get(Noodle.colour == 'red')
+        return Noodle.get(Noodle.designation == 'E')
 
     @staticmethod
     def pink():
-        return Noodle.get(Noodle.colour == 'pink')
+        return Noodle.get(Noodle.designation == 'F')
 
     @staticmethod
     def dark_green():
-        return Noodle.get(Noodle.colour == 'dark_green')
+        return Noodle.get(Noodle.designation == 'G')
 
     def rotate(self, increment=1):
         """Rotate the noodle clockwise by the specified number of increments.
