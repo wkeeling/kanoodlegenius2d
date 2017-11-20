@@ -92,11 +92,11 @@ class BoardFrame(tk.Frame):
     def _create_on_hole_press(self, index, hole):
         def _on_hole_press(_):
             if not self._hole_pressed:
-                self._canvas.itemconfig(hole, outline=HIGHLIGHT_COLOUR)
+                self._canvas.itemconfig(hole, outline=HIGHLIGHT_COLOUR, width=4)
                 self._hole_pressed = True
 
                 def revert():
-                    self._canvas.itemconfig(hole, outline='gray')
+                    self._canvas.itemconfig(hole, outline='gray', width=2)
                     self._hole_pressed = False
                 self.after(500, revert)
 
@@ -168,13 +168,13 @@ class NoodleSelectionFrame(tk.Frame):
     def _create_on_part_press(self, index, noodle_parts):
         def _on_part_press(_):
             for part in noodle_parts:
-                self._canvas.itemconfig(part, outline='gray')
+                self._canvas.itemconfig(part, outline='gray', width=2)
 
             if self._selected_part == noodle_parts[index]:
-                self._canvas.itemconfig(noodle_parts[index], outline='gray')
+                self._canvas.itemconfig(noodle_parts[index], outline='gray', width=2)
                 self._selected_part = None
             else:
-                self._canvas.itemconfig(noodle_parts[index], outline=HIGHLIGHT_COLOUR)
+                self._canvas.itemconfig(noodle_parts[index], outline=HIGHLIGHT_COLOUR, width=4)
                 self._selected_part = noodle_parts[index]
 
         return _on_part_press
