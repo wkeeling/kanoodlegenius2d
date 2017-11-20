@@ -24,32 +24,32 @@ def setup():
                   part2=orientation.NE,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='B', colour='ffff00',
+    Noodle.create(designation='B', colour='#ffff00',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.NE)
-    Noodle.create(designation='C', colour='333399',
+    Noodle.create(designation='C', colour='#333399',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.NE)
-    Noodle.create(designation='D', colour='00ccff',
+    Noodle.create(designation='D', colour='#00ccff',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='E', colour='ff0000',
+    Noodle.create(designation='E', colour='#ff0000',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='F', colour='ff00ff',
+    Noodle.create(designation='F', colour='#ff00ff',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.E)
-    Noodle.create(designation='G', colour='006600',
+    Noodle.create(designation='G', colour='#006600',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.E,
