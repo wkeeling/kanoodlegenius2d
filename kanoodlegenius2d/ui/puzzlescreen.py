@@ -140,7 +140,7 @@ class NoodleSelectionFrame(tk.Frame):
         noodle_parts = []
         noodle = self._selectable_noodles[0]
 
-        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill='red', outline='gray', width=2))
+        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='gray', width=2))
 
         for p in noodle.parts:
             offsets = self.orientation_offsets[p]
@@ -149,7 +149,7 @@ class NoodleSelectionFrame(tk.Frame):
                                                          coords[1] + offsets[1],
                                                          coords[0] + offsets[0] + 55,
                                                          coords[1] + offsets[1] + 55,
-                                                         fill='red', outline='gray', width=2))
+                                                         fill=noodle.colour, outline='gray', width=2))
             # Now that a new part has been drawn, re-centre the noodle as it currently stands
             self._recentre(noodle_parts)
 
