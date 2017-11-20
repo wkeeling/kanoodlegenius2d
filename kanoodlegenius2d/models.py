@@ -101,7 +101,17 @@ class Level(BaseModel):
         return '<Level: {} ({})>'.format(self.number, self.name)
 
 
-class PartPositionMixin:
+class PartAccessorMixin:
+
+    @property
+    def parts(self):
+        """Convenience property for accessing the parts.
+
+         Returns:
+             A tuple of the parts.
+         """
+        return self.part1, self.part2, self.part3, self.part4
+
     def get_part_positions(self, root_position=None):
         """Get the hole positions of each part of the noodle based on the
         root position.
@@ -129,7 +139,7 @@ class PartPositionMixin:
         return positions
 
 
-class Noodle(PartPositionMixin, BaseModel):
+class Noodle(PartAccessorMixin, BaseModel):
     """Represents a noodle - a puzzle piece."""
     designation = FixedCharField(max_length=1)
     colour = CharField()
@@ -330,7 +340,7 @@ class Board(BaseModel):
         return '<Board: {}>'.format(self.id)
 
 
-class BoardNoodle(PartPositionMixin, BaseModel):
+class BoardNoodle(PartAccessorMixin, BaseModel):
     """Represents an instance of a noodle on a player's board."""
     board = ForeignKeyField(Board, related_name='noodles')
     noodle = ForeignKeyField(Noodle)
@@ -346,7 +356,7 @@ class BoardNoodle(PartPositionMixin, BaseModel):
         return '<BoardNoodle: {}>'.format(self.id)
 
 
-class PuzzleNoodle(PartPositionMixin, BaseModel):
+class PuzzleNoodle(PartAccessorMixin, BaseModel):
     """Represents an instance of a noodle preconfigured on a
     puzzle board.
     """
