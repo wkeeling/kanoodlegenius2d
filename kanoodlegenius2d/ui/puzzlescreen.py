@@ -82,7 +82,7 @@ class BoardFrame(tk.Frame):
     def _draw_row(self, tl_x, tl_y, num):
         holes_ = []
         for i in range(num):
-            hole_id = self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55, outline='gray', fill='black', width=2)
+            hole_id = self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55, outline='#4d4d4d', fill='black', width=2)
             holes_.append(hole_id)
             tl_x += 56
         return holes_
@@ -99,10 +99,11 @@ class BoardFrame(tk.Frame):
         def _on_hole_press(_):
             if not self._hole_pressed:
                 self._canvas.itemconfig(hole, outline=HIGHLIGHT_COLOUR, width=4)
+                self._canvas.tag_raise(hole)
                 self._hole_pressed = True
 
                 def revert():
-                    self._canvas.itemconfig(hole, outline='gray', width=2)
+                    self._canvas.itemconfig(hole, outline='#4d4d4d', width=2)
                     self._hole_pressed = False
                 self.after(500, revert)
 
@@ -146,7 +147,7 @@ class NoodleSelectionFrame(tk.Frame):
         noodle_parts = []
         noodle = self._selectable_noodles[0]
 
-        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='gray', width=2))
+        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d', width=2))
 
         for p in noodle.parts:
             offsets = self.orientation_offsets[p]
@@ -155,7 +156,7 @@ class NoodleSelectionFrame(tk.Frame):
                                                          coords[1] + offsets[1],
                                                          coords[0] + offsets[0] + 55,
                                                          coords[1] + offsets[1] + 55,
-                                                         fill=noodle.colour, outline='gray', width=2))
+                                                         fill=noodle.colour, outline='#4d4d4d', width=2))
             # Now that a new part has been drawn, re-centre the noodle as it currently stands
             self._recentre(noodle_parts)
 
@@ -174,13 +175,14 @@ class NoodleSelectionFrame(tk.Frame):
     def _create_on_part_press(self, index, noodle_parts):
         def _on_part_press(_):
             for part in noodle_parts:
-                self._canvas.itemconfig(part, outline='gray', width=2)
+                self._canvas.itemconfig(part, outline='#4d4d4d', width=2)
 
             if self._selected_part == noodle_parts[index]:
-                self._canvas.itemconfig(noodle_parts[index], outline='gray', width=2)
+                self._canvas.itemconfig(noodle_parts[index], outline='#4d4d4d', width=2)
                 self._selected_part = None
             else:
                 self._canvas.itemconfig(noodle_parts[index], outline=HIGHLIGHT_COLOUR, width=4)
+                self._canvas.tag_raise(noodle_parts[index])
                 self._selected_part = noodle_parts[index]
 
         return _on_part_press
