@@ -1,7 +1,4 @@
-- Add tests for individual model methods that are coming into existence
-    - Board.setup()
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
-- Sort noodle colours out (load by designation not colour)
 - Create Noodle.parts property on PartsAccessorMixin which adds method returning tuple of parts
 - Better buttons (make button class which is canvas based - can be reused)
