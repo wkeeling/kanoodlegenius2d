@@ -141,10 +141,9 @@ class NoodleSelectionFrame(tk.Frame):
         noodle = self._selectable_noodles[0]
 
         noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill='red', outline='gray', width=2))
-        orientations = noodle.part1, noodle.part2, noodle.part3, noodle.part4
 
-        for o in orientations:
-            offsets = self.orientation_offsets[o]
+        for p in noodle.parts:
+            offsets = self.orientation_offsets[p]
             coords = self._canvas.coords(noodle_parts[-1])
             noodle_parts.append(self._canvas.create_oval(coords[0] + offsets[0],
                                                          coords[1] + offsets[1],
