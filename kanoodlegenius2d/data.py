@@ -19,7 +19,7 @@ def setup():
             getattr(v, 'create_table')(fail_silently=True)  # Don't error if the tables already exist
 
     # Set up the initial data where is does not already exist
-    Noodle.create(designation='A', colour='#00cc00',
+    Noodle.create(designation='A', colour='#00e600',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.NE,
@@ -29,7 +29,7 @@ def setup():
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.NE)
-    Noodle.create(designation='C', colour='#333399',
+    Noodle.create(designation='C', colour='#000099',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
@@ -39,7 +39,7 @@ def setup():
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='E', colour='#ff0000',
+    Noodle.create(designation='E', colour='#e60000',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.NE,
@@ -49,7 +49,7 @@ def setup():
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.E)
-    Noodle.create(designation='G', colour='#006600',
+    Noodle.create(designation='G', colour='#004d00',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.E,
