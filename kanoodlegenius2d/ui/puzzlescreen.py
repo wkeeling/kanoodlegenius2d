@@ -111,7 +111,10 @@ class BoardFrame(tk.Frame):
                 noodle, part_pos = self._noodle_frame.accept()
                 try:
                     index = hole_index
+                    # Traverse backwards along the noodle to the root position
                     for pos in reversed(range(part_pos)):
+                        if index is None:
+                            raise PositionUnavailableException()
                         index = holes.find_position(index, orientation.opposite(noodle.parts[pos]))
                     self._board.place(noodle, position=index)
                 except PositionUnavailableException:
