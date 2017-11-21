@@ -258,7 +258,8 @@ class NoodleSelectionFrame(tk.Frame):
         """
         noodle, part = self._selectable_noodles.popleft(), self._selected_part
         self._canvas.delete('all')
-        self._draw_noodle()
+        if self._selectable_noodles:
+            self.after(500, self._draw_noodle)
         return noodle, part
 
     def reject(self, noodle):
@@ -286,9 +287,9 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
 
-    # initialise()
-    # b = Game.start('Will')
-    b = Game.resume('Will')  # The board instance will be passed by our parent eventually
+    initialise()
+    b = Game.start('Will')
+    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
     puzzle_screen = PuzzleScreen(b, root)
     puzzle_screen.pack(fill='x')
     root.attributes('-topmost', True)
