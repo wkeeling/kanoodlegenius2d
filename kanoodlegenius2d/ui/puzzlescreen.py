@@ -47,7 +47,7 @@ class BoardFrame(tk.Frame):
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
         self._canvas.pack()
         self._holes = self._draw_board()
-        self._draw_puzzle_noodles()
+        self._draw_noodles_on_board()
 
         self._hole_pressed = False
 
@@ -89,9 +89,11 @@ class BoardFrame(tk.Frame):
             tl_x += 56
         return holes_
 
-    def _draw_puzzle_noodles(self):
+    def _draw_noodles_on_board(self):
         for puzzle_noodle in self._board.puzzle.noodles:
             self._draw_noodle(puzzle_noodle, puzzle_noodle.position)
+        for board_noodle in self._board.noodles:
+            self._draw_noodle(board_noodle, board_noodle.position)
 
     def _draw_noodle(self, noodle, position):
         last_position = position
