@@ -1,4 +1,5 @@
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
 - Better buttons (make button class which is canvas based - can be reused)
-- Get the rendering of the puzzle noodles working on the board
+- Do not allow hole selection for occupied holes
+- Get the board rendering previously placed noodles (board noodles) as well as preconfigured puzzle noodles

@@ -91,33 +91,48 @@ class BoardFrame(tk.Frame):
 
     def _draw_puzzle_noodles(self):
         for puzzle_noodle in self._board.puzzle.noodles:
-            last_position = puzzle_noodle.position
-            self._canvas.itemconfig(self._holes[last_position], fill=puzzle_noodle.noodle.colour)
-            for part in puzzle_noodle.parts:
-                last_position = holes.find_position(last_position, part)
-                self._canvas.itemconfig(self._holes[last_position], fill=puzzle_noodle.noodle.colour)
+            self._draw_noodle(puzzle_noodle, puzzle_noodle.position)
 
-    def _create_on_hole_press(self, hole_index, hold_id):
+    def _draw_noodle(self, noodle, position):
+        last_position = position
+        try:
+            colour = noodle.colour
+        except AttributeError:
+            colour = noodle.noodle.colour
+        self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', fill=colour, width=2)
+        for part in noodle.parts:
+            last_position = holes.find_position(last_position, part)
+            self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', fill=colour, width=2)
+
+    def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
             if not self._hole_pressed:
                 self._hole_pressed = True
                 noodle, part_pos = self._noodle_frame.accept()
                 try:
-                    for part in noodle.parts:
-                        pass
-                    self._board.place(noodle, position=part_pos)
+                    index = hole_index
+                    for pos in reversed(range(part_pos)):
+                        index = holes.find_position(index, orientation.opposite(noodle.parts[pos]))
+                    self._board.place(noodle, position=index)
                 except PositionUnavailableException:
                     self._noodle_frame.reject(noodle)
-                    self._canvas.itemconfig(hold_id, outline='red', width=4)
-                    self._canvas.tag_raise(hold_id)
-                else:
-                    self._canvas.itemconfig(hold_id, outline=HIGHLIGHT_COLOUR, width=4)
-                    self._canvas.tag_raise(hold_id)
+                    self._canvas.itemconfig(hole_id, outline='red', width=4)
+                    self._canvas.tag_raise(hole_id)
 
-                def revert():
-                    self._canvas.itemconfig(hold_id, outline='#4d4d4d', width=2)
-                    self._hole_pressed = False
-                self.after(500, revert)
+                    def revert():
+                        self._canvas.itemconfig(hole_id, outline='#4d4d4d', width=2)
+                        self._hole_pressed = False
+
+                    self.after(500, revert)
+                else:
+                    self._canvas.itemconfig(hole_id, outline=HIGHLIGHT_COLOUR, width=4)
+                    self._canvas.tag_raise(hole_id)
+
+                    def commit():
+                        self._draw_noodle(noodle, index)
+                        self._hole_pressed = False
+
+                    self.after(500, commit)
 
         return _on_hole_press
 
@@ -237,6 +252,7 @@ class NoodleSelectionFrame(tk.Frame):
             0 - 4).
         """
         noodle, part = self._selectable_noodles.popleft(), self._selected_part
+        self._canvas.delete('all')
         self._draw_noodle()
         return noodle, part
 
