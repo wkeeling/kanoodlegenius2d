@@ -43,8 +43,8 @@ def opposite(orientation):
     """
     opposites = {
         E: W,
-        SE: SW,
-        NE: NW
+        SE: NW,
+        NE: SW
     }
 
     try:
