@@ -19,3 +19,16 @@ class OrientationTest(TestCase):
     def test_invalid_orientation(self):
         with self.assertRaises(ValueError):
             orientation.rotate('foobar')
+
+
+class OppositeTest(TestCase):
+
+    def test_opposite_of_east(self):
+        o = orientation.opposite(orientation.E)
+
+        self.assertEqual(o, orientation.W)
+
+    def test_opposite_of_west(self):
+        o = orientation.opposite(orientation.W)
+
+        self.assertEqual(o, orientation.E)
