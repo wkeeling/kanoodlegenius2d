@@ -107,41 +107,51 @@ class BoardFrame(tk.Frame):
     def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
             if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == 'black':
-                noodle, part_pos = self._noodle_frame.accept()
-                if part_pos is None:
+                noodle, selected_part = self._noodle_frame.accept()
+                if selected_part is None:
                     # No noodle selected in NoodleSelectionFrame
                     self._noodle_frame.reject(noodle)
                     return
                 self._hole_pressed = True
                 try:
-                    index = hole_index
-                    # Traverse backwards along the noodle to the root position
-                    for pos in reversed(range(part_pos)):
-                        if index is None:
-                            raise PositionUnavailableException()
-                        index = holes.find_position(index, orientation.opposite(noodle.parts[pos]))
-                    self._board.place(noodle, position=index)
+                    root_index = self._place_noodle(noodle, selected_part, hole_index)
                 except PositionUnavailableException:
-                    self._noodle_frame.reject(noodle)
-                    self._canvas.itemconfig(hole_id, outline='red', width=4)
-                    self._canvas.tag_raise(hole_id)
-
-                    def revert():
-                        self._canvas.itemconfig(hole_id, outline='#4d4d4d', width=2)
-                        self._hole_pressed = False
-
-                    self.after(500, revert)
+                    self._reject_place_noodle(noodle, hole_id)
                 else:
-                    self._canvas.itemconfig(hole_id, outline=HIGHLIGHT_COLOUR, width=4)
-                    self._canvas.tag_raise(hole_id)
-
-                    def commit():
-                        self._draw_noodle(noodle, index)
-                        self._hole_pressed = False
-
-                    self.after(500, commit)
+                    self._commit_place_noodle(noodle, hole_id, root_index)
 
         return _on_hole_press
+
+    def _place_noodle(self, noodle, part_pos, hole_index):
+        index = hole_index
+        # Traverse backwards along the noodle to the root position
+        for pos in reversed(range(part_pos)):
+            if index is None:
+                raise PositionUnavailableException()
+            index = holes.find_position(index, orientation.opposite(noodle.parts[pos]))
+        self._board.place(noodle, position=index)
+        return index
+
+    def _reject_place_noodle(self, noodle, hole_id):
+        self._noodle_frame.reject(noodle)
+        self._canvas.itemconfig(hole_id, outline='red', width=4)
+        self._canvas.tag_raise(hole_id)
+
+        def revert():
+            self._canvas.itemconfig(hole_id, outline='#4d4d4d', width=2)
+            self._hole_pressed = False
+
+        self.after(500, revert)
+
+    def _commit_place_noodle(self, noodle, hole_id, root_index):
+        self._canvas.itemconfig(hole_id, outline=HIGHLIGHT_COLOUR, width=4)
+        self._canvas.tag_raise(hole_id)
+
+        def commit():
+            self._draw_noodle(noodle, root_index)
+            self._hole_pressed = False
+
+        self.after(500, commit)
 
 
 class NoodleSelectionFrame(tk.Frame):
