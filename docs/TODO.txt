@@ -1,5 +1,6 @@
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
 - Better buttons (make button class which is canvas based - can be reused)
-- Do not allow hole selection for occupied holes
-- Get the board rendering previously placed noodles (board noodles) as well as preconfigured puzzle noodles
+- Implement undo function
+- Implement status bar
+- Implement fading of colours in and out when placing
