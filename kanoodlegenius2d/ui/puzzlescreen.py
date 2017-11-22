@@ -106,9 +106,13 @@ class BoardFrame(tk.Frame):
 
     def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
-            if not self._hole_pressed:
-                self._hole_pressed = True
+            if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == 'black':
                 noodle, part_pos = self._noodle_frame.accept()
+                if part_pos is None:
+                    # No noodle selected in NoodleSelectionFrame
+                    self._noodle_frame.reject(noodle)
+                    return
+                self._hole_pressed = True
                 try:
                     index = hole_index
                     # Traverse backwards along the noodle to the root position
@@ -255,6 +259,7 @@ class NoodleSelectionFrame(tk.Frame):
             0 - 4).
         """
         noodle, part = self._selectable_noodles.popleft(), self._selected_part
+        self._selected_part = None
         self._canvas.delete('all')
         if self._selectable_noodles:
             self.after(500, self._draw_noodle)
@@ -285,9 +290,9 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
 
-    initialise()
-    b = Game.start('Will')
-    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
+    # initialise()
+    # b = Game.start('Will')
+    b = Game.resume('Will')  # The board instance will be passed by our parent eventually
     puzzle_screen = PuzzleScreen(b, root)
     puzzle_screen.pack(fill='x')
     root.attributes('-topmost', True)
