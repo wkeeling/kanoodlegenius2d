@@ -90,8 +90,6 @@ class BoardFrame(tk.Frame):
         return holes_
 
     def _draw_noodles_on_board(self):
-        for puzzle_noodle in self._board.puzzle.noodles:
-            self._draw_noodle(puzzle_noodle, puzzle_noodle.position)
         for board_noodle in self._board.noodles:
             self._draw_noodle(board_noodle, board_noodle.position)
 
