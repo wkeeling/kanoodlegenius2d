@@ -12,7 +12,7 @@ from kanoodlegenius2d import (holes,
 HIGHLIGHT_COLOUR = 'white'
 
 
-class PuzzleScreen(tk.Frame):
+class GameScreen(tk.Frame):
     """Represents the main screen of the game where a player interacts with
     a puzzle board and selects noodles to place.
     """
@@ -36,7 +36,7 @@ class PuzzleScreen(tk.Frame):
 
 
 class BoardFrame(tk.Frame):
-    """The frame of the PuzzleScreen that contains the board."""
+    """The frame of the GameScreen that contains the board."""
     def __init__(self, board, noodle_frame, master=None, cnf=None, **kw):
         if cnf is None:
             cnf = {}
@@ -145,7 +145,7 @@ class BoardFrame(tk.Frame):
 
 
 class NoodleSelectionFrame(tk.Frame):
-    """The frame of the PuzzleScreen that allows a noodle to be selected."""
+    """The frame of the GameScreen that allows a noodle to be selected."""
 
     orientation_offsets = {
         orientation.E: (57, 0),
@@ -290,11 +290,11 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
 
-    # initialise()
-    # b = Game.start('Will')
-    b = Game.resume('Will')  # The board instance will be passed by our parent eventually
-    puzzle_screen = PuzzleScreen(b, root)
-    puzzle_screen.pack(fill='x')
+    initialise()
+    b = Game.start('Will')
+    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
+    game_screen = GameScreen(b, root)
+    game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
     root.attributes('-topmost', False)
