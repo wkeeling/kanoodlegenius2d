@@ -44,7 +44,7 @@ class BoardFrame(tk.Frame):
 
         self._board = board
         self._noodle_frame = noodle_frame
-        self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightbackground='white')
+        self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightthickness=0)
         self._canvas.pack()
         self._holes = self._draw_board()
         self._draw_noodles_on_board()
@@ -176,7 +176,7 @@ class NoodleSelectionFrame(tk.Frame):
 
         noodle_frame = tk.Frame(self)
         noodle_frame.pack(side='top')
-        self._canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='black', highlightbackground='white')
+        self._canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='black', highlightthickness=0)
         self._canvas.pack()
 
         control_frame = tk.Frame(self)
@@ -303,7 +303,7 @@ if __name__ == '__main__':
     initialise()
     b = Game.start('Will')
     # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
-    game_screen = GameScreen(b, root)
+    game_screen = GameScreen(b, root, highlightthickness=1)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
