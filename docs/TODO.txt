@@ -1,6 +1,9 @@
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
 - Better buttons (make button class which is canvas based - can be reused)
+    - Width, height, outline, background, text, position
+    - Called "CanvasButton" or something
 - Implement undo function
 - Implement status bar
 - Implement fading of colours in and out when placing
+- Need button component before can implement undo
