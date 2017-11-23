@@ -31,7 +31,7 @@ class GameScreen(tk.Frame):
         )
         board_frame.pack(side='left')
         noodle_selection_frame.pack()
-        status_frame = StatusFrame(self, width=800, height=60, bg='black')
+        status_frame = StatusFrame(self, width=800, height=60, bg='black', highlightthickness=1)
         status_frame.pack()
 
 
@@ -90,6 +90,8 @@ class BoardFrame(tk.Frame):
         return holes_
 
     def _draw_noodles_on_board(self):
+        for hole_id in self._holes:
+            self._canvas.itemconfig(hole_id, fill='black')
         for board_noodle in self._board.noodles:
             self._draw_noodle(board_noodle, board_noodle.position)
 
@@ -152,6 +154,15 @@ class BoardFrame(tk.Frame):
             self._hole_pressed = False
 
         self.after(500, commit)
+
+    def _draw_undo_button(self):
+        #TODO: This should make use of the reusable canvas button component
+        pass
+
+    def _undo_place_noodle(self):
+        noodle = self._board.undo()
+        self._noodle_frame.reject(noodle)
+        self._draw_noodles_on_board()
 
 
 class NoodleSelectionFrame(tk.Frame):
@@ -300,9 +311,9 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
 
-    initialise()
-    b = Game.start('Will')
-    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
+    # initialise()
+    # b = Game.start('Will')
+    b = Game.resume('Will')  # The board instance will be passed by our parent eventually
     game_screen = GameScreen(b, root, highlightthickness=1)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
