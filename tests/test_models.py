@@ -314,8 +314,9 @@ class BoardTest(TestCase):
 
             BoardNoodle.get(BoardNoodle.position == 20)  # Should not raise a DoesNotExist
 
-            board.undo()
+            noodle = board.undo()
 
+            self.assertEqual(noodle, yellow)
             with self.assertRaises(BoardNoodle.DoesNotExist):
                 BoardNoodle.get(BoardNoodle.position == 20)  # Noodle has been removed so will raise DoesNotExist
 
@@ -331,8 +332,9 @@ class BoardTest(TestCase):
                                        part4=orientation.SE)
             board.puzzle.place(light_blue, position=5)
 
-            board.undo()  # Nothing to undo, because undo does not remove puzzle noddles (only board noodles)
+            noodle = board.undo()  # Nothing to undo, because undo does not remove puzzle noddles (only board noodles)
 
+            self.assertIsNone(noodle)
             PuzzleNoodle.get(PuzzleNoodle.position == 5)  # Should not raise a DoesNotExist
 
     def _create_board(self):

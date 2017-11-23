@@ -320,12 +320,17 @@ class Board(BaseModel):
             self.place(noodle, position=puzzle_noodle.position)
 
     def undo(self):
-        """Undo the last place operation."""
+        """Undo the last place operation.
+
+        Returns:
+            The noodle that was undone (removed from the board)
+            or None if there was no operation to undo.
+        """
         puzzle_noodles = [noodle.noodle for noodle in self.puzzle.noodles]
         for board_noodle in self.noodles.order_by(BoardNoodle.id.desc()):
             if board_noodle.noodle not in puzzle_noodles:
                 board_noodle.delete_instance()
-                break
+                return board_noodle.noodle
 
     @property
     def complete(self):
