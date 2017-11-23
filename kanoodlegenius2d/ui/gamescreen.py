@@ -1,12 +1,13 @@
 from collections import deque
 import tkinter as tk
 
+from kanoodlegenius2d import (holes,
+                              orientation)
 from kanoodlegenius2d.models import (initialise,
                                      Game,
                                      Noodle,
                                      PositionUnavailableException)
-from kanoodlegenius2d import (holes,
-                              orientation)
+from kanoodlegenius2d.ui.component import CanvasButton
 
 
 HIGHLIGHT_COLOUR = 'white'
@@ -48,6 +49,8 @@ class BoardFrame(tk.Frame):
         self._canvas.pack()
         self._holes = self._draw_board()
         self._draw_noodles_on_board()
+
+        CanvasButton(self._canvas, x=360, y=370, w=60, h=40, text='Undo')
 
         self._hole_pressed = False
 

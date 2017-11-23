@@ -1,5 +1,8 @@
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
+- CanvasButton API (a function, not class) should take just text and x,y position of text centre.
+    Can figure out how to wrap in button rectangle.
+    Button click highlight should fade
 - Better buttons (make button class which is canvas based - can be reused)
     - Width, height, outline, background, text, position
     - Called "CanvasButton" or something
