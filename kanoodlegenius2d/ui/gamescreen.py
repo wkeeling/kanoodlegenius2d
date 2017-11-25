@@ -159,7 +159,7 @@ class BoardFrame(tk.Frame):
 
         self.after(500, commit)
 
-    def _undo_place_noodle(self, _):
+    def _undo_place_noodle(self):
         noodle = self._board.undo()
         if noodle:
             self._noodle_frame.reject(noodle)

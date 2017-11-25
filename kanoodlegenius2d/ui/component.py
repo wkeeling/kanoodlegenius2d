@@ -54,29 +54,27 @@ class CanvasWidgetHelper:
         def on_release(_):
             self._canvas.itemconfigure(button, fill='black')
             self._canvas.itemconfigure(text, fill='white')
-            self._canvas.tag_bind(text, '<ButtonRelease-1>', onclick)
-            self._canvas.tag_bind(button, '<ButtonRelease-1>', onclick)
+            onclick()
 
         self._canvas.tag_bind(text, '<ButtonPress-1>', on_press)
         self._canvas.tag_bind(button, '<ButtonPress-1>', on_press)
         self._canvas.tag_bind(text, '<ButtonRelease-1>', on_release)
         self._canvas.tag_bind(button, '<ButtonRelease-1>', on_release)
 
+    def fade(self, item, to_colour, **kwargs):
+        """Fade the specified canvas item from its current colour to the specified
+        colour.
 
-def fade(canvas_item, to_colour, **kwargs):
-    """Fade the specified canvas item from its current colour to the specified
-    colour.
+        Args:
+            item:
+                The canvas item to fade.
+            to_colour:
+                The colour to fade to.
+            kwargs:
+                Addition keyword arguments that can be used to configure the fade
+                behaviour.
+                    duration: The duration in ms of the fade (default 1000).
 
-    Args:
-        canvas_item:
-            The canvas item to fade.
-        to_colour:
-            The colour to fade to.
-        kwargs:
-            Addition keyword arguments that can be used to configure the fade
-            behaviour.
-                duration: The duration in ms of the fade (default 1000).
+        """
 
-    """
-
-    pass
+        pass
