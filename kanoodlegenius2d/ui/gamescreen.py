@@ -7,7 +7,7 @@ from kanoodlegenius2d.models import (initialise,
                                      Game,
                                      Noodle,
                                      PositionUnavailableException)
-from kanoodlegenius2d.ui.component import CanvasWidgetCreator
+from kanoodlegenius2d.ui.component import CanvasWidgetHelper
 
 
 HIGHLIGHT_COLOUR = 'white'
@@ -50,7 +50,7 @@ class BoardFrame(tk.Frame):
         self._holes = self._draw_board()
         self._draw_noodles_on_board()
 
-        widget_creator = CanvasWidgetCreator(self._canvas)
+        widget_creator = CanvasWidgetHelper(self._canvas)
         widget_creator.create_button('Undo', (400, 380), onclick=self._undo_place_noodle)
 
         self._hole_pressed = False

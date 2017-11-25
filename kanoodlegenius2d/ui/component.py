@@ -1,5 +1,5 @@
 
-class CanvasWidgetCreator:
+class CanvasWidgetHelper:
     """Helper class for rendering widgets on an existing canvas."""
 
     def __init__(self, canvas):
