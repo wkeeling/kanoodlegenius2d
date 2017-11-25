@@ -7,7 +7,7 @@ from kanoodlegenius2d.models import (initialise,
                                      Game,
                                      Noodle,
                                      PositionUnavailableException)
-from kanoodlegenius2d.ui.component import CanvasButton
+from kanoodlegenius2d.ui.component import CanvasWidgetCreator
 
 
 HIGHLIGHT_COLOUR = 'white'
@@ -50,7 +50,8 @@ class BoardFrame(tk.Frame):
         self._holes = self._draw_board()
         self._draw_noodles_on_board()
 
-        CanvasButton(self._canvas, x=360, y=370, w=60, h=40, text='Undo')
+        widget_creator = CanvasWidgetCreator(self._canvas)
+        widget_creator.create_button('Undo', (400, 380), onclick=self._undo_place_noodle)
 
         self._hole_pressed = False
 
@@ -158,14 +159,11 @@ class BoardFrame(tk.Frame):
 
         self.after(500, commit)
 
-    def _draw_undo_button(self):
-        #TODO: This should make use of the reusable canvas button component
-        pass
-
-    def _undo_place_noodle(self):
+    def _undo_place_noodle(self, _):
         noodle = self._board.undo()
-        self._noodle_frame.reject(noodle)
-        self._draw_noodles_on_board()
+        if noodle:
+            self._noodle_frame.reject(noodle)
+            self._draw_noodles_on_board()
 
 
 class NoodleSelectionFrame(tk.Frame):
