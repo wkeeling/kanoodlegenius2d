@@ -55,7 +55,7 @@ class CanvasWidgetHelper:
             self._canvas.itemconfigure(text, fill='#000000')
 
         def on_release(_):
-            self.fadeout(button, duration=70)
+            self.fadeout(button, duration=50)
             self._canvas.itemconfigure(text, fill='#ffffff')
             onclick()
 
@@ -79,16 +79,18 @@ class CanvasWidgetHelper:
         duration = kwargs.get('duration', 1000)
         current_colour = self._canvas.itemcget(item, 'fill')
         red, green, blue = struct.unpack('BBB', bytes.fromhex(current_colour[1:]))
+        slices = max((duration // 100), 10)
+        decrement = (max((red, green, blue)) // slices)
 
         def fade(r, g, b):
             print('time: {}, {}'.format(time.time(), r))
-            r -= 40
-            g -= 40
-            b -= 40
+            r -= decrement
+            g -= decrement
+            b -= decrement
             r, g, b = max(r, 0), max(g, 0), max(b, 0)
             faded = '#%02x%02x%02x' % (r, g, b)
             self._canvas.itemconfigure(item, fill=faded)
             if sum((r, g, b)) > 0:
-                self._canvas.master.after(duration // (max((red, green, blue)) // 40), lambda: fade(r, g, b))
+                self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
 
         fade(red, green, blue)
