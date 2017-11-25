@@ -244,17 +244,19 @@ class NoodleSelectionFrame(tk.Frame):
         return _on_part_press
 
     def _init_buttons(self, control_frame):
-        nxt_button = tk.Button(control_frame, text='Next', highlightbackground='black',
-                               command=self._next_noodle)
-        nxt_button.pack(side='left')
-
-        rotate_button = tk.Button(control_frame, text='Rotate', highlightbackground='black',
-                                  command=self._rotate_noodle)
-        rotate_button.pack(side='left')
-
-        flip_button = tk.Button(control_frame, text='Flip', highlightbackground='black',
-                                command=self._flip_noodle)
-        flip_button.pack(side='left')
+        canvas = tk.Canvas(control_frame, width=300, height=100, bg='black', highlightthickness=1)
+        canvas.pack()
+        # nxt_button = tk.Button(control_frame, text='Next', highlightbackground='black',
+        #                        command=self._next_noodle)
+        # nxt_button.pack(side='left')
+        #
+        # rotate_button = tk.Button(control_frame, text='Rotate', highlightbackground='black',
+        #                           command=self._rotate_noodle)
+        # rotate_button.pack(side='left')
+        #
+        # flip_button = tk.Button(control_frame, text='Flip', highlightbackground='black',
+        #                         command=self._flip_noodle)
+        # flip_button.pack(side='left')
 
     def _next_noodle(self):
         self._canvas.delete('all')
