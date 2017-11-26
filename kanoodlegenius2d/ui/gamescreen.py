@@ -22,7 +22,7 @@ class GameScreen(tk.Frame):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        board_and_noodle = tk.Frame(self, bg='black')
+        board_and_noodle = tk.Frame(master=self, bg='black')
         board_and_noodle.pack(side='top', fill='x')
         noodle_selection_frame = NoodleSelectionFrame(
             board, master=board_and_noodle, width=360, height=420, bg='black'
@@ -32,7 +32,7 @@ class GameScreen(tk.Frame):
         )
         board_frame.pack(side='left')
         noodle_selection_frame.pack()
-        status_frame = StatusFrame(self, width=800, height=60, bg='black', highlightthickness=1)
+        status_frame = StatusFrame(board, master=self, width=800, height=60, bg='black', highlightthickness=1)
         status_frame.pack()
 
 
@@ -331,10 +331,13 @@ class NoodleSelectionFrame(tk.Frame):
 
 class StatusFrame(tk.Frame):
     """The bar at the bottom that holds information about the player, current level etc."""
-    def __init__(self, master=None, cnf=None, **kw):
+    def __init__(self, board, master=None, cnf=None, **kw):
         if cnf is None:
             cnf = {}
         super().__init__(master, cnf, **kw)
+
+        self._board = board
+
 
 
 if __name__ == '__main__':
