@@ -201,23 +201,24 @@ class NoodleSelectionFrame(tk.Frame):
 
     def _draw_noodle(self):
         noodle_parts = []
-        noodle = self._selectable_noodles[0]
 
-        noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d', width=2))
+        if self._selectable_noodles:
+            noodle = self._selectable_noodles[0]
+            noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d', width=2))
 
-        for p in noodle.parts:
-            offsets = self.orientation_offsets[p]
-            coords = self._canvas.coords(noodle_parts[-1])
-            noodle_parts.append(self._canvas.create_oval(coords[0] + offsets[0],
-                                                         coords[1] + offsets[1],
-                                                         coords[0] + offsets[0] + 55,
-                                                         coords[1] + offsets[1] + 55,
-                                                         fill=noodle.colour, outline='#4d4d4d', width=2))
-            # Now that a new part has been drawn, re-centre the noodle as it currently stands
-            self._recentre(noodle_parts)
+            for p in noodle.parts:
+                offsets = self.orientation_offsets[p]
+                coords = self._canvas.coords(noodle_parts[-1])
+                noodle_parts.append(self._canvas.create_oval(coords[0] + offsets[0],
+                                                             coords[1] + offsets[1],
+                                                             coords[0] + offsets[0] + 55,
+                                                             coords[1] + offsets[1] + 55,
+                                                             fill=noodle.colour, outline='#4d4d4d', width=2))
+                # Now that a new part has been drawn, re-centre the noodle as it currently stands
+                self._recentre(noodle_parts)
 
-        for i, part in enumerate(noodle_parts):
-            self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
+            for i, part in enumerate(noodle_parts):
+                self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
         canvas_width = int(self._canvas.config()['width'][4])
