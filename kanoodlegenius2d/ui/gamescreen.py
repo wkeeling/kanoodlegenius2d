@@ -51,7 +51,7 @@ class BoardFrame(tk.Frame):
         self._draw_noodles_on_board()
 
         widget_creator = CanvasWidgetHelper(self._canvas)
-        widget_creator.create_button('UNDO', (400, 380), onclick=self._undo_place_noodle)
+        widget_creator.create_button('UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
 
         self._hole_pressed = False
 
@@ -249,10 +249,10 @@ class NoodleSelectionFrame(tk.Frame):
         canvas.pack()
         widget_helper = CanvasWidgetHelper(canvas)
 
-        widget_helper.create_button(text='<< PREV', pos=(110, 20), onclick=self._prev_noodle, width=80)
-        widget_helper.create_button(text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, width=80)
-        widget_helper.create_button(text='ROTATE', pos=(110, 68), onclick=self._rotate_noodle, width=80)
-        widget_helper.create_button(text='FLIP', pos=(200, 68), onclick=self._flip_noodle, width=80)
+        widget_helper.create_button(text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, width=100, height=40)
+        widget_helper.create_button(text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, width=100, height=40)
+        widget_helper.create_button(text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, width=100, height=40)
+        widget_helper.create_button(text='FLIP', pos=(200, 70), onclick=self._flip_noodle, width=100, height=40)
 
     def _next_noodle(self):
         self._canvas.delete('all')
