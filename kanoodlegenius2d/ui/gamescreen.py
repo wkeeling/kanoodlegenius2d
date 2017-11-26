@@ -7,7 +7,7 @@ from kanoodlegenius2d.models import (initialise,
                                      Game,
                                      Noodle,
                                      PositionUnavailableException)
-from kanoodlegenius2d.ui.component import CanvasWidgetHelper
+from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 
 
 HIGHLIGHT_COLOUR = 'white'
@@ -51,7 +51,7 @@ class BoardFrame(tk.Frame):
         self._draw_noodles_on_board()
 
         widget_creator = CanvasWidgetHelper(self._canvas)
-        widget_creator.create_button('Undo', (400, 380), onclick=self._undo_place_noodle)
+        widget_creator.create_button('UNDO', (400, 380), onclick=self._undo_place_noodle)
 
         self._hole_pressed = False
 
@@ -244,23 +244,23 @@ class NoodleSelectionFrame(tk.Frame):
         return _on_part_press
 
     def _init_buttons(self, control_frame):
-        canvas = tk.Canvas(control_frame, width=300, height=100, bg='black', highlightthickness=1)
+        canvas = tk.Canvas(control_frame, width=300, height=100, bg='black', highlightthickness=0)
         canvas.pack()
-        # nxt_button = tk.Button(control_frame, text='Next', highlightbackground='black',
-        #                        command=self._next_noodle)
-        # nxt_button.pack(side='left')
-        #
-        # rotate_button = tk.Button(control_frame, text='Rotate', highlightbackground='black',
-        #                           command=self._rotate_noodle)
-        # rotate_button.pack(side='left')
-        #
-        # flip_button = tk.Button(control_frame, text='Flip', highlightbackground='black',
-        #                         command=self._flip_noodle)
-        # flip_button.pack(side='left')
+        widget_helper = CanvasWidgetHelper(canvas)
+
+        widget_helper.create_button(text='<< PREV', pos=(110, 20), onclick=self._prev_noodle, width=80)
+        widget_helper.create_button(text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, width=80)
+        widget_helper.create_button(text='ROTATE', pos=(110, 68), onclick=self._rotate_noodle, width=80)
+        widget_helper.create_button(text='FLIP', pos=(200, 68), onclick=self._flip_noodle, width=80)
 
     def _next_noodle(self):
         self._canvas.delete('all')
         self._selectable_noodles.rotate()
+        self._draw_noodle()
+
+    def _prev_noodle(self):
+        self._canvas.delete('all')
+        self._selectable_noodles.rotate(-1)
         self._draw_noodle()
 
     def _rotate_noodle(self):
