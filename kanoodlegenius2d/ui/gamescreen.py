@@ -263,35 +263,33 @@ class NoodleSelectionFrame(tk.Frame):
         items = self._canvas.find_all()
         self._selectable_noodles.rotate()
         self._draw_noodle()
-
-        def clear():
-            for i in items:
-                self._canvas.delete(i)
-
-        for item in items:
-            self._widget_helper.fadeout(item, duration=20, onfaded=clear)
+        self._clear_items(items)
 
     def _prev_noodle(self):
         items = self._canvas.find_all()
         self._selectable_noodles.rotate(-1)
         self._draw_noodle()
+        self._clear_items(items)
 
+    def _rotate_noodle(self):
+        items = self._canvas.find_all()
+        self._selectable_noodles[0].rotate()
+        self._draw_noodle()
+        self._clear_items(items)
+
+    def _flip_noodle(self):
+        items = self._canvas.find_all()
+        self._selectable_noodles[0].flip()
+        self._draw_noodle()
+        self._clear_items(items)
+
+    def _clear_items(self, items):
         def clear():
             for i in items:
                 self._canvas.delete(i)
 
         for item in items:
-            self._widget_helper.fadeout(item, duration=30, onfaded=clear)
-
-    def _rotate_noodle(self):
-        self._canvas.delete('all')
-        self._selectable_noodles[0].rotate()
-        self._draw_noodle(fade_duration=0)
-
-    def _flip_noodle(self):
-        self._canvas.delete('all')
-        self._selectable_noodles[0].flip()
-        self._draw_noodle(fade_duration=0)
+            self._widget_helper.fadeout(item, duration=60, elements=['fill', 'outline'], onfaded=clear)
 
     def accept(self):
         """Accept the currently selected noodle and part and remove them
