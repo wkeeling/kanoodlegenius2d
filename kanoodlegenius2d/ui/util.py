@@ -26,6 +26,8 @@ class CanvasWidgetHelper:
             kwargs:
                 Additional arguments that can be used to configure the
                 button.
+                    font:
+                        The font to use.
                     text_colour:
                         The text colour to use (default 'white').
                     width:
@@ -36,7 +38,13 @@ class CanvasWidgetHelper:
                         The padding between the text and the edge of the button
                         (default: 10).
         """
-        text = self._canvas.create_text(pos[0], pos[1], text=text, fill=kwargs.get('text_colour', '#ffffff'))
+        args = {
+            'text': text,
+            'fill': kwargs.get('text_colour', '#ffffff')
+        }
+        if 'font' in kwargs:
+            args['font'] = kwargs['font']
+        text = self._canvas.create_text(pos[0], pos[1], **args)
         bbox = self._canvas.bbox(text)
         padding = kwargs.get('padding', 10)
         width = kwargs.get('width', ((bbox[2] - bbox[0]) + (padding * 2)))
@@ -74,10 +82,13 @@ class CanvasWidgetHelper:
             kwargs:
                 Addition keyword arguments that can be used to configure the fade
                 behaviour.
-                    duration: The duration in ms of the fade (default 1000).
-                    elements: The parts of the item to be faded - a sequence of
+                    duration:
+                        The duration in ms of the fade (default 1000).
+                    elements:
+                        The parts of the item to be faded - a sequence of
                         names. Default ['fill']
-                    onfaded: Optional callback which will be called once the fade
+                    onfaded:
+                        Optional callback which will be called once the fade
                         has completed.
 
 
@@ -120,10 +131,13 @@ class CanvasWidgetHelper:
             kwargs:
                 Addition keyword arguments that can be used to configure the fade
                 behaviour.
-                    duration: The duration in ms of the fade (default 1000).
-                    elements: The parts of the item to be faded - a sequence of
+                    duration:
+                        The duration in ms of the fade (default 1000).
+                    elements:
+                        The parts of the item to be faded - a sequence of
                         names. Default ['fill']
-                    onfaded: Optional callback which will be called once the fade
+                    onfaded:
+                        Optional callback which will be called once the fade
                         has completed.
 
         """

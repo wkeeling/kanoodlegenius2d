@@ -22,17 +22,17 @@ class GameScreen(tk.Frame):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        board_and_noodle = tk.Frame(master=self, bg='black')
+        board_and_noodle = tk.Frame(master=self, bg='#000000')
         board_and_noodle.pack(side='top', fill='x')
         noodle_selection_frame = NoodleSelectionFrame(
-            board, master=board_and_noodle, width=360, height=420, bg='black'
+            board, master=board_and_noodle, width=360, height=420, bg='#000000'
         )
         board_frame = BoardFrame(
-            board, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='black'
+            board, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='#000000'
         )
         board_frame.pack(side='left')
         noodle_selection_frame.pack()
-        status_frame = StatusFrame(board, master=self, width=800, height=60, bg='black', highlightthickness=1)
+        status_frame = StatusFrame(board, master=self, width=800, height=60, bg='#000000', highlightthickness=1)
         status_frame.pack()
 
 
@@ -45,13 +45,14 @@ class BoardFrame(tk.Frame):
 
         self._board = board
         self._noodle_frame = noodle_frame
-        self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightthickness=0)
+        self._canvas = tk.Canvas(self, width=440, height=420, bg='#000000', highlightthickness=0)
         self._canvas.pack()
         self._widget_helper = CanvasWidgetHelper(self._canvas)
         self._holes = self._draw_board()
         self._draw_noodles_on_board()
 
-        self._widget_helper.create_button('UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
+        self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
+                                          height=40)
 
         self._hole_pressed = False
 
@@ -254,10 +255,14 @@ class NoodleSelectionFrame(tk.Frame):
         canvas.pack()
         widget_helper = CanvasWidgetHelper(canvas)
 
-        widget_helper.create_button(text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, width=100, height=40)
-        widget_helper.create_button(text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, width=100, height=40)
-        widget_helper.create_button(text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, width=100, height=40)
-        widget_helper.create_button(text='FLIP', pos=(200, 70), onclick=self._flip_noodle, width=100, height=40)
+        widget_helper.create_button(text='<< PREV', pos=(90, 20), font='Helvetica', onclick=self._prev_noodle,
+                                    width=100, height=40)
+        widget_helper.create_button(text='NEXT >>', pos=(200, 20), font='Helvetica', onclick=self._next_noodle,
+                                    width=100, height=40)
+        widget_helper.create_button(text='ROTATE', pos=(90, 70), font='Helvetica', onclick=self._rotate_noodle,
+                                    width=100, height=40)
+        widget_helper.create_button(text='FLIP', pos=(200, 70), font='Helvetica', onclick=self._flip_noodle,
+                                    width=100, height=40)
 
     def _next_noodle(self):
         items = self._canvas.find_all()
@@ -335,6 +340,9 @@ class StatusFrame(tk.Frame):
         super().__init__(master, cnf, **kw)
 
         self._board = board
+
+        player = tk.Label(master=self, text='Player: {}'.format(board.player.name), bg='#000000', fg='#ffffff')
+        player.pack(side='left')
 
 
 
