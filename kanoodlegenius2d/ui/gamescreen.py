@@ -192,9 +192,9 @@ class NoodleSelectionFrame(tk.Frame):
 
         noodle_frame = tk.Frame(self)
         noodle_frame.pack(side='top')
-        self._canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='#000000', highlightthickness=0)
-        self._canvas.pack()
-        self._widget_helper = CanvasWidgetHelper(self._canvas)
+        self._noodle_canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='#000000', highlightthickness=0)
+        self._noodle_canvas.pack()
+        self._widget_helper = CanvasWidgetHelper(self._noodle_canvas)
 
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
@@ -209,43 +209,44 @@ class NoodleSelectionFrame(tk.Frame):
 
         if self._selectable_noodles:
             noodle = self._selectable_noodles[0]
-            noodle_parts.append(self._canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d', width=2))
+            noodle_parts.append(self._noodle_canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d',
+                                                                width=2))
 
             for p in noodle.parts:
                 offsets = self.orientation_offsets[p]
-                coords = self._canvas.coords(noodle_parts[-1])
-                noodle_parts.append(self._canvas.create_oval(coords[0] + offsets[0],
-                                                             coords[1] + offsets[1],
-                                                             coords[0] + offsets[0] + 55,
-                                                             coords[1] + offsets[1] + 55,
-                                                             fill='#ffffff', outline='#4d4d4d', width=2))
+                coords = self._noodle_canvas.coords(noodle_parts[-1])
+                noodle_parts.append(self._noodle_canvas.create_oval(coords[0] + offsets[0],
+                                                                    coords[1] + offsets[1],
+                                                                    coords[0] + offsets[0] + 55,
+                                                                    coords[1] + offsets[1] + 55,
+                                                                    fill='#ffffff', outline='#4d4d4d', width=2))
                 # Now that a new part has been drawn, re-centre the noodle as it currently stands
                 self._recentre(noodle_parts)
 
             for i, part in enumerate(noodle_parts):
                 self._widget_helper.fadein(part, noodle.colour, duration=fade_duration)
-                self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
+                self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
-        canvas_width = int(self._canvas.config()['width'][4])
-        canvas_height = int(self._canvas.config()['height'][4])
-        bbox = self._canvas.bbox(*noodle_parts)
+        canvas_width = int(self._noodle_canvas.config()['width'][4])
+        canvas_height = int(self._noodle_canvas.config()['height'][4])
+        bbox = self._noodle_canvas.bbox(*noodle_parts)
         x_offset = ((canvas_width - (bbox[2] - bbox[0])) // 2) - bbox[0]
         y_offset = ((canvas_height - (bbox[3] - bbox[1])) // 2) - bbox[1]
         for part in noodle_parts:
-            self._canvas.move(part, x_offset, y_offset)
+            self._noodle_canvas.move(part, x_offset, y_offset)
 
     def _create_on_part_press(self, index, part_ids):
         def _on_part_press(_):
             for part_id in part_ids:
-                self._canvas.itemconfig(part_id, outline='#4d4d4d', width=2)
+                self._noodle_canvas.itemconfig(part_id, outline='#4d4d4d', width=2)
 
             if self._selected_part == part_ids[index]:
-                self._canvas.itemconfig(part_ids[index], outline='#4d4d4d', width=2)
+                self._noodle_canvas.itemconfig(part_ids[index], outline='#4d4d4d', width=2)
                 self._selected_part = None
             else:
-                self._canvas.itemconfig(part_ids[index], outline=HIGHLIGHT_COLOUR, width=4)
-                self._canvas.tag_raise(part_ids[index])
+                self._noodle_canvas.itemconfig(part_ids[index], outline=HIGHLIGHT_COLOUR, width=4)
+                self._noodle_canvas.tag_raise(part_ids[index])
                 self._selected_part = index
 
         return _on_part_press
@@ -255,35 +256,37 @@ class NoodleSelectionFrame(tk.Frame):
         canvas.pack()
         widget_helper = CanvasWidgetHelper(canvas)
 
-        widget_helper.create_button(text='<< PREV', pos=(90, 20), font='Helvetica', onclick=self._prev_noodle,
-                                    width=100, height=40)
-        widget_helper.create_button(text='NEXT >>', pos=(200, 20), font='Helvetica', onclick=self._next_noodle,
-                                    width=100, height=40)
-        widget_helper.create_button(text='ROTATE', pos=(90, 70), font='Helvetica', onclick=self._rotate_noodle,
-                                    width=100, height=40)
-        widget_helper.create_button(text='FLIP', pos=(200, 70), font='Helvetica', onclick=self._flip_noodle,
-                                    width=100, height=40)
+        args = {
+            'width': 100,
+            'height': 40,
+            'font': 'helvetica'
+        }
+
+        widget_helper.create_button(text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
+        widget_helper.create_button(text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, **args)
+        widget_helper.create_button(text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
+        widget_helper.create_button(text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
 
     def _next_noodle(self):
-        items = self._canvas.find_all()
+        items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate()
         self._draw_noodle()
         self._clear_items(items)
 
     def _prev_noodle(self):
-        items = self._canvas.find_all()
+        items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate(-1)
         self._draw_noodle()
         self._clear_items(items)
 
     def _rotate_noodle(self):
-        items = self._canvas.find_all()
+        items = self._noodle_canvas.find_all()
         self._selectable_noodles[0].rotate()
         self._draw_noodle()
         self._clear_items(items)
 
     def _flip_noodle(self):
-        items = self._canvas.find_all()
+        items = self._noodle_canvas.find_all()
         self._selectable_noodles[0].flip()
         self._draw_noodle()
         self._clear_items(items)
@@ -291,7 +294,7 @@ class NoodleSelectionFrame(tk.Frame):
     def _clear_items(self, items):
         def clear():
             for i in items:
-                self._canvas.delete(i)
+                self._noodle_canvas.delete(i)
 
         for item in items:
             self._widget_helper.fadeout(item, duration=60, elements=['fill', 'outline'], onfaded=clear)
@@ -309,13 +312,13 @@ class NoodleSelectionFrame(tk.Frame):
         self._selected_part = None
 
         def redraw():
-            self._canvas.delete('all')
+            self._noodle_canvas.delete('all')
             self._draw_noodle(fade_duration=40)
 
         if self._selectable_noodles:
             self.after(500, redraw)
         else:
-            self.after(500, lambda: self._canvas.delete('all'))
+            self.after(500, lambda: self._noodle_canvas.delete('all'))
 
         return noodle, part
 
@@ -328,7 +331,7 @@ class NoodleSelectionFrame(tk.Frame):
                 The noodle being rejected.
         """
         self._selectable_noodles.insert(0, noodle)
-        self._canvas.delete('all')
+        self._noodle_canvas.delete('all')
         self._draw_noodle()
 
 
@@ -340,9 +343,19 @@ class StatusFrame(tk.Frame):
         super().__init__(master, cnf, **kw)
 
         self._board = board
+        canvas = tk.Canvas(self, width=800, height=60, bg='#000000', highlightthickness=0)
+        canvas.pack()
+        widget_helper = CanvasWidgetHelper(canvas)
 
-        player = tk.Label(master=self, text='Player: {}'.format(board.player.name), bg='#000000', fg='#ffffff')
-        player.pack(side='left')
+        args = {
+            'font': 'helvetica',
+            'fill': '#ffffff'
+        }
+
+        player = canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
+        canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **args)
+        canvas.create_text(50, 37, text='PUZZLE: {}'.format(board.puzzle.number), **args)
+        widget_helper.create_button('LEAVE GAME', pos=(740, 28), width=100, height=40, onclick=lambda: True)
 
 
 
