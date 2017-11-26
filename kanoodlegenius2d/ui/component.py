@@ -55,7 +55,7 @@ class CanvasWidgetHelper:
             self._canvas.itemconfigure(text, fill='#000000')
 
         def on_release(_):
-            self.fadeout(button, duration=50)
+            self.fadeout(button, duration=20)
             self._canvas.itemconfigure(text, fill='#ffffff')
             onclick()
 
@@ -63,6 +63,42 @@ class CanvasWidgetHelper:
         self._canvas.tag_bind(button, '<ButtonPress-1>', on_press)
         self._canvas.tag_bind(text, '<ButtonRelease-1>', on_release)
         self._canvas.tag_bind(button, '<ButtonRelease-1>', on_release)
+
+    def fadein(self, item, colour, **kwargs):
+        """Fade the specified canvas item from black to its current colour.
+
+        Args:
+            item:
+                The canvas item to fade in.
+            colour:
+                The colour to fade to.
+            kwargs:
+                Addition keyword arguments that can be used to configure the fade
+                behaviour.
+                    duration: The duration in ms of the fade (default 1000).
+
+        """
+        duration = kwargs.get('duration', 1000)
+        red, green, blue = struct.unpack('BBB', bytes.fromhex(colour[1:]))
+        slices = max((duration // 100), 10)
+        increment = (max((red, green, blue)) // slices)
+
+        def fade(r, g, b):
+            if r < red:
+                r += increment
+                r = min(r, red)
+            if g < green:
+                g += increment
+                g = min(g, green)
+            if b < blue:
+                b += increment
+                b = min(b, blue)
+            faded = '#%02x%02x%02x' % (r, g, b)
+            self._canvas.itemconfigure(item, fill=faded)
+            if sum((r, g, b)) < sum((red, green, blue)):
+                self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
+
+        fade(0, 0, 0)
 
     def fadeout(self, item, **kwargs):
         """Fade the specified canvas item from its current colour to black.
@@ -83,7 +119,6 @@ class CanvasWidgetHelper:
         decrement = (max((red, green, blue)) // slices)
 
         def fade(r, g, b):
-            print('time: {}, {}'.format(time.time(), r))
             r -= decrement
             g -= decrement
             b -= decrement
