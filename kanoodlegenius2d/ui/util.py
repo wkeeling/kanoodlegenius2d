@@ -75,6 +75,8 @@ class CanvasWidgetHelper:
                 Addition keyword arguments that can be used to configure the fade
                 behaviour.
                     duration: The duration in ms of the fade (default 1000).
+                    elements: The parts of the item to be faded - a sequence of
+                        names. Default ['fill']
 
         """
         duration = kwargs.get('duration', 1000)
@@ -93,7 +95,10 @@ class CanvasWidgetHelper:
                 b += increment
                 b = min(b, blue)
             faded = '#%02x%02x%02x' % (r, g, b)
-            self._canvas.itemconfigure(item, fill=faded)
+            config = {}
+            for element in kwargs.get('element', ['fill']):
+                config[element] = faded
+            self._canvas.itemconfigure(item, **config)
             if sum((r, g, b)) < sum((red, green, blue)):
                 self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
 
@@ -109,6 +114,8 @@ class CanvasWidgetHelper:
                 Addition keyword arguments that can be used to configure the fade
                 behaviour.
                     duration: The duration in ms of the fade (default 1000).
+                    element: The parts of the item to be faded - a sequence of
+                        names. Default ['fill']
 
         """
         duration = kwargs.get('duration', 1000)
@@ -123,7 +130,10 @@ class CanvasWidgetHelper:
             b -= decrement
             r, g, b = max(r, 0), max(g, 0), max(b, 0)
             faded = '#%02x%02x%02x' % (r, g, b)
-            self._canvas.itemconfigure(item, fill=faded)
+            config = {}
+            for element in kwargs.get('element', ['fill']):
+                config[element] = faded
+            self._canvas.itemconfigure(item, **config)
             if sum((r, g, b)) > 0:
                 self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
 
