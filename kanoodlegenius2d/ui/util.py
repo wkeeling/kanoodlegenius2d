@@ -36,7 +36,7 @@ class CanvasWidgetHelper:
                         The padding between the text and the edge of the button
                         (default: 10).
         """
-        text = self._canvas.create_text(pos[0], pos[1], text=text, fill=kwargs.get('text_colour', '#FFFFFF'))
+        text = self._canvas.create_text(pos[0], pos[1], text=text, fill=kwargs.get('text_colour', '#ffffff'))
         bbox = self._canvas.bbox(text)
         padding = kwargs.get('padding', 10)
         width = kwargs.get('width', ((bbox[2] - bbox[0]) + (padding * 2)))
@@ -46,7 +46,7 @@ class CanvasWidgetHelper:
 
         button = self._canvas.create_rectangle((bbox[0] - x_offset, bbox[1] - y_offset,
                                                 bbox[2] + x_offset, bbox[3] + y_offset),
-                                               outline='white', fill='#000000')
+                                               outline='#ffffff', fill='#000000')
         self._canvas.tag_raise(text)
 
         def on_press(_):
@@ -77,6 +77,9 @@ class CanvasWidgetHelper:
                     duration: The duration in ms of the fade (default 1000).
                     elements: The parts of the item to be faded - a sequence of
                         names. Default ['fill']
+                    onfaded: Optional callback which will be called once the fade
+                        has completed.
+
 
         """
         duration = kwargs.get('duration', 1000)
@@ -96,11 +99,15 @@ class CanvasWidgetHelper:
                 b = min(b, blue)
             faded = '#%02x%02x%02x' % (r, g, b)
             config = {}
-            for element in kwargs.get('element', ['fill']):
+            for element in kwargs.get('elements', ['fill']):
                 config[element] = faded
             self._canvas.itemconfigure(item, **config)
             if sum((r, g, b)) < sum((red, green, blue)):
                 self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
+            else:
+                onfaded = kwargs.get('onfaded')
+                if onfaded:
+                    onfaded()
 
         fade(0, 0, 0)
 
@@ -114,8 +121,10 @@ class CanvasWidgetHelper:
                 Addition keyword arguments that can be used to configure the fade
                 behaviour.
                     duration: The duration in ms of the fade (default 1000).
-                    element: The parts of the item to be faded - a sequence of
+                    elements: The parts of the item to be faded - a sequence of
                         names. Default ['fill']
+                    onfaded: Optional callback which will be called once the fade
+                        has completed.
 
         """
         duration = kwargs.get('duration', 1000)
@@ -131,10 +140,14 @@ class CanvasWidgetHelper:
             r, g, b = max(r, 0), max(g, 0), max(b, 0)
             faded = '#%02x%02x%02x' % (r, g, b)
             config = {}
-            for element in kwargs.get('element', ['fill']):
+            for element in kwargs.get('elements', ['fill']):
                 config[element] = faded
             self._canvas.itemconfigure(item, **config)
             if sum((r, g, b)) > 0:
                 self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
+            else:
+                onfaded = kwargs.get('onfaded')
+                if onfaded:
+                    onfaded()
 
         fade(red, green, blue)

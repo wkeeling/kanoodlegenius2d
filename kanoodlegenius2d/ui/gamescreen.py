@@ -47,11 +47,11 @@ class BoardFrame(tk.Frame):
         self._noodle_frame = noodle_frame
         self._canvas = tk.Canvas(self, width=440, height=420, bg='black', highlightthickness=0)
         self._canvas.pack()
+        self._widget_helper = CanvasWidgetHelper(self._canvas)
         self._holes = self._draw_board()
         self._draw_noodles_on_board()
 
-        widget_creator = CanvasWidgetHelper(self._canvas)
-        widget_creator.create_button('UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
+        self._widget_helper.create_button('UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
 
         self._hole_pressed = False
 
@@ -95,24 +95,27 @@ class BoardFrame(tk.Frame):
 
     def _draw_noodles_on_board(self):
         for hole_id in self._holes:
-            self._canvas.itemconfig(hole_id, fill='black')
+            self._canvas.itemconfig(hole_id, fill='#000000')
         for board_noodle in self._board.noodles:
             self._draw_noodle(board_noodle, board_noodle.position)
 
-    def _draw_noodle(self, noodle, position):
+    def _draw_noodle(self, noodle, position, fade_duration=0):
         last_position = position
         try:
             colour = noodle.colour
         except AttributeError:
             colour = noodle.noodle.colour
-        self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', fill=colour, width=2)
+
+        self._widget_helper.fadein(self._holes[last_position], colour, duration=fade_duration)
+        self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
         for part in noodle.parts:
             last_position = holes.find_position(last_position, part)
-            self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', fill=colour, width=2)
+            self._widget_helper.fadein(self._holes[last_position], colour, duration=fade_duration)
+            self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
     def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
-            if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == 'black':
+            if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == '#000000':
                 noodle, selected_part = self._noodle_frame.accept()
                 if selected_part is None:
                     # No noodle selected in NoodleSelectionFrame
@@ -154,7 +157,7 @@ class BoardFrame(tk.Frame):
         self._canvas.tag_raise(hole_id)
 
         def commit():
-            self._draw_noodle(noodle, root_index)
+            self._draw_noodle(noodle, root_index, fade_duration=40)
             self._hole_pressed = False
 
         self.after(500, commit)
@@ -188,8 +191,9 @@ class NoodleSelectionFrame(tk.Frame):
 
         noodle_frame = tk.Frame(self)
         noodle_frame.pack(side='top')
-        self._canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='black', highlightthickness=0)
+        self._canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='#000000', highlightthickness=0)
         self._canvas.pack()
+        self._widget_helper = CanvasWidgetHelper(self._canvas)
 
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
@@ -199,7 +203,7 @@ class NoodleSelectionFrame(tk.Frame):
         # The part of the noodle that a user has pressed (0 - 4)
         self._selected_part = None
 
-    def _draw_noodle(self):
+    def _draw_noodle(self, fade_duration=0):
         noodle_parts = []
 
         if self._selectable_noodles:
@@ -213,11 +217,12 @@ class NoodleSelectionFrame(tk.Frame):
                                                              coords[1] + offsets[1],
                                                              coords[0] + offsets[0] + 55,
                                                              coords[1] + offsets[1] + 55,
-                                                             fill=noodle.colour, outline='#4d4d4d', width=2))
+                                                             fill='#ffffff', outline='#4d4d4d', width=2))
                 # Now that a new part has been drawn, re-centre the noodle as it currently stands
                 self._recentre(noodle_parts)
 
             for i, part in enumerate(noodle_parts):
+                self._widget_helper.fadein(part, noodle.colour, duration=fade_duration)
                 self._canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
@@ -245,7 +250,7 @@ class NoodleSelectionFrame(tk.Frame):
         return _on_part_press
 
     def _init_buttons(self, control_frame):
-        canvas = tk.Canvas(control_frame, width=300, height=100, bg='black', highlightthickness=0)
+        canvas = tk.Canvas(control_frame, width=300, height=100, bg='#000000', highlightthickness=0)
         canvas.pack()
         widget_helper = CanvasWidgetHelper(canvas)
 
@@ -255,24 +260,38 @@ class NoodleSelectionFrame(tk.Frame):
         widget_helper.create_button(text='FLIP', pos=(200, 70), onclick=self._flip_noodle, width=100, height=40)
 
     def _next_noodle(self):
-        self._canvas.delete('all')
+        items = self._canvas.find_all()
         self._selectable_noodles.rotate()
         self._draw_noodle()
 
+        def clear():
+            for i in items:
+                self._canvas.delete(i)
+
+        for item in items:
+            self._widget_helper.fadeout(item, duration=20, onfaded=clear)
+
     def _prev_noodle(self):
-        self._canvas.delete('all')
+        items = self._canvas.find_all()
         self._selectable_noodles.rotate(-1)
         self._draw_noodle()
+
+        def clear():
+            for i in items:
+                self._canvas.delete(i)
+
+        for item in items:
+            self._widget_helper.fadeout(item, duration=30, onfaded=clear)
 
     def _rotate_noodle(self):
         self._canvas.delete('all')
         self._selectable_noodles[0].rotate()
-        self._draw_noodle()
+        self._draw_noodle(fade_duration=0)
 
     def _flip_noodle(self):
         self._canvas.delete('all')
         self._selectable_noodles[0].flip()
-        self._draw_noodle()
+        self._draw_noodle(fade_duration=0)
 
     def accept(self):
         """Accept the currently selected noodle and part and remove them
@@ -285,9 +304,16 @@ class NoodleSelectionFrame(tk.Frame):
         """
         noodle, part = self._selectable_noodles.popleft(), self._selected_part
         self._selected_part = None
-        self._canvas.delete('all')
+
+        def redraw():
+            self._canvas.delete('all')
+            self._draw_noodle(fade_duration=40)
+
         if self._selectable_noodles:
-            self.after(500, self._draw_noodle)
+            self.after(500, redraw)
+        else:
+            self.after(500, lambda: self._canvas.delete('all'))
+
         return noodle, part
 
     def reject(self, noodle):
