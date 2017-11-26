@@ -80,7 +80,7 @@ class CanvasWidgetHelper:
         duration = kwargs.get('duration', 1000)
         red, green, blue = struct.unpack('BBB', bytes.fromhex(colour[1:]))
         slices = max((duration // 100), 10)
-        increment = (max((red, green, blue)) // slices)
+        increment = max(max((red, green, blue)) // slices, 1)
 
         def fade(r, g, b):
             if r < red:
@@ -115,7 +115,7 @@ class CanvasWidgetHelper:
         current_colour = self._canvas.itemcget(item, 'fill')
         red, green, blue = struct.unpack('BBB', bytes.fromhex(current_colour[1:]))
         slices = max((duration // 100), 10)
-        decrement = (max((red, green, blue)) // slices)
+        decrement = max(max((red, green, blue)) // slices, 1)
 
         def fade(r, g, b):
             r -= decrement
