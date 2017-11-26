@@ -4,3 +4,5 @@ function and class level
 - Need to implement a dialog popup. This will be standalone and will be a parent of the overall game frame, with
     an absolute position. Used for puzzle complete, player name already in use etc.
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
+- Have board holes animate when they first appear
+- HAve noodles animate onto the board when first set up
