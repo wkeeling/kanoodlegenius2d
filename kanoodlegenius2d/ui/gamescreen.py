@@ -11,6 +11,7 @@ from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 
 
 HIGHLIGHT_COLOUR = '#ffffff'
+REJECT_COLOUR = '#ff0000'
 
 
 class GameScreen(tk.Frame):
@@ -145,7 +146,7 @@ class BoardFrame(tk.Frame):
 
     def _reject_place_noodle(self, noodle, hole_id):
         self._noodle_frame.reject(noodle)
-        self._canvas.itemconfig(hole_id, outline='red', width=4)
+        self._canvas.itemconfig(hole_id, outline=REJECT_COLOUR, width=4)
         self._canvas.tag_raise(hole_id)
 
         def revert():
