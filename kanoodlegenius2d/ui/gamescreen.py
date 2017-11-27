@@ -313,12 +313,10 @@ class NoodleSelectionFrame(tk.Frame):
 
         def redraw():
             self._noodle_canvas.delete('all')
-            self._draw_noodle(fade_duration=40)
+            if self._selectable_noodles:
+                self._draw_noodle(fade_duration=40)
 
-        if self._selectable_noodles:
-            self.after(500, redraw)
-        else:
-            self.after(500, lambda: self._noodle_canvas.delete('all'))
+        self.after(500, redraw)
 
         return noodle, part
 
