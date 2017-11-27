@@ -50,7 +50,7 @@ class BoardFrame(tk.Frame):
         self._canvas.pack()
         self._widget_helper = CanvasWidgetHelper(self._canvas)
         self._holes = self._draw_board()
-        self._draw_noodles_on_board(fade_duration=1000)
+        self._draw_noodles_on_board(fade_duration=500)
 
         self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
                                           height=40)
@@ -99,8 +99,14 @@ class BoardFrame(tk.Frame):
     def _draw_noodles_on_board(self, fade_duration=0):
         for hole_id in self._holes:
             self._canvas.itemconfig(hole_id, fill='#000000')
-        for board_noodle in self._board.noodles:
-            self._draw_noodle(board_noodle, board_noodle.position, fade_duration)
+        for i, board_noodle in enumerate(self._board.noodles, start=2):
+
+            def draw(i, n):
+                if fade_duration == 0:
+                    i = 0
+                self.after(i*500, lambda: self._draw_noodle(n, n.position, fade_duration))
+
+            draw(i, board_noodle)
 
     def _draw_noodle(self, noodle, position, fade_duration=0):
         last_position = position
