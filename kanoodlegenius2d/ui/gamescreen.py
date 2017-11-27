@@ -10,7 +10,7 @@ from kanoodlegenius2d.models import (initialise,
 from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 
 
-HIGHLIGHT_COLOUR = 'white'
+HIGHLIGHT_COLOUR = '#ffffff'
 
 
 class GameScreen(tk.Frame):
