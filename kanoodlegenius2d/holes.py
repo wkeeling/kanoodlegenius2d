@@ -92,7 +92,7 @@ _holes[13].neighbours[orientation.SE] = _holes[19]
 _holes[13].neighbours[orientation.SW] = _holes[18]
 _holes[13].neighbours[orientation.W] = _holes[12]
 _holes[13].neighbours[orientation.NW] = _holes[7]
-_holes[13].neighbours[orientation.NE] = _holes[9]
+_holes[13].neighbours[orientation.NE] = _holes[8]
 
 _holes[14].neighbours[orientation.SW] = _holes[19]
 _holes[14].neighbours[orientation.W] = _holes[13]
