@@ -361,7 +361,7 @@ class StatusFrame(tk.Frame):
         canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
         canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **args)
         canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **args)
-        widget_helper.create_button('LEAVE GAME', pos=(715, 28), width=140, height=40, font='helvetica',
+        widget_helper.create_button('LEAVE GAME', pos=(715, 27), width=140, height=40, font='helvetica',
                                     onclick=lambda: True)
 
 
