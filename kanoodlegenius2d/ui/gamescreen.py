@@ -49,7 +49,7 @@ class BoardFrame(tk.Frame):
         self._canvas.pack()
         self._widget_helper = CanvasWidgetHelper(self._canvas)
         self._holes = self._draw_board()
-        self._draw_noodles_on_board()
+        self._draw_noodles_on_board(fade_duration=1000)
 
         self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
                                           height=40)
@@ -89,16 +89,17 @@ class BoardFrame(tk.Frame):
         holes_ = []
         for i in range(num):
             hole_id = self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55,
-                                               outline='#4d4d4d', fill='black', width=2)
+                                               outline='#000000', fill='#000000', width=2)
+            self._widget_helper.fadein(hole_id, '#4d4d4d', elements=['outline'], duration=1000)
             holes_.append(hole_id)
             tl_x += 56
         return holes_
 
-    def _draw_noodles_on_board(self):
+    def _draw_noodles_on_board(self, fade_duration=0):
         for hole_id in self._holes:
             self._canvas.itemconfig(hole_id, fill='#000000')
         for board_noodle in self._board.noodles:
-            self._draw_noodle(board_noodle, board_noodle.position)
+            self._draw_noodle(board_noodle, board_noodle.position, fade_duration)
 
     def _draw_noodle(self, noodle, position, fade_duration=0):
         last_position = position
@@ -199,7 +200,7 @@ class NoodleSelectionFrame(tk.Frame):
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
         self._init_buttons(control_frame)
-        self._draw_noodle()
+        self._draw_noodle(fade_duration=1000)
 
         # The part of the noodle that a user has pressed (0 - 4)
         self._selected_part = None
