@@ -59,6 +59,8 @@ def setup():
     level2 = Level.create(number=2, name='Champ')
     level3 = Level.create(number=3, name='Whiz')
 
+    # Puzzle 1/1 ######################################
+
     puzzle = Puzzle.create(level=level1, number=1)
 
     light_blue = Noodle.light_blue()
@@ -77,4 +79,39 @@ def setup():
     red.rotate()
     puzzle.place(red, position=20)
 
+    # Puzzle 2/1 ######################################
 
+    puzzle = Puzzle.create(level=level1, number=2)
+
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=3)
+    puzzle.place(dark_blue, position=2)
+
+    light_blue = Noodle.light_blue()
+    puzzle.place(light_blue, position=5)
+
+    yellow = Noodle.yellow()
+    yellow.rotate(increment=2)
+    puzzle.place(yellow, position=10)
+
+    red = Noodle.red()
+    puzzle.place(red, position=16)
+
+    # Puzzle 3/1 ######################################
+
+    puzzle = Puzzle.create(level=level1, number=3)
+
+    dark_green = Noodle.dark_green()
+    dark_green.rotate(increment=3)
+    puzzle.place(dark_green, position=2)
+
+    light_green = Noodle.light_green()
+    puzzle.place(light_green, position=11)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=5)
+    puzzle.place(pink, position=20)
+
+    red = Noodle.red()
+    red.rotate(increment=4)
+    puzzle.place(red, position=32)
