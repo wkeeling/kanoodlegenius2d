@@ -343,7 +343,7 @@ class Board(BaseModel):
         return self.noodles.count() == 7
 
     def __str__(self):
-        return '<Board: {}>'.format(self.id)
+        return '<Board: {}, Puzzle: {}, Level: {}>'.format(self.id, self.puzzle.id, self.puzzle.level.id)
 
 
 class BoardNoodle(PartAccessorMixin, BaseModel):
