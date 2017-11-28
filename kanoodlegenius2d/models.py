@@ -299,7 +299,8 @@ class Board(BaseModel):
             overlap = occupied_positions & target_positions
 
             if overlap:
-                raise PositionUnavailableException('Positions {} are occupied'.format(overlap))
+                raise PositionUnavailableException('Position(s) {} are occupied'.format(
+                    ', '.join([str(o) for o in overlap])))
 
         BoardNoodle.create(board=self, noodle=noodle, position=position, part1=noodle.part1,
                            part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
