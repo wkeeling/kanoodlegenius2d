@@ -32,7 +32,7 @@ class GameScreen(tk.Frame):
             board, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='#000000'
         )
         board_frame.pack(side='left')
-        noodle_selection_frame.pack()
+        self.after(4000, lambda: noodle_selection_frame.pack())
         status_frame = StatusFrame(board, master=self, width=800, height=60, bg='#000000', highlightthickness=1)
         status_frame.pack()
 
@@ -49,8 +49,12 @@ class BoardFrame(tk.Frame):
         self._canvas = tk.Canvas(self, width=440, height=420, bg='#000000', highlightthickness=0)
         self._canvas.pack()
         self._widget_helper = CanvasWidgetHelper(self._canvas)
-        self._holes = self._draw_board()
-        self._draw_noodles_on_board(fade_duration=100)
+
+        def draw():
+            self._holes = self._draw_board()
+            self._draw_noodles_on_board(fade_duration=100)
+
+        self.after(1000, draw)
 
         self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
                                           height=40)
