@@ -3,10 +3,12 @@ import tkinter as tk
 
 from kanoodlegenius2d import (holes,
                               orientation)
-from kanoodlegenius2d.models import (initialise,
+from kanoodlegenius2d.models import (Board,
+                                     initialise,
                                      Game,
                                      Noodle,
-                                     PositionUnavailableException)
+                                     PositionUnavailableException,
+                                     Puzzle)
 from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 
 
@@ -23,7 +25,7 @@ class GameScreen(tk.Frame):
             cnf = {}
         super().__init__(master, cnf, **kw)
 
-        board_and_noodle = tk.Frame(master=self, bg='#000000')
+        board_and_noodle = tk.Frame(master=self, bg='#000000', highlightthickness=1)
         board_and_noodle.pack(side='top', fill='x')
         noodle_selection_frame = NoodleSelectionFrame(
             board, master=board_and_noodle, width=360, height=420, bg='#000000'
@@ -141,6 +143,13 @@ class BoardFrame(tk.Frame):
                     self._reject_place_noodle(noodle, hole_id)
                 else:
                     self._commit_place_noodle(noodle, hole_id, root_index)
+                    if self._board.complete:
+                        def notify_board_complete(parent):
+                            if not hasattr(parent, 'board_complete'):
+                                notify_board_complete(parent.master)
+                            else:
+                                parent.board_complete(self._board)
+                        notify_board_complete(self.master)
 
         return _on_hole_press
 
@@ -362,9 +371,9 @@ class StatusFrame(tk.Frame):
             'fill': '#ffffff'
         }
 
-        canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
         canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **args)
         canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **args)
+        canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
         widget_helper.create_button('LEAVE GAME', pos=(715, 27), width=140, height=40, font='helvetica',
                                     onclick=lambda: True)
 
@@ -372,6 +381,7 @@ class StatusFrame(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
+    root.board_complete = lambda board: print('Board complete: {}'.format(board))
 
     try:
         import os
