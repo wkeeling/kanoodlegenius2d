@@ -32,7 +32,7 @@ class GameScreen(tk.Frame):
             board, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='#000000'
         )
         board_frame.pack(side='left')
-        self.after(4000, lambda: noodle_selection_frame.pack())
+        noodle_selection_frame.pack()
         status_frame = StatusFrame(board, master=self, width=800, height=60, bg='#000000', highlightthickness=1)
         status_frame.pack()
 
@@ -49,13 +49,13 @@ class BoardFrame(tk.Frame):
         self._canvas = tk.Canvas(self, width=440, height=420, bg='#000000', highlightthickness=0)
         self._canvas.pack()
         self._widget_helper = CanvasWidgetHelper(self._canvas)
+        self._holes = []
 
         def draw():
             self._holes = self._draw_board()
             self._draw_noodles_on_board(fade_duration=100)
 
         self.after(1000, draw)
-
         self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
                                           height=40)
 
@@ -103,7 +103,7 @@ class BoardFrame(tk.Frame):
     def _draw_noodles_on_board(self, fade_duration=0):
         for hole_id in self._holes:
             self._canvas.itemconfig(hole_id, fill='#000000')
-        for i, board_noodle in enumerate(self._board.noodles, start=2):
+        for i, board_noodle in enumerate(self._board.noodles, start=3):
 
             def draw(i, n):
                 if fade_duration == 0:
@@ -211,7 +211,7 @@ class NoodleSelectionFrame(tk.Frame):
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
         self._init_buttons(control_frame)
-        self._draw_noodle(fade_duration=1000)
+        self.after(4500, lambda: self._draw_noodle(fade_duration=1000))
 
         # The part of the noodle that a user has pressed (0 - 4)
         self._selected_part = None
