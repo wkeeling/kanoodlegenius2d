@@ -50,7 +50,7 @@ class BoardFrame(tk.Frame):
         self._canvas.pack()
         self._widget_helper = CanvasWidgetHelper(self._canvas)
         self._holes = self._draw_board()
-        self._draw_noodles_on_board(fade_duration=500)
+        self._draw_noodles_on_board(fade_duration=100)
 
         self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
                                           height=40)
