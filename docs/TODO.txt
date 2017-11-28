@@ -1,6 +1,10 @@
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
-- Implement status bar
 - Need to implement a dialog popup. This will be standalone and will be a parent of the overall game frame, with
     an absolute position. Used for puzzle complete, player name already in use etc.
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
+- Display "Puzzles completed (n/total)" on player selection screen (not on game screen)
+- May need to hold "completed" field on Board (already have "complete" property) as this will distinguish between
+    puzzles completed and puzzles auto-solved. completed() and complete() would both exist and have subtly
+    different meanings.
+- Implement the logic that switches to the next puzzle once puzzle completed. Need dialog popup too.
