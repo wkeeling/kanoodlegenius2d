@@ -381,9 +381,9 @@ class StatusFrame(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
+    root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
     root.board_complete = lambda board: print('Board complete: {}'.format(board))
-    dialog = Dialog('Test dialog', 'Hello world', master=root)
+    dialog = Dialog('Hello world', master=root)
 
 
     # try:
@@ -396,7 +396,7 @@ if __name__ == '__main__':
     # # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
     # game_screen = GameScreen(b, root, highlightthickness=1)
     # game_screen.pack(fill='x')
-    # root.attributes('-topmost', True)
-    # root.update()
-    # root.attributes('-topmost', False)
+    root.attributes('-topmost', True)
+    root.update()
+    root.attributes('-topmost', False)
     root.mainloop()
