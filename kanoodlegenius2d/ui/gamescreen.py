@@ -9,6 +9,7 @@ from kanoodlegenius2d.models import (Board,
                                      Noodle,
                                      PositionUnavailableException,
                                      Puzzle)
+from kanoodlegenius2d.ui.dialog import Dialog
 from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 
 
@@ -382,18 +383,20 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480')  # Will eventually be set by the main kanoodlegenius2d root screen
     root.board_complete = lambda board: print('Board complete: {}'.format(board))
+    dialog = Dialog('Test dialog', 'Hello world', master=root)
 
-    try:
-        import os
-        os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
-    except OSError:
-        pass
-    initialise()
-    b = Game.start('Will')
-    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
-    game_screen = GameScreen(b, root, highlightthickness=1)
-    game_screen.pack(fill='x')
-    root.attributes('-topmost', True)
-    root.update()
-    root.attributes('-topmost', False)
+
+    # try:
+    #     import os
+    #     os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
+    # except OSError:
+    #     pass
+    # initialise()
+    # b = Game.start('Will')
+    # # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
+    # game_screen = GameScreen(b, root, highlightthickness=1)
+    # game_screen.pack(fill='x')
+    # root.attributes('-topmost', True)
+    # root.update()
+    # root.attributes('-topmost', False)
     root.mainloop()
