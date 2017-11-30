@@ -24,13 +24,13 @@ class Dialog(tk.Toplevel):
                         Whether to show a submit button (default True).
                     submit_text:
                         The text of the submit button (default OK).
-                    on_submit:
+                    onsubmit:
                         Callable invoked when the submit button pressed (default None).
                     show_cancel:
                         Whether to show a cancel button (default False).
                     cancel_text:
                         The text of the cancel button when shown (default Cancel).
-                    on_cancel:
+                    oncancel:
                         Callable invoked when the cancel button pressed (default None).
                     timeout:
                         The number of seconds after which to automatically submit the
@@ -46,14 +46,31 @@ class Dialog(tk.Toplevel):
         self.overrideredirect(True)
         # Make the geometry update
         self.update_idletasks()
-        
-        width, height = master.winfo_width() // 2, master.winfo_height() // 2
+
+        width = kwargs.get('width', master.winfo_width() // 2)
+        height = kwargs.get('height', master.winfo_height() // 2)
+
         self.geometry("%dx%d+%d+%d" % (width, height,
                                        master.winfo_rootx() + ((master.winfo_width() - width) // 2),
                                        master.winfo_rooty() + ((master.winfo_height() - height) // 2)))
 
         canvas = tk.Canvas(self, width=width, height=height, bg='#000000', highlightthickness=0)
         canvas.pack()
-        widget_helper = CanvasWidgetHelper(canvas)
-        widget_helper.create_button(' OK ', (100, 100), font='helvetica', onclick=lambda: self.destroy())
+        self._widget_helper = CanvasWidgetHelper(canvas)
+
+        self._init_submit_button(**kwargs)
+
+    def _init_submit_button(self, **kwargs):
+        if kwargs.get('show_submit', True):
+            text = kwargs.get('submit_text', ' OK ')
+
+            def submit():
+                self.destroy()
+                onsubmit = kwargs.get('onsubmit')
+                if callable(onsubmit):
+                    onsubmit()
+
+            self._widget_helper.create_button(text, (self.winfo_x() + self.winfo_width() - 100,
+                                                     self.winfo_y() - self.winfo_height() - 100),
+                                              font='helvetica', onclick=submit)
 
