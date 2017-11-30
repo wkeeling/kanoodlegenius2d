@@ -9,7 +9,7 @@ from kanoodlegenius2d.models import (Board,
                                      Noodle,
                                      PositionUnavailableException,
                                      Puzzle)
-from kanoodlegenius2d.ui.dialog import Dialog
+from kanoodlegenius2d.ui.dialog import display_dialog
 from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 
 
@@ -383,7 +383,9 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
     root.board_complete = lambda board: print('Board complete: {}'.format(board))
-    dialog = Dialog('Hello world', master=root)
+    # Remove window border
+    root.overrideredirect(True)
+    display_dialog('Hello world', master=root, show_cancel=True, timeout=3)
 
 
     # try:

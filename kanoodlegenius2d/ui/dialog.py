@@ -7,35 +7,6 @@ class Dialog(tk.Toplevel):
     """A popup panel which overlays the frame beneath it and can be closed by the user."""
 
     def __init__(self, message, master=None, **kwargs):
-        """Initialise and display a new dialog popup.
-
-        Args:
-            message:
-                The text to display on the dialog.
-            master:
-                The parent widget.
-            kwargs:
-                Optional keyword arguments that can include:
-                    width:
-                        The width of the dialog in pixels (default 50% of parent).
-                    height:
-                        The height of the dialog in pixels (default 50% of parent).
-                    show_submit:
-                        Whether to show a submit button (default True).
-                    submit_text:
-                        The text of the submit button (default OK).
-                    onsubmit:
-                        Callable invoked when the submit button pressed (default None).
-                    show_cancel:
-                        Whether to show a cancel button (default False).
-                    cancel_text:
-                        The text of the cancel button when shown (default Cancel).
-                    oncancel:
-                        Callable invoked when the cancel button pressed (default None).
-                    timeout:
-                        The number of seconds after which to automatically submit the
-                        dialog (default None - no auto-submit).
-        """
         super().__init__(master, bg='#000000', highlightthickness=1)
 
         # Make the dialog appear on top of its parent
@@ -47,18 +18,24 @@ class Dialog(tk.Toplevel):
         # Make the geometry update
         self.update_idletasks()
 
-        width = kwargs.get('width', master.winfo_width() // 2)
-        height = kwargs.get('height', master.winfo_height() // 2)
+        self._width = kwargs.get('width', master.winfo_width() // 2)
+        self._height = kwargs.get('height', master.winfo_height() // 2)
+        self._x_offset = master.winfo_rootx() + ((master.winfo_width() - self._width) // 2)
+        self._y_offset = master.winfo_rooty() + ((master.winfo_height() - self._height) // 2)
 
-        self.geometry("%dx%d+%d+%d" % (width, height,
-                                       master.winfo_rootx() + ((master.winfo_width() - width) // 2),
-                                       master.winfo_rooty() + ((master.winfo_height() - height) // 2)))
+        self.geometry("%dx%d+%d+%d" % (self._width, self._height, self._x_offset, self._y_offset))
 
-        canvas = tk.Canvas(self, width=width, height=height, bg='#000000', highlightthickness=0)
+        canvas = tk.Canvas(self, width=self._width, height=self._height, bg='#000000', highlightthickness=0)
         canvas.pack()
         self._widget_helper = CanvasWidgetHelper(canvas)
 
         self._init_submit_button(**kwargs)
+        self._init_cancel_button(**kwargs)
+        self._init_message(**kwargs)
+
+        timeout = kwargs.get('timeout')
+        if timeout:
+            self.after(timeout*1000, self.destroy)
 
     def _init_submit_button(self, **kwargs):
         if kwargs.get('show_submit', True):
@@ -70,7 +47,54 @@ class Dialog(tk.Toplevel):
                 if callable(onsubmit):
                     onsubmit()
 
-            self._widget_helper.create_button(text, (self.winfo_x() + self.winfo_width() - 100,
-                                                     self.winfo_y() - self.winfo_height() - 100),
+            self._widget_helper.create_button(text, (self._width - 50, self._height - 40),
                                               font='helvetica', onclick=submit)
 
+    def _init_cancel_button(self, **kwargs):
+        if kwargs.get('show_cancel', False):
+            text = kwargs.get('submit_text', 'CANCEL')
+
+            def cancel():
+                self.destroy()
+                oncancel = kwargs.get('oncancel')
+                if callable(oncancel):
+                    oncancel()
+
+            self._widget_helper.create_button(text, (60, self._height - 40),
+                                              font='helvetica', onclick=cancel)
+
+    def _init_message(self, **kwargs):
+        pass
+
+
+def display_dialog(message, master=None, **kwargs):
+    """Initialise and display a new dialog popup.
+
+    Args:
+        message:
+            The text to display on the dialog.
+        master:
+            The parent widget.
+        kwargs:
+            Optional keyword arguments that can include:
+                width:
+                    The width of the dialog in pixels (default 50% of parent).
+                height:
+                    The height of the dialog in pixels (default 50% of parent).
+                show_submit:
+                    Whether to show a submit button (default True).
+                submit_text:
+                    The text of the submit button (default OK).
+                onsubmit:
+                    Callable invoked when the submit button pressed (default None).
+                show_cancel:
+                    Whether to show a cancel button (default False).
+                cancel_text:
+                    The text of the cancel button when shown (default CANCEL).
+                oncancel:
+                    Callable invoked when the cancel button pressed (default None).
+                timeout:
+                    The number of seconds after which to automatically cancel the
+                    dialog (default None - no auto-cancel).
+    """
+    Dialog(message, master=master, **kwargs)
