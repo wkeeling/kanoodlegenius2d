@@ -66,6 +66,20 @@ class Dialog(tk.Toplevel):
     def _init_message(self, **kwargs):
         pass
 
+    def _fade_in(self):
+        alpha = self.attributes("-alpha")
+        alpha = min(alpha + .01, 1.0)
+        self.attributes("-alpha", alpha)
+        if alpha < 1.0:
+            self.after(10, self._fade_in)
+
+    def _fade_out(self):
+        alpha = self.attributes("-alpha")
+        alpha = max(alpha - .01, 0)
+        self.attributes("-alpha", alpha)
+        if alpha > 0:
+            self.after(10, self._fade_out)
+
 
 def display_dialog(message, master=None, **kwargs):
     """Initialise and display a new dialog popup.

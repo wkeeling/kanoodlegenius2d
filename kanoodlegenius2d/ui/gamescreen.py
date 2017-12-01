@@ -383,8 +383,6 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
     root.board_complete = lambda board: print('Board complete: {}'.format(board))
-    # Remove window border
-    root.overrideredirect(True)
     display_dialog('Hello world', master=root, show_cancel=True, timeout=3)
 
 
