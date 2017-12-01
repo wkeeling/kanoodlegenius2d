@@ -1,6 +1,6 @@
-from datetime import datetime
 import logging
 import os
+from datetime import datetime
 
 from peewee import (BooleanField,
                     CharField,
@@ -11,9 +11,9 @@ from peewee import (BooleanField,
                     Model,
                     SqliteDatabase)
 
-from kanoodlegenius2d import data
-from kanoodlegenius2d import holes
-from kanoodlegenius2d import orientation
+from kanoodlegenius2d.domain import data
+from kanoodlegenius2d.domain import holes
+from kanoodlegenius2d.domain import orientation
 
 _LOG = logging.getLogger(__name__)
 

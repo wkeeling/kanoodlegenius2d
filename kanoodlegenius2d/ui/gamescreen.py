@@ -1,17 +1,12 @@
-from collections import deque
 import tkinter as tk
+from collections import deque
 
-from kanoodlegenius2d import (holes,
-                              orientation)
-from kanoodlegenius2d.models import (Board,
-                                     initialise,
-                                     Game,
-                                     Noodle,
-                                     PositionUnavailableException,
-                                     Puzzle)
+from kanoodlegenius2d.domain import (holes,
+                                     orientation)
+from kanoodlegenius2d.domain.models import (Noodle,
+                                            PositionUnavailableException)
 from kanoodlegenius2d.ui.dialog import display_dialog
 from kanoodlegenius2d.ui.util import CanvasWidgetHelper
-
 
 HIGHLIGHT_COLOUR = '#ffffff'
 REJECT_COLOUR = '#ff0000'

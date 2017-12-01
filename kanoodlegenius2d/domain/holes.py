@@ -1,4 +1,5 @@
-from kanoodlegenius2d import orientation
+from kanoodlegenius2d.domain import orientation
+
 """Helper functions for determining hole positions."""
 
 

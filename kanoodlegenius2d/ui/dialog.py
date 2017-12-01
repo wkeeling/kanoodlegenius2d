@@ -25,9 +25,9 @@ class Dialog(tk.Toplevel):
 
         self.geometry("%dx%d+%d+%d" % (self._width, self._height, self._x_offset, self._y_offset))
 
-        canvas = tk.Canvas(self, width=self._width, height=self._height, bg='#000000', highlightthickness=0)
-        canvas.pack()
-        self._widget_helper = CanvasWidgetHelper(canvas)
+        self._canvas = tk.Canvas(self, width=self._width, height=self._height, bg='#000000', highlightthickness=0)
+        self._canvas.pack()
+        self._widget_helper = CanvasWidgetHelper(self._canvas)
 
         self._init_submit_button(**kwargs)
         self._init_cancel_button(**kwargs)
@@ -63,22 +63,8 @@ class Dialog(tk.Toplevel):
             self._widget_helper.create_button(text, (60, self._height - 40),
                                               font='helvetica', onclick=cancel)
 
-    def _init_message(self, **kwargs):
-        pass
-
-    def _fade_in(self):
-        alpha = self.attributes("-alpha")
-        alpha = min(alpha + .01, 1.0)
-        self.attributes("-alpha", alpha)
-        if alpha < 1.0:
-            self.after(10, self._fade_in)
-
-    def _fade_out(self):
-        alpha = self.attributes("-alpha")
-        alpha = max(alpha - .01, 0)
-        self.attributes("-alpha", alpha)
-        if alpha > 0:
-            self.after(10, self._fade_out)
+    def _init_message(self, message):
+        self._canvas.create_text(message)
 
 
 def display_dialog(message, master=None, **kwargs):

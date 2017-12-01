@@ -6,18 +6,18 @@ from peewee import (IntegrityError,
                     SqliteDatabase)
 from playhouse.test_utils import test_database
 
-from kanoodlegenius2d.models import (Board,
-                                     BoardNoodle,
-                                     Game,
-                                     initialise,
-                                     Level,
-                                     Noodle,
-                                     Player,
-                                     Puzzle,
-                                     PuzzleNoodle,
-                                     PositionUnavailableException,
-                                     shutdown)
-from kanoodlegenius2d import orientation
+from kanoodlegenius2d.domain import orientation
+from kanoodlegenius2d.domain.models import (Board,
+                                            BoardNoodle,
+                                            Game,
+                                            initialise,
+                                            Level,
+                                            Noodle,
+                                            Player,
+                                            Puzzle,
+                                            PuzzleNoodle,
+                                            PositionUnavailableException,
+                                            shutdown)
 
 test_db = SqliteDatabase(':memory:')
 

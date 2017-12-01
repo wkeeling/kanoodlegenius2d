@@ -1,17 +1,17 @@
 import logging
 
-from kanoodlegenius2d import orientation
+from kanoodlegenius2d.domain import orientation
 
 _LOG = logging.getLogger(__name__)
 
 
 def setup():
     # To avoid circular dependency
-    from kanoodlegenius2d import models
-    from kanoodlegenius2d.models import (BaseModel,
-                                         Level,
-                                         Noodle,
-                                         Puzzle)
+    from kanoodlegenius2d.domain import models
+    from kanoodlegenius2d.domain.models import (BaseModel,
+                                                Level,
+                                                Noodle,
+                                                Puzzle)
     # Create the tables if they do not already exist
     for k, v in vars(models).items():
         if isinstance(v, type) and issubclass(v, BaseModel):

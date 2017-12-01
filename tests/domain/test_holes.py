@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from kanoodlegenius2d.holes import find_position
-from kanoodlegenius2d import orientation
+from kanoodlegenius2d.domain import orientation
+from kanoodlegenius2d.domain.holes import find_position
 
 
 class FindPositionTest(TestCase):
