@@ -31,7 +31,7 @@ class Dialog(tk.Toplevel):
 
         self._init_submit_button(**kwargs)
         self._init_cancel_button(**kwargs)
-        self._init_message(**kwargs)
+        self._init_message(message)
 
         timeout = kwargs.get('timeout')
         if timeout:
@@ -64,7 +64,9 @@ class Dialog(tk.Toplevel):
                                               font='helvetica', onclick=cancel)
 
     def _init_message(self, message):
-        self._canvas.create_text(message)
+        self._canvas.create_text((self._width // 2, (self._height // 2) - 20), text=message,
+                                 font=('helvetica', 18), width=self._width - 30,
+                                 justify='center', fill='#FFFFFF')
 
 
 def display_dialog(message, master=None, **kwargs):
