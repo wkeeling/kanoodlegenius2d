@@ -3,7 +3,9 @@ from collections import deque
 
 from kanoodlegenius2d.domain import (holes,
                                      orientation)
-from kanoodlegenius2d.domain.models import (Noodle,
+from kanoodlegenius2d.domain.models import (initialise,
+                                            Game,
+                                            Noodle,
                                             PositionUnavailableException)
 from kanoodlegenius2d.ui.dialog import display_dialog
 from kanoodlegenius2d.ui.util import CanvasWidgetHelper
@@ -377,20 +379,29 @@ class StatusFrame(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
-    root.board_complete = lambda board: print('Board complete: {}'.format(board))
-    display_dialog('Hello world', master=root)
 
+    def board_complete(board):
+        next_puzzle = board.puzzle.next_puzzle()
+        if next_puzzle is None:
+            message = 'Congratulations, you have completed the game!'
+        else:
+            message = 'Congratulations you have completed puzzle {}!\n\nNext, puzzle {}...' \
+                .format(board.puzzle.number, next_puzzle.number)
 
-    # try:
-    #     import os
-    #     os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
-    # except OSError:
-    #     pass
-    # initialise()
-    # b = Game.start('Will')
-    # # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
-    # game_screen = GameScreen(b, root, highlightthickness=1)
-    # game_screen.pack(fill='x')
+        root.after(1500, lambda: display_dialog(message, master=root))
+
+    root.board_complete = board_complete
+
+    try:
+        import os
+        os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
+    except OSError:
+        pass
+    initialise()
+    b = Game.start('Will')
+    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
+    game_screen = GameScreen(b, root, highlightthickness=1)
+    game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
     root.attributes('-topmost', False)

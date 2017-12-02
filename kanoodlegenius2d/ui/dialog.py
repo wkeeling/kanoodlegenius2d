@@ -65,7 +65,7 @@ class Dialog(tk.Toplevel):
 
     def _init_message(self, message):
         self._canvas.create_text((self._width // 2, (self._height // 2) - 20), text=message,
-                                 font=('helvetica', 18), width=self._width - 30,
+                                 font=('helvetica', 18), width=self._width - 40,
                                  justify='center', fill='#FFFFFF')
 
 
