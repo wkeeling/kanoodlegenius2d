@@ -9,6 +9,8 @@ class Dialog(tk.Toplevel):
     def __init__(self, message, master=None, **kwargs):
         super().__init__(master, bg='#000000', highlightthickness=2)
 
+        # Hide dialog until we've configured it
+        self.geometry("0x0+0+0")
         # Make the dialog appear on top of its parent
         self.transient(master)
         # Make the dialog modal
