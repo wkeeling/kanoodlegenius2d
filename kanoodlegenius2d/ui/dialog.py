@@ -7,7 +7,7 @@ class Dialog(tk.Toplevel):
     """A popup panel which overlays the frame beneath it and can be closed by the user."""
 
     def __init__(self, message, master=None, **kwargs):
-        super().__init__(master, bg='#000000', highlightthickness=1)
+        super().__init__(master, bg='#000000', highlightthickness=2)
 
         # Make the dialog appear on top of its parent
         self.transient(master)
