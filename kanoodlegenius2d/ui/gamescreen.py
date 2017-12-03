@@ -18,10 +18,9 @@ class GameScreen(tk.Frame):
     """Represents the main screen of the game where a player interacts with
     a puzzle board and selects noodles to place.
     """
-    def __init__(self, board, master=None, cnf=None, **kw):
-        if cnf is None:
-            cnf = {}
-        super().__init__(master, cnf, **kw)
+
+    def __init__(self, board, master=None, **kw):
+        super().__init__(master, **kw)
 
         board_and_noodle = tk.Frame(master=self, bg='#000000', highlightthickness=1)
         board_and_noodle.pack(side='top', fill='x')
@@ -39,10 +38,9 @@ class GameScreen(tk.Frame):
 
 class BoardFrame(tk.Frame):
     """The frame of the GameScreen that contains the board."""
-    def __init__(self, board, noodle_frame, master=None, cnf=None, **kw):
-        if cnf is None:
-            cnf = {}
-        super().__init__(master, cnf, **kw)
+
+    def __init__(self, board, noodle_frame, master=None, **kw):
+        super().__init__(master, **kw)
 
         self._board = board
         self._noodle_frame = noodle_frame
@@ -201,10 +199,8 @@ class NoodleSelectionFrame(tk.Frame):
         orientation.NE: (29, -49)
     }
 
-    def __init__(self, board, master=None, cnf=None, **kw):
-        if cnf is None:
-            cnf = {}
-        super().__init__(master, cnf, **kw)
+    def __init__(self, board, master=None, **kw):
+        super().__init__(master, **kw)
 
         self._board = board
         self._selectable_noodles = deque(set(Noodle.select()) - set([noodle.noodle for noodle in self._board.noodles]))
@@ -354,10 +350,9 @@ class NoodleSelectionFrame(tk.Frame):
 
 class StatusFrame(tk.Frame):
     """The bar at the bottom that holds information about the player, current level etc."""
-    def __init__(self, board, master=None, cnf=None, **kw):
-        if cnf is None:
-            cnf = {}
-        super().__init__(master, cnf, **kw)
+
+    def __init__(self, board, master=None, **kw):
+        super().__init__(master, **kw)
 
         self._board = board
         canvas = tk.Canvas(self, width=800, height=60, bg='#000000', highlightthickness=0)
