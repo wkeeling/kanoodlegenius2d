@@ -180,7 +180,7 @@ class BoardFrame(tk.Frame):
 
         self.after(500, commit)
 
-    def _undo_place_noodle(self):
+    def _undo_place_noodle(self, _):
         noodle = self._board.undo()
         if noodle:
             self._noodle_frame.reject(noodle)
@@ -282,25 +282,25 @@ class NoodleSelectionFrame(tk.Frame):
         widget_helper.create_button(text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
         widget_helper.create_button(text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
 
-    def _next_noodle(self):
+    def _next_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate()
         self._draw_noodle()
         self._clear_items(items)
 
-    def _prev_noodle(self):
+    def _prev_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate(-1)
         self._draw_noodle()
         self._clear_items(items)
 
-    def _rotate_noodle(self):
+    def _rotate_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles[0].rotate()
         self._draw_noodle()
         self._clear_items(items)
 
-    def _flip_noodle(self):
+    def _flip_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles[0].flip()
         self._draw_noodle()
@@ -368,7 +368,7 @@ class StatusFrame(tk.Frame):
         canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **args)
         canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
         widget_helper.create_button('LEAVE GAME', pos=(715, 27), width=140, height=40, font='helvetica',
-                                    onclick=lambda: True)
+                                    onclick=lambda _: True)
 
 
 if __name__ == '__main__':

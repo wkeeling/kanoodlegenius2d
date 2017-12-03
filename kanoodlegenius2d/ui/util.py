@@ -64,7 +64,7 @@ class CanvasWidgetHelper:
         def on_release(_):
             self.fadeout(button, duration=20)
             self._canvas.itemconfigure(text, fill='#ffffff')
-            onclick()
+            onclick(text)
 
         self._canvas.tag_bind(text, '<ButtonPress-1>', on_press)
         self._canvas.tag_bind(button, '<ButtonPress-1>', on_press)
