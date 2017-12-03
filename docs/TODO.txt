@@ -7,4 +7,4 @@ function and class level
 - May need to hold "completed" field on Board (already have "complete" property) as this will distinguish between
     puzzles completed and puzzles auto-solved. completed() and complete() would both exist and have subtly
     different meanings.
-- Implement the logic that switches to the next puzzle once puzzle completed. Need dialog popup too.
+- Change "onclick" references to "onpress"
