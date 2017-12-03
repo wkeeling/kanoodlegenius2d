@@ -37,21 +37,22 @@ class NewPlayerScreen(tk.Frame):
             'height': 50
         }
 
-        y = 220
+        y, offset = 220, 55
         for row in keys:
             x = 150
             for key in row:
                 self._widget_helper.create_button(str(key), (x, y), onclick=self._onclick, **args)
-                x += 55
-            y += 55
+                x += offset
+            y += offset
 
-        self._widget_helper.create_button('Del', (x, y - 55), onclick=self._onclick, **args)
-        x += 55
-        self._widget_helper.create_button('Shift', (x, y - 55), onclick=self._onclick, **args)
-        x += 55
-        self._widget_helper.create_button('Back', (x, y - 55), onclick=self._back, **args)
-        x += 55
-        self._widget_helper.create_button(' OK ', (x, y - 55), onclick=self._submit, **args)
+        args['font'] = ('helvetica', 14)
+        self._widget_helper.create_button('Del', (x, y - offset), onclick=self._onclick, **args)
+        x += offset
+        self._widget_helper.create_button('Shift', (x, y - offset), onclick=self._onclick, **args)
+        x += offset
+        self._widget_helper.create_button('Back', (x, y - offset), onclick=self._back, **args)
+        x += offset
+        self._widget_helper.create_button(' OK ', (x, y - offset), onclick=self._submit, **args)
 
     def _onclick(self, key):
         if key == 'Del':
