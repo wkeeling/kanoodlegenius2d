@@ -19,7 +19,10 @@ class NewPlayerScreen(tk.Frame):
         self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=1)
         self._canvas.pack()
 
-        self._player_text = self._canvas.create_text(400, 120, text='WILL', font=('helvetica', 18),
+        self._canvas.create_text(400, 60, text='Enter Player Name', font=('helvetica', 22),
+                                 justify='center', fill='#FFFFFF')
+
+        self._player_text = self._canvas.create_text(400, 120, text='', font=('helvetica', 18),
                                                      justify='center', fill='#FFFFFF')
         self._canvas.create_line(250, 135, 550, 135, fill='#666666', width=2.0)
 
