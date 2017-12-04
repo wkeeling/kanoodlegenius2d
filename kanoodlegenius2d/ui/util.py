@@ -12,8 +12,9 @@ class CanvasWidgetHelper:
                 The canvas object.
         """
         self._canvas = canvas
+        self._lockable_buttons = {}
 
-    def create_button(self, text, pos, onclick, **kwargs):
+    def create_button(self, text, pos, onclick, lockable=False, **kwargs):
         """Create a clickable canvas button.
 
         Args:
@@ -22,7 +23,11 @@ class CanvasWidgetHelper:
             pos:
                 The x,y point (2-tuple) that the button will be centred around.
             onclick:
-                The callback for when the button is clicked.
+                The callback for when the button is clicked. This will receive
+                a single parameter: the text of the clicked button.
+            lockable:
+                Whether the button is a lockable button (e.g. a caps lock key).
+                Lockable buttons remain pressed until they are pressed again.
             kwargs:
                 Additional arguments that can be used to configure the
                 button.
@@ -55,21 +60,30 @@ class CanvasWidgetHelper:
         button = self._canvas.create_rectangle((bbox[0] - x_offset, bbox[1] - y_offset,
                                                 bbox[2] + x_offset, bbox[3] + y_offset),
                                                outline='#ffffff', fill='#000000')
+        if lockable:
+            self._lockable_buttons[button] = False
+
         self._canvas.tag_raise(text)
 
-        def on_press(_):
+        def onpress(_):
             self._canvas.itemconfigure(button, fill='#ffffff')
             self._canvas.itemconfigure(text, fill='#000000')
 
-        def on_release(_):
+        def onrelease(_):
+            onclick(args['text'])
+            if button in self._lockable_buttons:
+                if self._lockable_buttons[button]:
+                    self._lockable_buttons[button] = False
+                else:
+                    self._lockable_buttons[button] = True
+                    return
             self.fadeout(button, duration=20)
             self._canvas.itemconfigure(text, fill='#ffffff')
-            onclick(args['text'])
 
-        self._canvas.tag_bind(text, '<ButtonPress-1>', on_press)
-        self._canvas.tag_bind(button, '<ButtonPress-1>', on_press)
-        self._canvas.tag_bind(text, '<ButtonRelease-1>', on_release)
-        self._canvas.tag_bind(button, '<ButtonRelease-1>', on_release)
+        self._canvas.tag_bind(text, '<ButtonPress-1>', onpress)
+        self._canvas.tag_bind(button, '<ButtonPress-1>', onpress)
+        self._canvas.tag_bind(text, '<ButtonRelease-1>', onrelease)
+        self._canvas.tag_bind(button, '<ButtonRelease-1>', onrelease)
 
     def fadein(self, item, colour, **kwargs):
         """Fade the specified canvas item from black to its current colour.
