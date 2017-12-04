@@ -53,9 +53,9 @@ class NewPlayerScreen(tk.Frame):
         x += offset
         CanvasButton(self._canvas, 'Shift', (x, y - offset), onclick=self._onshift, lockable=True, **args)
         x += offset
-        CanvasButton(self._canvas, 'Back', (x, y - offset), onclick=self._oncancel, **args)
+        CanvasButton(self._canvas, 'Exit', (x, y - offset), onclick=self._oncancel, **args)
         x += offset
-        CanvasButton(self._canvas, ' OK ', (x, y - offset), onclick=self._onsubmit, **args)
+        CanvasButton(self._canvas, 'Done', (x, y - offset), onclick=self._onsubmit, **args)
 
         return keys
 
