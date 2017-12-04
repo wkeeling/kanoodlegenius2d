@@ -49,7 +49,7 @@ class NewPlayerScreen(tk.Frame):
             y += offset
 
         args['font'] = ('helvetica', 14)
-        self._widget_helper.create_button('Del', (x, y - offset), onclick=self._delete, **args)
+        self._widget_helper.create_button('Del', (x, y - offset), onclick=self._ondelete, **args)
         x += offset
         self._widget_helper.create_button('Shift', (x, y - offset), onclick=self._onclick, **args)
         x += offset
@@ -61,7 +61,7 @@ class NewPlayerScreen(tk.Frame):
         self._canvas.itemconfigure(self._player_text,
                                    text=self._canvas.itemcget(self._player_text, 'text') + str(key))
 
-    def _delete(self, _):
+    def _ondelete(self, _):
         self._canvas.itemconfigure(self._player_text,
                                    text=self._canvas.itemcget(self._player_text, 'text')[:-1])
 
