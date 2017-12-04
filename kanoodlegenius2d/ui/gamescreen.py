@@ -8,7 +8,8 @@ from kanoodlegenius2d.domain.models import (initialise,
                                             Noodle,
                                             PositionUnavailableException)
 from kanoodlegenius2d.ui.dialog import display_dialog
-from kanoodlegenius2d.ui.util import CanvasWidgetHelper
+from kanoodlegenius2d.ui.components import (CanvasButton,
+                                            Fade)
 
 HIGHLIGHT_COLOUR = '#ffffff'
 REJECT_COLOUR = '#ff0000'
@@ -46,7 +47,7 @@ class BoardFrame(tk.Frame):
         self._noodle_frame = noodle_frame
         self._canvas = tk.Canvas(self, width=440, height=420, bg='#000000', highlightthickness=0)
         self._canvas.pack()
-        self._widget_helper = CanvasWidgetHelper(self._canvas)
+        self._fade = Fade(self._canvas)
         self._holes = []
 
         def draw():
@@ -54,8 +55,8 @@ class BoardFrame(tk.Frame):
             self._draw_noodles_on_board(fade_duration=100)
 
         self.after(1000, draw)
-        self._widget_helper.create_button('UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
-                                          height=40)
+        CanvasButton(self._canvas, 'UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
+                     height=40)
 
         self._hole_pressed = False
 
@@ -93,7 +94,7 @@ class BoardFrame(tk.Frame):
         for i in range(num):
             hole_id = self._canvas.create_oval(tl_x, tl_y, tl_x + 55, tl_y + 55,
                                                outline='#000000', fill='#000000', width=2)
-            self._widget_helper.fadein(hole_id, '#4d4d4d', elements=['outline'], duration=1000)
+            self._fade.fadein(hole_id, '#4d4d4d', elements=['outline'], duration=1000)
             holes_.append(hole_id)
             tl_x += 56
         return holes_
@@ -117,11 +118,11 @@ class BoardFrame(tk.Frame):
         except AttributeError:
             colour = noodle.noodle.colour
 
-        self._widget_helper.fadein(self._holes[last_position], colour, duration=fade_duration)
+        self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
         self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
         for part in noodle.parts:
             last_position = holes.find_position(last_position, part)
-            self._widget_helper.fadein(self._holes[last_position], colour, duration=fade_duration)
+            self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
             self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
     def _create_on_hole_press(self, hole_index, hole_id):
@@ -209,7 +210,7 @@ class NoodleSelectionFrame(tk.Frame):
         noodle_frame.pack(side='top')
         self._noodle_canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='#000000', highlightthickness=0)
         self._noodle_canvas.pack()
-        self._widget_helper = CanvasWidgetHelper(self._noodle_canvas)
+        self._fade = Fade(self._noodle_canvas)
 
         control_frame = tk.Frame(self)
         control_frame.pack(side='top')
@@ -239,7 +240,7 @@ class NoodleSelectionFrame(tk.Frame):
                 self._recentre(noodle_parts)
 
             for i, part in enumerate(noodle_parts):
-                self._widget_helper.fadein(part, noodle.colour, duration=fade_duration)
+                self._fade.fadein(part, noodle.colour, duration=fade_duration)
                 self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
@@ -269,7 +270,6 @@ class NoodleSelectionFrame(tk.Frame):
     def _init_buttons(self, control_frame):
         canvas = tk.Canvas(control_frame, width=300, height=100, bg='#000000', highlightthickness=0)
         canvas.pack()
-        widget_helper = CanvasWidgetHelper(canvas)
 
         args = {
             'width': 100,
@@ -277,10 +277,10 @@ class NoodleSelectionFrame(tk.Frame):
             'font': 'helvetica'
         }
 
-        widget_helper.create_button(text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
-        widget_helper.create_button(text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, **args)
-        widget_helper.create_button(text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
-        widget_helper.create_button(text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
+        CanvasButton(canvas, text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
+        CanvasButton(canvas, text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, **args)
+        CanvasButton(canvas, text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
+        CanvasButton(canvas, text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
 
     def _next_noodle(self, _):
         items = self._noodle_canvas.find_all()
@@ -312,7 +312,7 @@ class NoodleSelectionFrame(tk.Frame):
                 self._noodle_canvas.delete(i)
 
         for item in items:
-            self._widget_helper.fadeout(item, duration=60, elements=['fill', 'outline'], onfaded=clear)
+            self._fade.fadeout(item, duration=60, elements=['fill', 'outline'], onfaded=clear)
 
     def accept(self):
         """Accept the currently selected noodle and part and remove them
@@ -357,7 +357,6 @@ class StatusFrame(tk.Frame):
         self._board = board
         canvas = tk.Canvas(self, width=800, height=60, bg='#000000', highlightthickness=0)
         canvas.pack()
-        widget_helper = CanvasWidgetHelper(canvas)
 
         args = {
             'font': 'helvetica',
@@ -367,8 +366,8 @@ class StatusFrame(tk.Frame):
         canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **args)
         canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **args)
         canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
-        widget_helper.create_button('LEAVE GAME', pos=(715, 27), width=140, height=40, font='helvetica',
-                                    onclick=lambda _: True)
+        CanvasButton(canvas, 'LEAVE GAME', pos=(715, 27), width=140, height=40, font='helvetica',
+                     onclick=lambda _: True)
 
 
 if __name__ == '__main__':

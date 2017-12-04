@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from kanoodlegenius2d.ui.util import CanvasWidgetHelper
+from kanoodlegenius2d.ui.components import CanvasButton
 
 
 class Dialog(tk.Toplevel):
@@ -29,7 +29,6 @@ class Dialog(tk.Toplevel):
 
         self._canvas = tk.Canvas(self, width=self._width, height=self._height, bg='#000000', highlightthickness=0)
         self._canvas.pack()
-        self._widget_helper = CanvasWidgetHelper(self._canvas)
 
         self._init_submit_button(**kwargs)
         self._init_cancel_button(**kwargs)
@@ -49,8 +48,8 @@ class Dialog(tk.Toplevel):
                 if callable(onsubmit):
                     onsubmit()
 
-            self._widget_helper.create_button(text, (self._width - 50, self._height - 40),
-                                              font='helvetica', onclick=submit)
+            CanvasButton(self._canvas, text, (self._width - 50, self._height - 40),
+                         font='helvetica', onclick=submit)
 
     def _init_cancel_button(self, **kwargs):
         if kwargs.get('show_cancel', False):
@@ -62,8 +61,8 @@ class Dialog(tk.Toplevel):
                 if callable(oncancel):
                     oncancel()
 
-            self._widget_helper.create_button(text, (60, self._height - 40),
-                                              font='helvetica', onclick=cancel)
+            CanvasButton(self._canvas, text, (60, self._height - 40),
+                         font='helvetica', onclick=cancel)
 
     def _init_message(self, message):
         self._canvas.create_text((self._width // 2, (self._height // 2) - 20), text=message,

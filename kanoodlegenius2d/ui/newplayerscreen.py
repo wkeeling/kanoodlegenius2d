@@ -4,7 +4,7 @@ import tkinter as tk
 
 from kanoodlegenius2d.domain.models import initialise
 from kanoodlegenius2d.ui.dialog import display_dialog
-from kanoodlegenius2d.ui.util import CanvasWidgetHelper
+from kanoodlegenius2d.ui.components import CanvasButton
 
 
 class NewPlayerScreen(tk.Frame):
@@ -18,16 +18,15 @@ class NewPlayerScreen(tk.Frame):
 
         self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=1)
         self._canvas.pack()
-        self._widget_helper = CanvasWidgetHelper(self._canvas)
 
         self._player_text = self._canvas.create_text(400, 120, text='WILL', font=('helvetica', 18),
                                                      justify='center', fill='#FFFFFF')
         self._canvas.create_line(250, 135, 550, 135, fill='#666666', width=2.0)
 
-        self._init_keyboard()
+        self._keys = self._init_keyboard()
 
     def _init_keyboard(self):
-        keys = (
+        rows = (
             (1, 2, 3, 4, 5, 6, 7, 8, 9, 0),
             ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
             ('k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'),
@@ -40,22 +39,25 @@ class NewPlayerScreen(tk.Frame):
             'height': 50
         }
 
+        keys = []
         y, offset = 220, 55
-        for row in keys:
+        for row in rows:
             x = 150
-            for key in row:
-                self._widget_helper.create_button(str(key), (x, y), onclick=self._onclick, **args)
+            for char in row:
+                keys.append(CanvasButton(self._canvas, str(char), (x, y), onclick=self._onclick, **args))
                 x += offset
             y += offset
 
         args['font'] = ('helvetica', 14)
-        self._widget_helper.create_button('Del', (x, y - offset), onclick=self._ondelete, **args)
+        CanvasButton(self._canvas, 'Del', (x, y - offset), onclick=self._ondelete, **args)
         x += offset
-        self._widget_helper.create_button('Shift', (x, y - offset), onclick=self._onshift, lockable=True, **args)
+        CanvasButton(self._canvas, 'Shift', (x, y - offset), onclick=self._onshift, lockable=True, **args)
         x += offset
-        self._widget_helper.create_button('Back', (x, y - offset), onclick=self._oncancel, **args)
+        CanvasButton(self._canvas, 'Back', (x, y - offset), onclick=self._oncancel, **args)
         x += offset
-        self._widget_helper.create_button(' OK ', (x, y - offset), onclick=self._onsubmit, **args)
+        CanvasButton(self._canvas, ' OK ', (x, y - offset), onclick=self._onsubmit, **args)
+
+        return keys
 
     def _onclick(self, key):
         self._canvas.itemconfigure(self._player_text,
@@ -66,7 +68,13 @@ class NewPlayerScreen(tk.Frame):
                                    text=self._canvas.itemcget(self._player_text, 'text')[:-1])
 
     def _onshift(self, _):
-        pass
+        for key in self._keys:
+            if key.text.isalpha():
+                if key.text.islower():
+                    key.text = key.text.upper()
+                else:
+                    key.text = key.text.lower()
+
 
 if __name__ == '__main__':
     root = tk.Tk()

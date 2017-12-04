@@ -8,8 +8,4 @@ function and class level
     puzzles completed and puzzles auto-solved. completed() and complete() would both exist and have subtly
     different meanings.
 - Change "onclick" references to "onpress"
-- Lose CanvasWidgetHelper
-    - Create CanvasButton
-    - Create Fade object with a in() and out() method
-    - Change util.py to components.py
-    - Move Dialog to components.py
+- Move Dialog to components.py
