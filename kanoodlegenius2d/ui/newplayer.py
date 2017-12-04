@@ -10,8 +10,11 @@ from kanoodlegenius2d.ui.util import CanvasWidgetHelper
 class NewPlayerScreen(tk.Frame):
     """Represents the screen where a new player can be entered."""
 
-    def __init__(self, master=None, **kw):
+    def __init__(self, onsubmit, oncancel, master=None, **kw):
         super().__init__(master, **kw)
+
+        self._onsubmit = onsubmit
+        self._oncancel = oncancel
 
         self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=1)
         self._canvas.pack()
@@ -46,28 +49,21 @@ class NewPlayerScreen(tk.Frame):
             y += offset
 
         args['font'] = ('helvetica', 14)
-        self._widget_helper.create_button('Del', (x, y - offset), onclick=self._onclick, **args)
+        self._widget_helper.create_button('Del', (x, y - offset), onclick=self._delete, **args)
         x += offset
         self._widget_helper.create_button('Shift', (x, y - offset), onclick=self._onclick, **args)
         x += offset
-        self._widget_helper.create_button('Back', (x, y - offset), onclick=self._back, **args)
+        self._widget_helper.create_button('Back', (x, y - offset), onclick=self._oncancel, **args)
         x += offset
-        self._widget_helper.create_button(' OK ', (x, y - offset), onclick=self._submit, **args)
+        self._widget_helper.create_button(' OK ', (x, y - offset), onclick=self._onsubmit, **args)
 
     def _onclick(self, key):
-        if key == 'Del':
-            self._canvas.itemconfigure(self._player_text,
-                                       text=self._canvas.itemcget(self._player_text, 'text')[:-1])
-        else:
-            self._canvas.itemconfigure(self._player_text,
-                                       text=self._canvas.itemcget(self._player_text, 'text') + str(key))
+        self._canvas.itemconfigure(self._player_text,
+                                   text=self._canvas.itemcget(self._player_text, 'text') + str(key))
 
-    def _back(self, _):
-        pass
-
-    def _submit(self, _):
-        pass
-
+    def _delete(self, _):
+        self._canvas.itemconfigure(self._player_text,
+                                   text=self._canvas.itemcget(self._player_text, 'text')[:-1])
 
 if __name__ == '__main__':
     root = tk.Tk()
@@ -80,7 +76,7 @@ if __name__ == '__main__':
         pass
     initialise()
 
-    game_screen = NewPlayerScreen(root, highlightthickness=1)
+    game_screen = NewPlayerScreen(lambda _: None, lambda _: None, root, highlightthickness=1)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
