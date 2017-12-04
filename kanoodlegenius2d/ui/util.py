@@ -42,6 +42,8 @@ class CanvasWidgetHelper:
                     padding:
                         The padding between the text and the edge of the button
                         (default: 10).
+        Returns:
+            A CanvasButton object that represents the rendered button.
         """
         args = {
             'text': text,
@@ -84,6 +86,8 @@ class CanvasWidgetHelper:
         self._canvas.tag_bind(button, '<ButtonPress-1>', onpress)
         self._canvas.tag_bind(text, '<ButtonRelease-1>', onrelease)
         self._canvas.tag_bind(button, '<ButtonRelease-1>', onrelease)
+
+        return CanvasButton(self._canvas, button, text)
 
     def fadein(self, item, colour, **kwargs):
         """Fade the specified canvas item from black to its current colour.
@@ -131,7 +135,7 @@ class CanvasWidgetHelper:
                 self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
             else:
                 onfaded = kwargs.get('onfaded')
-                if onfaded:
+                if callable(onfaded):
                     onfaded()
 
         fade(0, 0, 0)
@@ -175,7 +179,21 @@ class CanvasWidgetHelper:
                 self._canvas.master.after(duration // slices, lambda: fade(r, g, b))
             else:
                 onfaded = kwargs.get('onfaded')
-                if onfaded:
+                if callable(onfaded):
                     onfaded()
 
         fade(red, green, blue)
+
+
+class CanvasButton:
+    """Represents a button drawn onto the canvas and allows elements of it
+    to be changed.
+    """
+
+    def __init__(self, canvas, button, text):
+        self._canvas = canvas
+        self._button = button
+        self._text = text
+
+    def text(self, text):
+        self._canvas.itemconfigure(self._text, text)

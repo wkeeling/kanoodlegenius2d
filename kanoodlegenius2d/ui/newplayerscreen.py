@@ -51,7 +51,7 @@ class NewPlayerScreen(tk.Frame):
         args['font'] = ('helvetica', 14)
         self._widget_helper.create_button('Del', (x, y - offset), onclick=self._ondelete, **args)
         x += offset
-        self._widget_helper.create_button('Shift', (x, y - offset), onclick=self._onclick, **args)
+        self._widget_helper.create_button('Shift', (x, y - offset), onclick=self._onshift, lockable=True, **args)
         x += offset
         self._widget_helper.create_button('Back', (x, y - offset), onclick=self._oncancel, **args)
         x += offset
@@ -64,6 +64,9 @@ class NewPlayerScreen(tk.Frame):
     def _ondelete(self, _):
         self._canvas.itemconfigure(self._player_text,
                                    text=self._canvas.itemcget(self._player_text, 'text')[:-1])
+
+    def _onshift(self, _):
+        pass
 
 if __name__ == '__main__':
     root = tk.Tk()
