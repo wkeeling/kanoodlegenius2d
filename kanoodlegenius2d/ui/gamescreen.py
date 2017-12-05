@@ -7,8 +7,8 @@ from kanoodlegenius2d.domain.models import (initialise,
                                             Game,
                                             Noodle,
                                             PositionUnavailableException)
-from kanoodlegenius2d.ui.dialog import display_dialog
 from kanoodlegenius2d.ui.components import (CanvasButton,
+                                            display_dialog,
                                             Fade)
 
 HIGHLIGHT_COLOUR = '#ffffff'
