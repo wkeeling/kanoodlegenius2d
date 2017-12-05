@@ -147,14 +147,14 @@ class CanvasButton:
             self._canvas.itemconfigure(self._text, fill='#000000')
 
         def onrelease(_):
-            onclick(self.text)
             if lockable:
                 self._locked = not self._locked
-                if self._locked:
-                    return
 
-            self._fade.fadeout(self._button, duration=20)
-            self._canvas.itemconfigure(self._text, fill='#ffffff')
+            if not self._locked:
+                self._fade.fadeout(self._button, duration=20)
+                self._canvas.itemconfigure(self._text, fill='#ffffff')
+
+            onclick(self.text)
 
         self._canvas.tag_bind(self._text, '<ButtonPress-1>', onpress)
         self._canvas.tag_bind(self._button, '<ButtonPress-1>', onpress)
