@@ -9,6 +9,7 @@ from playhouse.test_utils import test_database
 from kanoodlegenius2d.domain import orientation
 from kanoodlegenius2d.domain.models import (Board,
                                             BoardNoodle,
+                                            DuplicatePlayerNameException,
                                             Game,
                                             initialise,
                                             Level,
@@ -66,6 +67,15 @@ class GameIntegrationTest(TestCase):
         board = Game.start('test_player')
 
         self.assertIsNotNone(board.player.game.last_played)
+
+    def test_starts_new_game_raises_exception_when_player_name_taken(self):
+        """Test that an exception is raised when a new game is started with
+        a player name that has already been used.
+        """
+        Game.start('test_player')
+
+        with self.assertRaises(DuplicatePlayerNameException):
+            Game.start('test_player')
 
     def test_complete_puzzle_1(self):
         """Test complete the first puzzle, checking that the board

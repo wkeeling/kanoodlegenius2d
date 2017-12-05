@@ -8,6 +8,7 @@ from peewee import (BooleanField,
                     FixedCharField,
                     ForeignKeyField,
                     IntegerField,
+                    IntegrityError,
                     Model,
                     SqliteDatabase)
 
@@ -59,7 +60,11 @@ class Game(BaseModel):
             The board instance preconfigured with noodles, and ready to go.
         """
         game = Game.create()
-        player = Player.create(name=player_name, game=game)
+        
+        try:
+            player = Player.create(name=player_name, game=game)
+        except IntegrityError:
+            raise DuplicatePlayerNameException(player_name)
 
         first_puzzle = Puzzle.get(Puzzle.number == 1)
         board = Board.create(player=player, puzzle=first_puzzle)  # Creates an empty board referencing player/puzzle
@@ -378,6 +383,12 @@ class PuzzleNoodle(PartAccessorMixin, BaseModel):
 
     def __str__(self):
         return '<PuzzleNoodle: {}>'.format(self.id)
+
+
+class DuplicatePlayerNameException(Exception):
+    """Raised when an attempt is made to create a new player with the same name
+    as an existing player.
+    """
 
 
 class PositionUnavailableException(Exception):
