@@ -42,7 +42,7 @@ class Dialog(tk.Toplevel):
         if kwargs.get('show_submit', True):
             text = kwargs.get('submit_text', ' OK ')
 
-            def submit():
+            def submit(_):
                 self.destroy()
                 onsubmit = kwargs.get('onsubmit')
                 if callable(onsubmit):
