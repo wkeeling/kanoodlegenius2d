@@ -2,7 +2,9 @@ import os
 
 import tkinter as tk
 
-from kanoodlegenius2d.domain.models import initialise
+from kanoodlegenius2d.domain.models import (DuplicatePlayerNameException,
+                                            Game,
+                                            initialise)
 from kanoodlegenius2d.ui.dialog import display_dialog
 from kanoodlegenius2d.ui.components import CanvasButton
 
@@ -10,10 +12,10 @@ from kanoodlegenius2d.ui.components import CanvasButton
 class NewPlayerScreen(tk.Frame):
     """Represents the screen where a new player can be entered."""
 
-    def __init__(self, onsubmit, oncancel, master=None, **kw):
+    def __init__(self, oncreate, oncancel, master=None, **kw):
         super().__init__(master, **kw)
 
-        self._onsubmit = onsubmit
+        self._oncreate = oncreate
         self._oncancel = oncancel
 
         self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=1)
@@ -77,6 +79,15 @@ class NewPlayerScreen(tk.Frame):
                     key.text = key.text.upper()
                 else:
                     key.text = key.text.lower()
+
+    def _onsubmit(self, _):
+        name = self._canvas.itemcget(self._player_name, 'text').strip()
+        try:
+            board = Game.start(name)
+        except DuplicatePlayerNameException:
+            display_dialog('That name is already taken', master=self)
+        else:
+            self._oncreate(board)
 
 
 if __name__ == '__main__':
