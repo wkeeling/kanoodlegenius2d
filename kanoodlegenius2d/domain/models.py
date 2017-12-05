@@ -60,7 +60,7 @@ class Game(BaseModel):
             The board instance preconfigured with noodles, and ready to go.
         """
         game = Game.create()
-        
+
         try:
             player = Player.create(name=player_name, game=game)
         except IntegrityError:
