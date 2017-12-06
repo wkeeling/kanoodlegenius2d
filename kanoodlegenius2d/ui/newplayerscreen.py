@@ -35,8 +35,7 @@ class NewPlayerScreen(tk.Frame):
                                  justify='center', fill='#FFFFFF')
 
         self._player_name = self._canvas.create_text(400, 120, text='', font=('helvetica', 18),
-                                                     justify='center', fill='#FFFFFF')
-        self._canvas.create_line(250, 135, 550, 135, fill='#666666', width=2.0)
+                                                     justify='center', fill='#666666')
 
         self._buttons = self._init_keyboard()
 
@@ -64,13 +63,13 @@ class NewPlayerScreen(tk.Frame):
             y += offset
 
         button_args['font'] = ('helvetica', 14)
-        CanvasButton(self._canvas, 'Del', (x, y - offset), onclick=self._ondelete, **button_args)
+        CanvasButton(self._canvas, 'DEL', (x, y - offset), onclick=self._ondelete, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'Shift', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)
+        CanvasButton(self._canvas, 'SHIFT', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'Exit', (x, y - offset), onclick=self._oncancel, **button_args)
+        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onclick=self._oncancel, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'Done', (x, y - offset), onclick=self._onsubmit, **button_args)
+        CanvasButton(self._canvas, ' OK ', (x, y - offset), onclick=self._onsubmit, **button_args)
 
         return buttons
 
