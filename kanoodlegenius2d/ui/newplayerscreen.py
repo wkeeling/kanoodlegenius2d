@@ -28,7 +28,7 @@ class NewPlayerScreen(tk.Frame):
         self._oncreate = oncreate
         self._oncancel = oncancel
 
-        self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=1)
+        self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=0)
         self._canvas.pack()
 
         self._canvas.create_text(400, 60, text='Enter Player Name', font=('helvetica', 22),
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         pass
     initialise()
 
-    game_screen = NewPlayerScreen(lambda _: None, lambda _: None, root, highlightthickness=1)
+    game_screen = NewPlayerScreen(lambda _: None, lambda _: None, root, highlightthickness=2)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
