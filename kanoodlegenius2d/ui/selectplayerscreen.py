@@ -1,7 +1,10 @@
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
+                                            Player,
                                             initialise)
+from kanoodlegenius2d.ui.components import (CanvasButton,
+                                            display_dialog)
 
 
 class SelectPlayerScreen(tk.Frame):
@@ -33,19 +36,32 @@ class SelectPlayerScreen(tk.Frame):
         title_frame = tk.Frame(self, highlightthickness=0)
         title_frame.pack()
 
-        title = tk.Label(title_frame, width=800, height=3, text='Select Player', bg='#000000', fg='#FFFFFF',
+        title = tk.Label(title_frame, width=800, height=4, text='Select Player', bg='#000000', fg='#FFFFFF',
                          font=('helvetica', 22))
         title.pack()
 
     def _init_player_list(self):
         canvas_frame = tk.Frame(self, highlightthickness=0)
         canvas_frame.pack()
-        self._canvas = tk.Canvas(canvas_frame, width=800, height=380, bg='#000000', highlightthickness=0)
-        vbar = tk.Scrollbar(canvas_frame, width=32, bg='#000000', activebackground='#000000', orient='vertical')
-        vbar.pack(side='right', fill='y')
-        vbar.config(command=self._canvas.yview)
-        self._canvas.config(yscrollcommand=vbar.set)
-        self._canvas.pack(side='bottom')
+        canvas = tk.Canvas(canvas_frame, width=800, height=480, bg='#000000', highlightthickness=0)
+        canvas.pack()
+
+        x, y = 150, 75
+
+        for player in Player.select().where(Player.deleted == False):
+            canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
+            CanvasButton(canvas, 'DELETE', (570, y), font='helvetica', onclick=self._create_delete_player(player))
+            CanvasButton(canvas, ' GO ', (637, y), font='helvetica', onclick=lambda: None)
+            y += 40
+
+    def _create_delete_player(self, player):
+        def delete(_):
+            display_dialog(message="Are you sure you want to delete {}?".format(player.name),
+                           master=self, show_cancel=True)
+            player.soft_delete()
+
+        return delete
+
 
 if __name__ == '__main__':
     root = tk.Tk()
@@ -58,6 +74,9 @@ if __name__ == '__main__':
         pass
     initialise()
 
+    Game.start('Will')
+    Game.start('John')
+    Game.start('Fred')
     game_screen = SelectPlayerScreen(lambda _: None, lambda _: None, root, highlightthickness=2)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
