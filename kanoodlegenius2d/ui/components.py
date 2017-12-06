@@ -60,7 +60,7 @@ class Dialog(tk.Toplevel):
                 if callable(oncancel):
                     oncancel()
 
-            CanvasButton(self._canvas, text, (60, self._height - 40),
+            CanvasButton(self._canvas, text, (57, self._height - 40),
                          font='helvetica', onclick=cancel)
 
     def _init_message(self, message):
