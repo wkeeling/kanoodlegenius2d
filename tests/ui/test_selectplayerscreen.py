@@ -44,3 +44,8 @@ class PlayerPaginationTest(TestCase):
 
     def test_does_not_have_prev_page(self):
         self.assertFalse(self._paginator.has_prev_page())
+
+    def test_pagination_after_player_removal(self):
+        self._paginator.next_page()  # Now on page 2
+        self._players.remove('player3')
+        self.assertEqual(self._paginator.players(), ['player4', 'player5'])
