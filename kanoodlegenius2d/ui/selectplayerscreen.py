@@ -31,7 +31,7 @@ class SelectPlayerScreen(tk.Frame):
         self._oncancel = oncancel
 
         self._init_title()
-        self._paginator = PlayerPaginator([player.name for player in Player.active_players()])
+        self._paginator = PlayerPaginator(Player.active_players())
         self._init_player_list()
 
     def _init_title(self):
@@ -56,7 +56,7 @@ class SelectPlayerScreen(tk.Frame):
         x, y = 150, 50
 
         for player in self._paginator.players():
-            self._canvas.create_text(x, y, text=player, font=('helvetica', 18), fill='#666666')
+            self._canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
             CanvasButton(self._canvas, ' X ', (575, y), font='helvetica',
                          onclick=self._create_ondelete_player(player))
             CanvasButton(self._canvas, 'SELECT', (640, y), font='helvetica', onclick=lambda: None)
@@ -66,34 +66,39 @@ class SelectPlayerScreen(tk.Frame):
         CanvasButton(self._canvas, 'NEXT >>', (445, 250), font='helvetica', onclick=self._onnext)
 
     def _onnext(self, _):
-        items = self._canvas.find_all()
-        self._canvas.delete(*items)
+        self._canvas.delete(*self._canvas.find_all())
         self._paginator.next_page()
         self._show_page()
 
     def _onprev(self, _):
-        items = self._canvas.find_all()
-        self._canvas.delete(*items)
+        self._canvas.delete(*self._canvas.find_all())
         self._paginator.prev_page()
         self._show_page()
 
     def _create_ondelete_player(self, player):
-        def delete(_):
-            display_dialog(message="Are you sure you want to delete {}?".format(player),
-                           master=self, show_cancel=True)
-            player.soft_delete()
+        def ondelete(_):
+            def delete():
+                player.soft_delete()
+                self._paginator.remove(player)
+                self._canvas.delete(*self._canvas.find_all())
+                self._show_page()
+            display_dialog(message="Are you sure you want to delete {}?".format(player.name),
+                           master=self, onsubmit=delete, show_cancel=True)
 
-        return delete
+        return ondelete
 
 
 class PlayerPaginator:
     """Helper class for paginating a list of players in memory."""
 
     def __init__(self, players, page_size=4):
-        self._players = players
+        self._players = list(players)
         self._page_size = page_size
         self._current_page = 1
-        self._total_pages = math.ceil(len(self._players) / self._page_size)
+        self._total_pages = self._calc_total_pages()
+
+    def _calc_total_pages(self):
+        return math.ceil(len(self._players) / self._page_size)
 
     def players(self):
         start = (self._current_page - 1) * self._page_size
@@ -113,6 +118,12 @@ class PlayerPaginator:
 
     def has_prev_page(self):
         return self._current_page != 1
+
+    def remove(self, player):
+        self._players.remove(player)
+        if not self.players():
+            self._total_pages = self._calc_total_pages()
+            self.prev_page()
 
 if __name__ == '__main__':
     root = tk.Tk()

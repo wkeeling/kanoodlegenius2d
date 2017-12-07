@@ -47,8 +47,16 @@ class PlayerPaginationTest(TestCase):
 
     def test_pagination_after_player_removal(self):
         self._paginator.next_page()  # Now on page 2
-        self._players.remove('player3')
+        self._paginator.remove('player3')
         self.assertEqual(self._paginator.players(), ['player4', 'player5'])
+
+    def test_pagination_after_page_removal(self):
+        self._paginator.next_page()  # Now on page 2
+        self._paginator.remove('player3')
+        self._paginator.remove('player4')
+        self._paginator.remove('player5')
+        self._paginator.remove('player6')
+        self.assertEqual(self._paginator.players(), ['player1', 'player2'])
 
     def test_does_not_paginate_below_page_1(self):
         self._paginator.prev_page()
