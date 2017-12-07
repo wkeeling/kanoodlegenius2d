@@ -8,6 +8,4 @@ function and class level
     puzzles completed and puzzles auto-solved. completed() and complete() would both exist and have subtly
     different meanings.
 - Change "onclick" references to "onpress"
-- Create a Player.active_players() method which does: Player.select().where(Player.deleted == False) and retrofit
-    to the selectplayerscreen.
 - Create a Player.puzzles_completed('name') helper method
