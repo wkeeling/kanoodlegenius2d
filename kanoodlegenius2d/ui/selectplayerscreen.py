@@ -93,6 +93,7 @@ class PlayerPaginator:
         self._players = players
         self._page_size = page_size
         self._current_page = 1
+        self._total_pages = math.ceil(len(self._players) / self._page_size)
 
     def players(self):
         start = (self._current_page - 1) * self._page_size
@@ -101,13 +102,14 @@ class PlayerPaginator:
 
     def next_page(self):
         self._current_page += 1
+        self._current_page = min(self._current_page, self._total_pages)
 
     def has_next_page(self):
-        total_pages = math.ceil(len(self._players) / self._page_size)
-        return self._current_page != total_pages
+        return self._current_page != self._total_pages
 
     def prev_page(self):
         self._current_page -= 1
+        self._current_page = max(self._current_page, 1)
 
     def has_prev_page(self):
         return self._current_page != 1
