@@ -9,3 +9,7 @@ function and class level
     different meanings.
 - Change "onclick" references to "onpress"
 - Create a Player.puzzles_completed('name') helper method
+- Need arrow icons for shift and del
+- CanvasButton needs a disabled state (onclicks do nothing, and fill is grey with no highlight)
+- Paginator should not page off ends (use max(), min())
+- Use Fade to fade paginations, and also typing on newplayer
