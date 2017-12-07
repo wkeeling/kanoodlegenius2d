@@ -221,6 +221,15 @@ class Player(BaseModel):
     name = CharField(max_length=10, unique=True)
     deleted = BooleanField(default=False)
 
+    @staticmethod
+    def active_players():
+        """Get players that have not been soft deleted.
+
+        Return:
+            A queryset of players.
+        """
+        return Player.select().where(Player.deleted == False)
+
     def soft_delete(self):
         """Mark a player as deleted, but do not physically delete the
         database record.

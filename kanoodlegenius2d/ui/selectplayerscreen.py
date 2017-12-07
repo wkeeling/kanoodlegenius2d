@@ -48,7 +48,7 @@ class SelectPlayerScreen(tk.Frame):
 
         x, y = 150, 75
 
-        for player in Player.select().where(Player.deleted == False):
+        for player in Player.active_players():
             canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
             CanvasButton(canvas, 'DELETE', (570, y), font='helvetica', onclick=self._create_delete_player(player))
             CanvasButton(canvas, ' GO ', (637, y), font='helvetica', onclick=lambda: None)

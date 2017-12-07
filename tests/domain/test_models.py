@@ -405,6 +405,24 @@ class PlayerTest(TestCase):
             deleted_player = Player.get(Player.name == 'test player')
             self.assertTrue(deleted_player.deleted)
 
+    def test_get_active_players(self):
+        with test_database(test_db, (Game, Player)):
+            game = Game.create()
+            Player.create(name='test player', game=game).soft_delete()
+
+            game = Game.create()
+            Player.create(name='test player 1', game=game)
+
+            game = Game.create()
+            Player.create(name='test player 2', game=game)
+
+            active_players = Player.active_players()
+
+            self.assertEqual(len(active_players), 2)
+            names = [player.name for player in active_players]
+            self.assertIn('test player 1', names)
+            self.assertIn('test player 2', names)
+
 
 class PuzzleTest(TestCase):
 
