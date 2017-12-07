@@ -65,7 +65,7 @@ class NewPlayerScreen(tk.Frame):
         button_args['font'] = ('helvetica', 14)
         CanvasButton(self._canvas, 'DEL', (x, y - offset), onclick=self._ondelete, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'SHIFT', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)
+        CanvasButton(self._canvas, 'SHF', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)
         x += offset
         CanvasButton(self._canvas, 'EXIT', (x, y - offset), onclick=self._oncancel, **button_args)
         x += offset
