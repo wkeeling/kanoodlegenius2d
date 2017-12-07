@@ -1,3 +1,4 @@
+import math
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
@@ -62,6 +63,32 @@ class SelectPlayerScreen(tk.Frame):
 
         return delete
 
+
+class PlayerPaginator:
+    """Helper class for paginating a list of players in memory."""
+
+    def __init__(self, players, page_size=5):
+        self._players = players
+        self._page_size = page_size
+        self._current_page = 1
+
+    def players(self):
+        start = (self._current_page - 1) * self._page_size
+        end = self._current_page * self._page_size
+        return self._players[start:end]
+
+    def next_page(self):
+        self._current_page += 1
+
+    def has_next_page(self):
+        total_pages = math.ceil(len(self._players) / self._page_size)
+        return self._current_page != total_pages
+
+    def prev_page(self):
+        self._current_page -= 1
+
+    def has_prev_page(self):
+        return self._current_page != 1
 
 if __name__ == '__main__':
     root = tk.Tk()
