@@ -54,7 +54,7 @@ class SelectPlayerScreen(tk.Frame):
         canvas = tk.Canvas(canvas_frame, width=800, height=100, bg='#000000', highlightthickness=0)
         canvas.pack()
 
-        CanvasButton(canvas, 'EXIT', (700, 25), font='helvetica', onclick=self._oncancel)
+        CanvasButton(canvas, 'EXIT', (700, 25), font='helvetica', onclick=lambda _: self._oncancel())
 
     def _show_page(self):
         x, y = 150, 20
