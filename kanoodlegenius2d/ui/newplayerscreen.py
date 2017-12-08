@@ -63,7 +63,7 @@ class NewPlayerScreen(tk.Frame):
         x += offset
         CanvasButton(self._canvas, 'SHF', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onclick=self._oncancel, **button_args)
+        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onclick=lambda _: self._oncancel(), **button_args)
         x += offset
         CanvasButton(self._canvas, ' OK ', (x, y - offset), onclick=self._onsubmit, **button_args)
 
