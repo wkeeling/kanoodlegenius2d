@@ -23,11 +23,14 @@ class HomeScreen(tk.Frame):
         canvas.create_text(400, 60, text='Kanoodle Genius 2D', font=('helvetica', 22),
                            justify='center', fill='#FFFFFF')
 
-        CanvasButton(canvas, 'NEW PLAYER', (305, 200), width=150, height=50, font='helvetica',
-                     onclick=lambda _: onnewplayer)
+        args = {
+            'width': 150,
+            'height': 50,
+            'font': 'helvetica'
+        }
 
-        CanvasButton(canvas, 'EXISTING PLAYER', (485, 200), width=150, height=50, font='helvetica',
-                     onclick=lambda _: onexistingplayer)
+        CanvasButton(canvas, 'NEW PLAYER', (305, 200), onclick=lambda _: onnewplayer, **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (485, 200), onclick=lambda _: onexistingplayer, **args)
 
 if __name__ == '__main__':
     root = tk.Tk()
