@@ -29,8 +29,8 @@ class HomeScreen(tk.Frame):
             'font': 'helvetica'
         }
 
-        CanvasButton(canvas, 'NEW PLAYER', (305, 200), onclick=lambda _: onnewplayer, **args)
-        CanvasButton(canvas, 'EXISTING PLAYER', (485, 200), onclick=lambda _: onexistingplayer, **args)
+        CanvasButton(canvas, 'NEW PLAYER', (305, 200), onclick=lambda _: onnewplayer(), **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (485, 200), onclick=lambda _: onexistingplayer(), **args)
 
 if __name__ == '__main__':
     root = tk.Tk()
