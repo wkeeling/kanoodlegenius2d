@@ -89,7 +89,7 @@ class Dialog(tk.Toplevel):
 class CanvasButton:
     """Represents a button drawn onto the canvas."""
 
-    DISABLED_COLOUR = '#aaaaaa'
+    DISABLED_COLOUR = '#404040'
 
     def __init__(self, canvas, text, pos, onclick, lockable=False, **kwargs):
         """Initialise a new CanvasButton.

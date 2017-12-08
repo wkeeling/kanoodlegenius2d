@@ -29,6 +29,7 @@ class SelectPlayerScreen(tk.Frame):
         self._init_title()
         self._paginator = PlayerPaginator(Player.active_players())
         self._init_player_list()
+        self._init_exit()
 
     def _init_title(self):
         title_frame = tk.Frame(self, highlightthickness=0)
@@ -41,25 +42,34 @@ class SelectPlayerScreen(tk.Frame):
     def _init_player_list(self):
         canvas_frame = tk.Frame(self, highlightthickness=0)
         canvas_frame.pack()
-        self._canvas = tk.Canvas(canvas_frame, width=800, height=480, bg='#000000', highlightthickness=0)
+        self._canvas = tk.Canvas(canvas_frame, width=800, height=250, bg='#000000', highlightthickness=0)
         self._canvas.pack()
 
         self._show_page()
 
-        CanvasButton(self._canvas, 'EXIT', (700, 300), font='helvetica', onclick=self._oncancel)
+    def _init_exit(self):
+        canvas_frame = tk.Frame(self, highlightthickness=0)
+        canvas_frame.pack()
+
+        canvas = tk.Canvas(canvas_frame, width=800, height=100, bg='#000000', highlightthickness=0)
+        canvas.pack()
+
+        CanvasButton(canvas, 'EXIT', (700, 25), font='helvetica', onclick=self._oncancel)
 
     def _show_page(self):
-        x, y = 150, 50
+        x, y = 150, 20
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
-            CanvasButton(self._canvas, ' X ', (575, y), font='helvetica',
+            CanvasButton(self._canvas, ' X ', (570, y), font='helvetica',
                          onclick=self._create_ondelete_player(player))
             CanvasButton(self._canvas, 'SELECT', (640, y), font='helvetica', onclick=lambda: None)
-            y += 40
+            y += 45
 
-        CanvasButton(self._canvas, '<< PREV', (345, 250), font='helvetica', onclick=self._onprev)
-        CanvasButton(self._canvas, 'NEXT >>', (445, 250), font='helvetica', onclick=self._onnext)
+        CanvasButton(self._canvas, '<< PREV', (345, 220), font='helvetica', onclick=self._onprev,
+                     disabled=not self._paginator.has_prev_page())
+        CanvasButton(self._canvas, 'NEXT >>', (445, 220), font='helvetica', onclick=self._onnext,
+                     disabled=not self._paginator.has_next_page())
 
     def _onnext(self, _):
         self._canvas.delete(*self._canvas.find_all())
