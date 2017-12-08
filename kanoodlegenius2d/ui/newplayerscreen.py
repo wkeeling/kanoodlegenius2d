@@ -50,7 +50,7 @@ class NewPlayerScreen(tk.Frame):
         }
 
         buttons = []
-        y, offset = 220, 55
+        y, offset = 200, 55
         for row in rows:
             x = 150
             for char in row:
