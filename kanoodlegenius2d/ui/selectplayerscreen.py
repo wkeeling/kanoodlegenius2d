@@ -42,7 +42,7 @@ class SelectPlayerScreen(tk.Frame):
     def _init_player_list(self):
         canvas_frame = tk.Frame(self, highlightthickness=0)
         canvas_frame.pack()
-        self._canvas = tk.Canvas(canvas_frame, width=800, height=250, bg='#000000', highlightthickness=0)
+        self._canvas = tk.Canvas(canvas_frame, width=800, height=280, bg='#000000', highlightthickness=0)
         self._canvas.pack()
 
         self._show_page()
