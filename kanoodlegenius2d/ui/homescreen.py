@@ -15,7 +15,7 @@ class HomeScreen(tk.Frame):
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
-        super().__init__(master, **kwargs)
+        super().__init__(master, highlightthickness=2, **kwargs)
 
         canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=0)
         canvas.pack()
