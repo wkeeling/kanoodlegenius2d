@@ -89,6 +89,8 @@ class Dialog(tk.Toplevel):
 class CanvasButton:
     """Represents a button drawn onto the canvas."""
 
+    DISABLED_COLOUR = '#aaaaaa'
+
     def __init__(self, canvas, text, pos, onclick, lockable=False, **kwargs):
         """Initialise a new CanvasButton.
 
@@ -106,6 +108,7 @@ class CanvasButton:
                 height: The height of the button (will override padding).
                 padding: The padding between the text and the edge of the button
                     (default: 10).
+                disabled: Whether to disable the button.
         Returns:
             A CanvasButton object that represents the rendered button.
         """
@@ -128,15 +131,16 @@ class CanvasButton:
 
             onclick(self.text)
 
-        self._canvas.tag_bind(self._text, '<ButtonPress-1>', onpress)
-        self._canvas.tag_bind(self._button, '<ButtonPress-1>', onpress)
-        self._canvas.tag_bind(self._text, '<ButtonRelease-1>', onrelease)
-        self._canvas.tag_bind(self._button, '<ButtonRelease-1>', onrelease)
+        if not kwargs.get('disabled'):
+            self._canvas.tag_bind(self._text, '<ButtonPress-1>', onpress)
+            self._canvas.tag_bind(self._button, '<ButtonPress-1>', onpress)
+            self._canvas.tag_bind(self._text, '<ButtonRelease-1>', onrelease)
+            self._canvas.tag_bind(self._button, '<ButtonRelease-1>', onrelease)
 
     def _draw_button(self, text, pos, **kwargs):
         args = {
             'text': text,
-            'fill': kwargs.get('text_colour', '#ffffff')
+            'fill': kwargs.get('text_colour', '#ffffff') if not kwargs.get('disabled') else self.DISABLED_COLOUR
         }
         if 'font' in kwargs:
             args['font'] = kwargs['font']
@@ -149,9 +153,14 @@ class CanvasButton:
         x_offset = (width - (bbox[2] - bbox[0])) // 2
         y_offset = (height - (bbox[3] - bbox[1])) // 2
 
+        args = {
+            'outline': '#ffffff' if not kwargs.get('disabled') else self.DISABLED_COLOUR,
+            'fill': '#000000'
+        }
+
         button = self._canvas.create_rectangle((bbox[0] - x_offset, bbox[1] - y_offset,
                                                 bbox[2] + x_offset, bbox[3] + y_offset),
-                                               outline='#ffffff', fill='#000000')
+                                               **args)
 
         self._canvas.tag_raise(text)
 
