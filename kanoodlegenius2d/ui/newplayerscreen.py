@@ -15,11 +15,11 @@ class NewPlayerScreen(tk.Frame):
         Args:
             oncreate: Callback that will be called when a new player is created. This
                 will be passed a single argument - the board instance for the player.
-            oncancel: Callback that will be called when the exit button is pressed.
+            oncancel: No-args callback that will be called when the exit button is pressed.
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
-        super().__init__(master, **kwargs)
+        super().__init__(master, highlightthickness=2, **kwargs)
 
         self._oncreate = oncreate
         self._oncancel = oncancel
