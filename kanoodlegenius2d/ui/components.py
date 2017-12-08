@@ -73,31 +73,19 @@ def display_dialog(message, master=None, **kwargs):
     """Initialise and display a new dialog popup.
 
     Args:
-        message:
-            The text to display on the dialog.
-        master:
-            The parent widget.
-        kwargs:
-            Optional keyword arguments that can include:
-                width:
-                    The width of the dialog in pixels (default 50% of parent).
-                height:
-                    The height of the dialog in pixels (default 50% of parent).
-                show_submit:
-                    Whether to show a submit button (default True).
-                submit_text:
-                    The text of the submit button (default OK).
-                onsubmit:
-                    Callable invoked when the submit button pressed (default None).
-                show_cancel:
-                    Whether to show a cancel button (default False).
-                cancel_text:
-                    The text of the cancel button when shown (default CANCEL).
-                oncancel:
-                    Callable invoked when the cancel button pressed (default None).
-                timeout:
-                    The number of seconds after which to automatically cancel the
-                    dialog (default None - no auto-cancel).
+        message: The text to display on the dialog.
+        master: The parent widget.
+        **kwargs: Optional keyword arguments that can include:
+            width: The width of the dialog in pixels (default 50% of parent).
+            height: The height of the dialog in pixels (default 50% of parent).
+            show_submit: Whether to show a submit button (default True).
+            submit_text: The text of the submit button (default OK).
+            onsubmit: Callable invoked when the submit button pressed (default None).
+            show_cancel: Whether to show a cancel button (default False).
+            cancel_text: The text of the cancel button when shown (default CANCEL).
+            oncancel: Callable invoked when the cancel button pressed (default None).
+            timeout: The number of seconds after which to automatically cancel the
+                dialog (default None - no auto-cancel).
     """
     Dialog(message, master=master, **kwargs)
 
@@ -109,30 +97,19 @@ class CanvasButton:
         """Initialise a new CanvasButton.
 
         Args:
-            text:
-                The text of the button.
-            pos:
-                The x,y point (2-tuple) that the button will be centred around.
-            onclick:
-                The callback for when the button is clicked. This will receive
+            text: The text of the button.
+            pos: The x,y point (2-tuple) that the button will be centred around.
+            onclick: The callback for when the button is clicked. This will receive
                 a single parameter: the text of the clicked button.
-            lockable:
-                Whether the button is a lockable button (e.g. a caps lock key).
+            lockable: Whether the button is a lockable button (e.g. a caps lock key).
                 Lockable buttons remain pressed until they are pressed again.
-            kwargs:
-                Additional arguments that can be used to configure the
-                button.
-                    font:
-                        The font to use.
-                    text_colour:
-                        The text colour to use (default 'white').
-                    width:
-                        The width of the button (will override padding).
-                    height:
-                        The height of the button (will override padding).
-                    padding:
-                        The padding between the text and the edge of the button
-                        (default: 10).
+            **kwargs: Additional arguments that can be used to configure the button:
+                font: The font to use.
+                text_colour: The text colour to use (default 'white').
+                width: The width of the button (will override padding).
+                height: The height of the button (will override padding).
+                padding: The padding between the text and the edge of the button
+                    (default: 10).
         Returns:
             A CanvasButton object that represents the rendered button.
         """
@@ -198,8 +175,7 @@ class CanvasButton:
         """Set the text of the button.
 
         Args:
-            text:
-                The button text to set.
+            text: The button text to set.
         """
         self._canvas.itemconfigure(self._text, text=text)
 
@@ -214,21 +190,15 @@ class Fade:
         """Fade the specified canvas item from black to its current colour.
 
         Args:
-            item:
-                The canvas item to fade in.
-            colour:
-                The colour to fade to.
-            kwargs:
-                Addition keyword arguments that can be used to configure the fade
-                behaviour.
-                    duration:
-                        The duration in ms of the fade (default 1000).
-                    elements:
-                        The parts of the item to be faded - a sequence of
-                        names. Default ['fill']
-                    onfaded:
-                        Optional callback which will be called once the fade
-                        has completed.
+            item: The canvas item to fade in.
+            colour: The colour to fade to.
+            **kwargs: Addition keyword arguments that can be used to configure the fade
+                behaviour:
+                duration: The duration in ms of the fade (default 1000).
+                elements: The parts of the item to be faded - a sequence of
+                    names. Default ['fill']
+                onfaded: Optional callback which will be called once the fade
+                    has completed.
 
 
         """
@@ -265,19 +235,14 @@ class Fade:
         """Fade the specified canvas item from its current colour to black.
 
         Args:
-            item:
-                The canvas item to fade out.
-            kwargs:
-                Addition keyword arguments that can be used to configure the fade
-                behaviour.
-                    duration:
-                        The duration in ms of the fade (default 1000).
-                    elements:
-                        The parts of the item to be faded - a sequence of
-                        names. Default ['fill']
-                    onfaded:
-                        Optional callback which will be called once the fade
-                        has completed.
+            item: The canvas item to fade out.
+            **kwargs: Addition keyword arguments that can be used to configure the fade
+                behaviour:
+                duration: The duration in ms of the fade (default 1000).
+                elements: The parts of the item to be faded - a sequence of
+                    names. Default ['fill']
+                onfaded: Optional callback which will be called once the fade
+                    has completed.
 
         """
         duration = kwargs.get('duration', 1000)

@@ -340,8 +340,7 @@ class NoodleSelectionFrame(tk.Frame):
         selectable noodles.
 
         Args:
-            noodle:
-                The noodle being rejected.
+            noodle: The noodle being rejected.
         """
         self._selectable_noodles.insert(0, noodle)
         self._noodle_canvas.delete('all')

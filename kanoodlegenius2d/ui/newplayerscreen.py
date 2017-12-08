@@ -9,21 +9,17 @@ from kanoodlegenius2d.ui.components import CanvasButton, display_dialog
 class NewPlayerScreen(tk.Frame):
     """Represents the screen where a new player can be entered."""
 
-    def __init__(self, oncreate, oncancel, master=None, **kw):
+    def __init__(self, oncreate, oncancel, master=None, **kwargs):
         """Initialise a NewPlayerScreen frame.
 
         Args:
-            oncreate:
-                Callback that will be called when a new player is created. This
+            oncreate: Callback that will be called when a new player is created. This
                 will be passed a single argument - the board instance for the player.
-            oncancel:
-                Callback that will be called when the exit button is pressed.
-            master:
-                The parent widget.
-            kw:
-                Optional keyword arguments to configure this screen.
+            oncancel: Callback that will be called when the exit button is pressed.
+            master: The parent widget.
+            **kwargs: Optional keyword arguments to configure this screen.
         """
-        super().__init__(master, **kw)
+        super().__init__(master, **kwargs)
 
         self._oncreate = oncreate
         self._oncancel = oncancel

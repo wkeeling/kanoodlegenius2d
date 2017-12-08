@@ -222,10 +222,8 @@ def find_position(position, orientation):
     """Given a hole position and orientation, find the neighbouring hole position.
     
     Args:
-        position:
-            The position of the hole.
-        orientation:
-            The orientation of the neighbouring hole.
+        position: The position of the hole.
+        orientation: The orientation of the neighbouring hole.
         
     Returns:
         The position of the neighbouring hole, or None if no position exists

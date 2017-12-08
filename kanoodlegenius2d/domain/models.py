@@ -54,8 +54,7 @@ class Game(BaseModel):
         """Convenience method which assembles the objects necessary to begin a new game.
 
         Args:
-            player_name:
-                The name of the player starting the game.
+            player_name: The name of the player starting the game.
         Returns:
             The board instance preconfigured with noodles, and ready to go.
         """
@@ -77,8 +76,7 @@ class Game(BaseModel):
         """Convenience method to resume a previous game for a player.
 
         Args:
-            player_name:
-                The name of the player resuming the game.
+            player_name: The name of the player resuming the game.
         Returns:
             The board instance holding the previous state of the game.
         """
@@ -122,8 +120,7 @@ class PartAccessorMixin:
         root position.
 
         Args:
-            root_position:
-                The position of the root part. If not specified the root
+            root_position: The position of the root part. If not specified the root
                 position will be discovered from the subclass.
 
         Returns:
@@ -146,6 +143,7 @@ class PartAccessorMixin:
 
 class Noodle(PartAccessorMixin, BaseModel):
     """Represents a noodle - a puzzle piece."""
+
     designation = FixedCharField(max_length=1)
     colour = CharField()
 
@@ -187,8 +185,7 @@ class Noodle(PartAccessorMixin, BaseModel):
         """Rotate the noodle clockwise by the specified number of increments.
 
         Args:
-            increment:
-                The number of increments to rotate the noodle by.
+            increment: The number of increments to rotate the noodle by.
         """
         for _ in range(increment):
             self.part1 = orientation.rotate(self.part1)
@@ -198,6 +195,7 @@ class Noodle(PartAccessorMixin, BaseModel):
 
     def flip(self):
         """Flip the noodle 180 degrees on its Y axis."""
+
         y_conversions = {
             orientation.SE: orientation.SW,
             orientation.NE: orientation.NW,
@@ -217,6 +215,7 @@ class Noodle(PartAccessorMixin, BaseModel):
 
 class Player(BaseModel):
     """Represents a player playing the game."""
+
     game = ForeignKeyField(Game)
     name = CharField(max_length=10, unique=True)
     deleted = BooleanField(default=False)
@@ -252,10 +251,8 @@ class Puzzle(BaseModel):
         """Place the specified noodle onto the puzzle at the specified position.
 
         Args:
-            noodle:
-                The noodle to place on the puzzle.
-            position:
-                The puzzle position to place the noodle's root part onto.
+            noodle: The noodle to place on the puzzle.
+            position: The puzzle position to place the noodle's root part onto.
         """
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position,
                             part1=noodle.part1,
@@ -288,15 +285,12 @@ class Board(BaseModel):
         """Place a noodle onto the board in the specified position.
 
         Args:
-            noodle:
-                The noodle instance to place on the board.
-            position:
-                The hole position to place the root part of the noodle on to.
+            noodle: The noodle instance to place on the board.
+            position: The hole position to place the root part of the noodle on to.
                 Board hole positions begin at 0.
         Raises:
-            PositionOccupiedException:
-                If any of the positions targeted by the specified noodle's parts
-                are occupied.
+            PositionOccupiedException: If any of the positions targeted by the specified
+                noodle's parts are occupied.
         """
         if position not in range(35):
             raise PositionUnavailableException('Position {} is not on the board')
@@ -362,6 +356,7 @@ class Board(BaseModel):
 
 class BoardNoodle(PartAccessorMixin, BaseModel):
     """Represents an instance of a noodle on a player's board."""
+
     board = ForeignKeyField(Board, related_name='noodles')
     noodle = ForeignKeyField(Noodle)
     # The position of the root part on the board

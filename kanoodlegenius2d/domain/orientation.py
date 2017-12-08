@@ -14,8 +14,7 @@ def rotate(start):
     orientation.
 
     Args:
-        start:
-            The starting orientation.
+        start: The starting orientation.
     Returns:
         The orientation one increment clockwise from the start.
     """
@@ -36,8 +35,7 @@ def opposite(orientation):
     """Return the orientation opposite from the one supplied, e.g. E --> W
 
     Args:
-        orientation:
-            The orientation to find the opposite of.
+        orientation: The orientation to find the opposite of.
     Returns:
         The opposite orientation.
     """
