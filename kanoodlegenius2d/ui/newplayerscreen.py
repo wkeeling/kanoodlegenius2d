@@ -3,7 +3,7 @@ import tkinter as tk
 from kanoodlegenius2d.domain.models import (DuplicatePlayerNameException,
                                             Game,
                                             initialise)
-from kanoodlegenius2d.ui.components import CanvasButton, display_dialog
+from kanoodlegenius2d.ui.components import CanvasButton, Dialog
 
 
 class NewPlayerScreen(tk.Frame):
@@ -90,7 +90,7 @@ class NewPlayerScreen(tk.Frame):
         try:
             board = Game.start(name)
         except DuplicatePlayerNameException:
-            display_dialog('That name is already taken', master=self)
+            Dialog('That name is already taken', master=self)
         else:
             self._oncreate(board)
 

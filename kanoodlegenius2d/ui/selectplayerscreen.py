@@ -5,7 +5,7 @@ from kanoodlegenius2d.domain.models import (Game,
                                             Player,
                                             initialise)
 from kanoodlegenius2d.ui.components import (CanvasButton,
-                                            display_dialog)
+                                            Dialog)
 
 
 class SelectPlayerScreen(tk.Frame):
@@ -78,7 +78,7 @@ class SelectPlayerScreen(tk.Frame):
                 self._paginator.remove(player)
                 self._canvas.delete(*self._canvas.find_all())
                 self._show_page()
-            display_dialog(message="Are you sure you want to delete {}?".format(player.name),
+            Dialog(message="Are you sure you want to delete {}?".format(player.name),
                            master=self, onsubmit=delete, show_cancel=True)
 
         return ondelete

@@ -8,7 +8,7 @@ from kanoodlegenius2d.domain.models import (initialise,
                                             Noodle,
                                             PositionUnavailableException)
 from kanoodlegenius2d.ui.components import (CanvasButton,
-                                            display_dialog,
+                                            Dialog,
                                             Fade)
 
 HIGHLIGHT_COLOUR = '#ffffff'
@@ -381,7 +381,7 @@ if __name__ == '__main__':
             message = 'Congratulations you have completed puzzle {}!\n\nNext, puzzle {}...' \
                 .format(board.puzzle.number, next_puzzle.number)
 
-        root.after(1500, lambda: display_dialog(message, master=root))
+        root.after(1500, lambda: Dialog(message, master=root))
 
     root.board_complete = board_complete
 

@@ -6,6 +6,23 @@ class Dialog(tk.Toplevel):
     """A popup panel which overlays the frame beneath it and can be closed by the user."""
 
     def __init__(self, message, master=None, **kwargs):
+        """Initialise and display a new dialog popup.
+
+        Args:
+            message: The text to display on the dialog.
+            master: The parent widget.
+            **kwargs: Optional keyword arguments that can include:
+                width: The width of the dialog in pixels (default 50% of parent).
+                height: The height of the dialog in pixels (default 50% of parent).
+                show_submit: Whether to show a submit button (default True).
+                submit_text: The text of the submit button (default OK).
+                onsubmit: Callable invoked when the submit button pressed (default None).
+                show_cancel: Whether to show a cancel button (default False).
+                cancel_text: The text of the cancel button when shown (default CANCEL).
+                oncancel: Callable invoked when the cancel button pressed (default None).
+                timeout: The number of seconds after which to automatically cancel the
+                    dialog (default None - no auto-cancel).
+        """
         super().__init__(master, bg='#000000', highlightthickness=2)
 
         # Hide dialog until we've configured it
@@ -67,27 +84,6 @@ class Dialog(tk.Toplevel):
         self._canvas.create_text((self._width // 2, (self._height // 2) - 20), text=message,
                                  font=('helvetica', 18), width=self._width - 40,
                                  justify='center', fill='#FFFFFF')
-
-
-def display_dialog(message, master=None, **kwargs):
-    """Initialise and display a new dialog popup.
-
-    Args:
-        message: The text to display on the dialog.
-        master: The parent widget.
-        **kwargs: Optional keyword arguments that can include:
-            width: The width of the dialog in pixels (default 50% of parent).
-            height: The height of the dialog in pixels (default 50% of parent).
-            show_submit: Whether to show a submit button (default True).
-            submit_text: The text of the submit button (default OK).
-            onsubmit: Callable invoked when the submit button pressed (default None).
-            show_cancel: Whether to show a cancel button (default False).
-            cancel_text: The text of the cancel button when shown (default CANCEL).
-            oncancel: Callable invoked when the cancel button pressed (default None).
-            timeout: The number of seconds after which to automatically cancel the
-                dialog (default None - no auto-cancel).
-    """
-    Dialog(message, master=master, **kwargs)
 
 
 class CanvasButton:
