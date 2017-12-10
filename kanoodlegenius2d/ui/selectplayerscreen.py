@@ -27,7 +27,7 @@ class SelectPlayerScreen(tk.Frame):
         self._oncancel = oncancel
 
         self._init_title()
-        self._paginator = PlayerPaginator(Player.active_players())
+        self._paginator = PlayerPaginator([game.player for game in Game.by_last_played() if not game.player.deleted])
         self._init_player_list()
         self._init_exit()
 
