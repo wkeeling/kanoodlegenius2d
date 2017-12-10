@@ -132,7 +132,8 @@ class GameIntegrationTest(TestCase):
         dark_blue = Noodle.dark_blue()
         board2.place(dark_blue, position=32)
 
-        self.assertEqual(Game.resume('player1'), board1)
+        player1 = Player.get(Player.name == 'player1')
+        self.assertEqual(Game.resume(player1), board1)
 
     def setUp(self):
         self._datafile_path = os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db')

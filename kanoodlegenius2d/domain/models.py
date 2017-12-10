@@ -72,15 +72,14 @@ class Game(BaseModel):
         return board
 
     @staticmethod
-    def resume(player_name):
+    def resume(player):
         """Convenience method to resume a previous game for a player.
 
         Args:
-            player_name: The name of the player resuming the game.
+            player: An instance of the Player resuming the game.
         Returns:
             The board instance holding the previous state of the game.
         """
-        player = Player.get(Player.name == player_name)
         boards = player.boards.order_by(Board.id)
         return boards[-1]
 
