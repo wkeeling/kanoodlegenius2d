@@ -20,8 +20,18 @@ class GameScreen(tk.Frame):
     a puzzle board and selects noodles to place.
     """
 
-    def __init__(self, board, master=None, **kw):
-        super().__init__(master, **kw)
+    def __init__(self, board, oncomplete, oncancel, master=None, **kwargs):
+        """Initialise a new GameScreen frame.
+
+        Args:
+            board: The Board instance.
+            oncomplete: Callback called when the board has been completed. The callback should accept a single
+                argument - the Board instance that has been completed.
+            oncancel: Callback called when the Exit button is pressed.
+            master: The parent widget.
+            **kwargs: Optional keyword arguments to configure this screen.
+        """
+        super().__init__(master, **kwargs)
 
         board_and_noodle = tk.Frame(master=self, bg='#000000', highlightthickness=1)
         board_and_noodle.pack(side='top', fill='x')
@@ -29,21 +39,31 @@ class GameScreen(tk.Frame):
             board, master=board_and_noodle, width=360, height=420, bg='#000000'
         )
         board_frame = BoardFrame(
-            board, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='#000000'
+            board, oncomplete, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='#000000'
         )
         board_frame.pack(side='left')
         noodle_selection_frame.pack()
-        status_frame = StatusFrame(board, master=self, width=800, height=60, bg='#000000', highlightthickness=1)
+        status_frame = StatusFrame(board, oncancel, master=self, width=800, height=60, bg='#000000', highlightthickness=1)
         status_frame.pack()
 
 
 class BoardFrame(tk.Frame):
     """The frame of the GameScreen that contains the board."""
 
-    def __init__(self, board, noodle_frame, master=None, **kw):
-        super().__init__(master, **kw)
+    def __init__(self, board, oncomplete, noodle_frame, master=None, **kwargs):
+        """Initialise a new BoardFrame frame.
+
+        Args:
+            board: The Board instance.
+            oncomplete: Callback called when the board has been completed. The callback should accept a single
+                argument - the Board instance that has been completed.
+            master: The parent widget.
+            **kwargs: Optional keyword arguments to configure this screen.
+        """
+        super().__init__(master, **kwargs)
 
         self._board = board
+        self._oncomplete = oncomplete
         self._noodle_frame = noodle_frame
         self._canvas = tk.Canvas(self, width=440, height=420, bg='#000000', highlightthickness=0)
         self._canvas.pack()
@@ -141,12 +161,7 @@ class BoardFrame(tk.Frame):
                 else:
                     self._commit_place_noodle(noodle, hole_id, root_index)
                     if self._board.complete:
-                        def notify_board_complete(parent):
-                            if not hasattr(parent, 'board_complete'):
-                                notify_board_complete(parent.master)
-                            else:
-                                parent.board_complete(self._board)
-                        notify_board_complete(self.master)
+                        self._oncomplete(self._board)
 
         return _on_hole_press
 
@@ -350,10 +365,19 @@ class NoodleSelectionFrame(tk.Frame):
 class StatusFrame(tk.Frame):
     """The bar at the bottom that holds information about the player, current level etc."""
 
-    def __init__(self, board, master=None, **kw):
-        super().__init__(master, **kw)
+    def __init__(self, board, oncancel, master=None, **kwargs):
+        """Initialise a new StatusFrame frame.
+
+        Args:
+            board: The Board instance.
+            oncancel: Callback called when the Exit button is pressed.
+            master: The parent widget.
+            **kwargs: Optional keyword arguments to configure this screen.
+        """
+        super().__init__(master, **kwargs)
 
         self._board = board
+        self._oncancel = oncancel
         canvas = tk.Canvas(self, width=800, height=60, bg='#000000', highlightthickness=0)
         canvas.pack()
 
@@ -365,8 +389,8 @@ class StatusFrame(tk.Frame):
         canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **args)
         canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **args)
         canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
-        CanvasButton(canvas, 'LEAVE GAME', pos=(715, 27), width=140, height=40, font='helvetica',
-                     onclick=lambda _: True)
+        CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, font='helvetica',
+                     onclick=lambda _: self._oncancel())
 
 
 if __name__ == '__main__':
@@ -378,7 +402,7 @@ if __name__ == '__main__':
         if next_puzzle is None:
             message = 'Congratulations, you have completed the game!'
         else:
-            message = 'Congratulations you have completed puzzle {}!\n\nNext, puzzle {}...' \
+            message = 'Congratulations you have completed puzzle {}!' \
                 .format(board.puzzle.number, next_puzzle.number)
 
         root.after(1500, lambda: Dialog(message, master=root))

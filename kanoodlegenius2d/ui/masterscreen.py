@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from kanoodlegenius2d.ui.components import Dialog
 from kanoodlegenius2d.ui.gamescreen import GameScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
 from kanoodlegenius2d.ui.newplayerscreen import NewPlayerScreen
@@ -7,12 +8,10 @@ from kanoodlegenius2d.ui.selectplayerscreen import SelectPlayerScreen
 
 
 class MasterScreen(tk.Tk):
+    """The MasterScreen is responsible for coordinating switching between screens."""
 
     def __init__(self):
-        """Initialise a Masterscreen frame.
-
-        The MasterScreen is responsible for coordinating switching between screens.
-        """
+        """Initialise a Masterscreen frame."""
         super().__init__()
 
         self.geometry('800x480+500+300')
@@ -36,14 +35,24 @@ class MasterScreen(tk.Tk):
                                                master=self))
 
     def _oncreatenewplayer(self, board):
-        self._switch_screen(GameScreen(board, self))
+        self._switch_screen(GameScreen(board, self._oncomplete, self._oncancel, self))
 
     def _onselectplayer(self, board):
-        self._switch_screen(GameScreen(board, self))
+        self._switch_screen(GameScreen(board, self._oncomplete, self._oncancel, self))
 
     def _oncancel(self):
         self._switch_screen(HomeScreen(onnewplayer=self._onnewplayer, onexistingplayer=self._onexistingplayer,
                                        master=self))
+
+    def _oncomplete(self, board):
+        next_puzzle = board.puzzle.next_puzzle()
+        if next_puzzle is None:
+            message = 'Congratulations, you have completed the game!'
+        else:
+            message = 'Congratulations you have completed puzzle {}!' \
+                .format(board.puzzle.number, next_puzzle.number)
+
+        self.after(1500, lambda: Dialog(message, master=self))
 
     def _switch_screen(self, new_screen):
         old_screen = self._current_screen
