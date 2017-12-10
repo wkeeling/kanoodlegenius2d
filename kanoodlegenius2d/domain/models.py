@@ -49,6 +49,18 @@ class Game(BaseModel):
     """Represents a single Kanoodle Genius game for a given player."""
     last_played = DateTimeField(default=datetime.now())
 
+    @gproperty
+    def player(self):
+        """Convenience method for getting the game for a player.
+
+        Although Game -> Player is a foreign key relationship, a game
+        only has a single player (effectively one to one).
+
+        Returns:
+            The Player instance for the game.
+        """
+        return self.player_set[0]
+
     @staticmethod
     def start(player_name):
         """Convenience method which assembles the objects necessary to begin a new game.
