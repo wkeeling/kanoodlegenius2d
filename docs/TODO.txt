@@ -1,7 +1,5 @@
 - Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
 function and class level
-- Need to implement a dialog popup. This will be standalone and will be a parent of the overall game frame, with
-    an absolute position. Used for puzzle complete, player name already in use etc.
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
 - Display "Puzzles completed (n/total)" on player selection screen (not on game screen)
 - May need to hold "completed" field on Board (already have "complete" property) as this will distinguish between
@@ -10,6 +8,6 @@ function and class level
 - Change "onclick" references to "onpress"
 - Create a Player.puzzles_completed('name') helper method
 - Need arrow icons for shift and del
-- CanvasButton needs a disabled state (onclicks do nothing, and fill is grey with no highlight)
-- Use Fade to fade paginations, and also typing on newplayer
 - Fix width of buttons on select player and dialog box. Put cancel next to OK on dialog
+- Timing of noodle fade in does not work when more than 4 noodles on board.
+- Flicker when switching to board screen.
