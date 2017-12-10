@@ -53,8 +53,9 @@ class Game(BaseModel):
     def player(self):
         """Convenience method for getting the game for a player.
 
-        Although Game -> Player is a foreign key relationship, a game
-        only has a single player (effectively one to one).
+        Although Game -> Player is technically a one to many relationship,
+        a game only ever has a single player and so the relationship is
+        effectively one to one.
 
         Returns:
             The Player instance for the game.
