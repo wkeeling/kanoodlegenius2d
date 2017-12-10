@@ -68,7 +68,7 @@ class GameIntegrationTest(TestCase):
 
         self.assertIsNotNone(board.player.game.last_played)
 
-    def test_starts_new_game_raises_exception_when_player_name_taken(self):
+    def test_start_new_game_raises_exception_when_player_name_taken(self):
         """Test that an exception is raised when a new game is started with
         a player name that has already been used.
         """
@@ -76,6 +76,17 @@ class GameIntegrationTest(TestCase):
 
         with self.assertRaises(DuplicatePlayerNameException):
             Game.start('test_player')
+
+    def test_start_new_game_rolls_back_transaction_when_player_name_taken(self):
+        """Test that the transaction is rolled back (game not created) when
+        a game is started with a player name that has already been used.
+        """
+        Game.start('test_player')
+
+        try:
+            Game.start('test_player')
+        except DuplicatePlayerNameException:
+            self.assertEqual(Game.select().count(), 1)
 
     def test_complete_puzzle_1(self):
         """Test complete the first puzzle, checking that the board

@@ -63,6 +63,7 @@ class Game(BaseModel):
         return self.player_set[0]
 
     @staticmethod
+    @database.atomic()
     def start(player_name):
         """Convenience method which assembles the objects necessary to begin a new game.
 
