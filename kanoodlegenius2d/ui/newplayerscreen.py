@@ -86,12 +86,15 @@ class NewPlayerScreen(tk.Frame):
 
     def _onsubmit(self, _):
         name = self._canvas.itemcget(self._player_name, 'text').strip()
-        try:
-            board = Game.start(name)
-        except DuplicatePlayerNameException:
-            Dialog('That name is already taken', master=self)
+        if not name:
+            Dialog('Please enter a name', master=self)
         else:
-            self._oncreate(board)
+            try:
+                board = Game.start(name)
+            except DuplicatePlayerNameException:
+                Dialog('That name is already taken', master=self)
+            else:
+                self._oncreate(board)
 
 
 if __name__ == '__main__':
