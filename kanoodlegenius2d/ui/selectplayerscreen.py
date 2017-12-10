@@ -21,7 +21,7 @@ class SelectPlayerScreen(tk.Frame):
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
-        super().__init__(master, highlightthickness=2, **kwargs)
+        super().__init__(master, width=800, height=480, bg='#000000', highlightthickness=2, **kwargs)
 
         self._onselect = onselect
         self._oncancel = oncancel
@@ -32,7 +32,12 @@ class SelectPlayerScreen(tk.Frame):
         self._init_exit()
 
     def _init_title(self):
-        title_frame = tk.Frame(self, highlightthickness=0)
+        args = {
+            'width': 800,
+            'height': 100,
+            'bg': '#000000'
+        }
+        title_frame = tk.Frame(self, highlightthickness=0, **args)
         title_frame.pack()
 
         title = tk.Label(title_frame, width=800, height=4, text='Select Player', bg='#000000', fg='#FFFFFF',
@@ -40,18 +45,28 @@ class SelectPlayerScreen(tk.Frame):
         title.pack()
 
     def _init_player_list(self):
-        canvas_frame = tk.Frame(self, highlightthickness=0)
+        args = {
+            'width': 800,
+            'height': 280,
+            'bg': '#000000'
+        }
+        canvas_frame = tk.Frame(self, highlightthickness=0, **args)
         canvas_frame.pack()
-        self._canvas = tk.Canvas(canvas_frame, width=800, height=280, bg='#000000', highlightthickness=0)
+        self._canvas = tk.Canvas(canvas_frame, highlightthickness=0, **args)
         self._canvas.pack()
 
         self._show_page()
 
     def _init_exit(self):
-        canvas_frame = tk.Frame(self, highlightthickness=0)
+        args = {
+            'width': 800,
+            'height': 100,
+            'bg': '#000000'
+        }
+        canvas_frame = tk.Frame(self, highlightthickness=0, **args)
         canvas_frame.pack()
 
-        canvas = tk.Canvas(canvas_frame, width=800, height=100, bg='#000000', highlightthickness=0)
+        canvas = tk.Canvas(canvas_frame, highlightthickness=0, **args)
         canvas.pack()
 
         CanvasButton(canvas, 'EXIT', (700, 25), font='helvetica', onclick=lambda _: self._oncancel())

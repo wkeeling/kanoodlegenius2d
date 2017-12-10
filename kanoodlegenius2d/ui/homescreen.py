@@ -15,9 +15,16 @@ class HomeScreen(tk.Frame):
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
+        args = {
+            'width': 800,
+            'height': 480,
+            'bg': '#000000'
+        }
+        kwargs.update(args)
+
         super().__init__(master, highlightthickness=2, **kwargs)
 
-        canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=0)
+        canvas = tk.Canvas(self, highlightthickness=0, **args)
         canvas.pack()
 
         canvas.create_text(400, 100, text='Kanoodle Genius 2D', font=('helvetica', 32),
@@ -29,5 +36,5 @@ class HomeScreen(tk.Frame):
             'font': 'helvetica'
         }
 
-        CanvasButton(canvas, 'NEW PLAYER', (305, 220), onclick=lambda _: onnewplayer(), **args)
-        CanvasButton(canvas, 'EXISTING PLAYER', (485, 220), onclick=lambda _: onexistingplayer(), **args)
+        CanvasButton(canvas, 'NEW PLAYER', (310, 220), onclick=lambda _: onnewplayer(), **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (490, 220), onclick=lambda _: onexistingplayer(), **args)
