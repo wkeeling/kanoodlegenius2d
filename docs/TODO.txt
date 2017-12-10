@@ -14,3 +14,5 @@ function and class level
     on CanvasButton
 - Undo should update the game last played
 - Game.resume() and board completed callback both need to start a new board. Create helper method if necessary.
+- Next button still enabled when delete items so that only left with singel page (but don't change screens when
+    deleting)
