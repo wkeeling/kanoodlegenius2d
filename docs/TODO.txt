@@ -12,4 +12,3 @@ function and class level
 - Timing of noodle fade in does not work when more than 4 noodles on board.
 - Disable noodle controls until noodle available (and next/prev when only one noodle). Needs a disable() method
     on CanvasButton
-- Take Exit and OK off keyboard on newplayer screen
