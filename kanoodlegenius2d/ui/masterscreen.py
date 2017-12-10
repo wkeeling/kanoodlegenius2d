@@ -1,6 +1,5 @@
 import tkinter as tk
 
-from kanoodlegenius2d.domain.models import Game
 from kanoodlegenius2d.ui.gamescreen import GameScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
 from kanoodlegenius2d.ui.newplayerscreen import NewPlayerScreen

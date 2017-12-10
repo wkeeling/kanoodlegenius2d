@@ -49,7 +49,7 @@ class Game(BaseModel):
     """Represents a single Kanoodle Genius game for a given player."""
     last_played = DateTimeField(default=datetime.now())
 
-    @gproperty
+    @property
     def player(self):
         """Convenience method for getting the game for a player.
 
