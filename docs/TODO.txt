@@ -11,3 +11,4 @@ function and class level
 - Fix width of buttons on select player and dialog box. Put cancel next to OK on dialog
 - Timing of noodle fade in does not work when more than 4 noodles on board.
 - Flicker when switching to board screen.
+- Disable noodle controls until noodle available (and next/prev when only one noodle)

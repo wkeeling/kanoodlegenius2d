@@ -31,19 +31,15 @@ class GameScreen(tk.Frame):
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
-        super().__init__(master, **kwargs)
+        super().__init__(master, width=800, height=480, bg='#000000', highlightthickness=1, **kwargs)
 
-        board_and_noodle = tk.Frame(master=self, bg='#000000', highlightthickness=1)
+        board_and_noodle = tk.Frame(master=self, width=800, height=420, bg='#000000', highlightthickness=1)
         board_and_noodle.pack(side='top', fill='x')
-        noodle_selection_frame = NoodleSelectionFrame(
-            board, master=board_and_noodle, width=360, height=420, bg='#000000'
-        )
-        board_frame = BoardFrame(
-            board, oncomplete, noodle_selection_frame, master=board_and_noodle, width=440, height=420, bg='#000000'
-        )
+        noodle_selection_frame = NoodleSelectionFrame(board, master=board_and_noodle)
+        board_frame = BoardFrame(board, oncomplete, noodle_selection_frame, master=board_and_noodle)
         board_frame.pack(side='left')
         noodle_selection_frame.pack()
-        status_frame = StatusFrame(board, oncancel, master=self, width=800, height=60, bg='#000000', highlightthickness=1)
+        status_frame = StatusFrame(board, oncancel, master=self)
         status_frame.pack()
 
 
@@ -60,12 +56,18 @@ class BoardFrame(tk.Frame):
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
+        args = {
+            'width': 440,
+            'height': 420,
+            'bg': '#000000'
+        }
+        kwargs.update(args)
         super().__init__(master, **kwargs)
 
         self._board = board
         self._oncomplete = oncomplete
         self._noodle_frame = noodle_frame
-        self._canvas = tk.Canvas(self, width=440, height=420, bg='#000000', highlightthickness=0)
+        self._canvas = tk.Canvas(self, highlightthickness=0, **args)
         self._canvas.pack()
         self._fade = Fade(self._canvas)
         self._holes = []
@@ -215,19 +217,19 @@ class NoodleSelectionFrame(tk.Frame):
         orientation.NE: (29, -49)
     }
 
-    def __init__(self, board, master=None, **kw):
-        super().__init__(master, **kw)
+    def __init__(self, board, master=None, **kwargs):
+        super().__init__(master, width=360, height=420, bg='#000000', **kwargs)
 
         self._board = board
         self._selectable_noodles = deque(set(Noodle.select()) - set([noodle.noodle for noodle in self._board.noodles]))
 
-        noodle_frame = tk.Frame(self)
+        noodle_frame = tk.Frame(self, width=360, height=300, bg='#000000')
         noodle_frame.pack(side='top')
         self._noodle_canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='#000000', highlightthickness=0)
         self._noodle_canvas.pack()
         self._fade = Fade(self._noodle_canvas)
 
-        control_frame = tk.Frame(self)
+        control_frame = tk.Frame(self, width=360, height=120, bg='#000000')
         control_frame.pack(side='top')
         self._init_buttons(control_frame)
         self.after(4500, lambda: self._draw_noodle(fade_duration=1000))
@@ -374,21 +376,27 @@ class StatusFrame(tk.Frame):
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
-        super().__init__(master, **kwargs)
+        frame_args = {
+            'width': 800,
+            'height': 60,
+            'bg': '#000000',
+        }
+        kwargs.update(frame_args)
+        super().__init__(master, highlightthickness=1, **kwargs)
 
         self._board = board
         self._oncancel = oncancel
-        canvas = tk.Canvas(self, width=800, height=60, bg='#000000', highlightthickness=0)
+        canvas = tk.Canvas(self, highlightthickness=0, **kwargs)
         canvas.pack()
 
-        args = {
+        canvas_args = {
             'font': 'helvetica',
             'fill': '#ffffff'
         }
 
-        canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **args)
-        canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **args)
-        canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **args)
+        canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **canvas_args)
+        canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **canvas_args)
+        canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **canvas_args)
         CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, font='helvetica',
                      onclick=lambda _: self._oncancel())
 
