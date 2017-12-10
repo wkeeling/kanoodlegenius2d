@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from kanoodlegenius2d.domain.models import Game
 from kanoodlegenius2d.ui.gamescreen import GameScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
 from kanoodlegenius2d.ui.newplayerscreen import NewPlayerScreen
@@ -11,7 +12,7 @@ class MasterScreen(tk.Tk):
     def __init__(self):
         """Initialise a Masterscreen frame.
 
-        The MasterScreen is responsible for coordinating switching between other screens.
+        The MasterScreen is responsible for coordinating switching between screens.
         """
         super().__init__()
 
@@ -35,11 +36,11 @@ class MasterScreen(tk.Tk):
         self._switch_screen(SelectPlayerScreen(onselect=self._onselectplayer, oncancel=self._oncancel,
                                                master=self))
 
-    def _oncreatenewplayer(self, player):
-        pass
+    def _oncreatenewplayer(self, board):
+        self._switch_screen(GameScreen(board, self))
 
-    def _onselectplayer(self, player):
-        pass
+    def _onselectplayer(self, board):
+        self._switch_screen(GameScreen(board, self))
 
     def _oncancel(self):
         self._switch_screen(HomeScreen(onnewplayer=self._onnewplayer, onexistingplayer=self._onexistingplayer,

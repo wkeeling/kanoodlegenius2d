@@ -78,7 +78,8 @@ class SelectPlayerScreen(tk.Frame):
             self._canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
             CanvasButton(self._canvas, ' X ', (570, y), font='helvetica',
                          onclick=self._create_ondelete_player(player))
-            CanvasButton(self._canvas, 'SELECT', (640, y), font='helvetica', onclick=lambda: None)
+            CanvasButton(self._canvas, 'SELECT', (640, y), font='helvetica',
+                         onclick=self._create_onselect_player(player))
             y += 45
 
         CanvasButton(self._canvas, '<< PREV', (345, 220), font='helvetica', onclick=self._onprev,
@@ -95,6 +96,12 @@ class SelectPlayerScreen(tk.Frame):
         self._canvas.delete(*self._canvas.find_all())
         self._paginator.prev_page()
         self._show_page()
+
+    def _create_onselect_player(self, player):
+        def onselect(_):
+            board = Game.resume(player)
+            return self._onselect(board)
+        return onselect
 
     def _create_ondelete_player(self, player):
         def ondelete(_):
@@ -165,7 +172,7 @@ if __name__ == '__main__':
     Game.start('Lucy')
     Game.start('Emma')
     import sys
-    game_screen = SelectPlayerScreen(lambda _: None, lambda _: sys.exit(), root, highlightthickness=2)
+    game_screen = SelectPlayerScreen(lambda _: None, lambda _: sys.exit(), root)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
