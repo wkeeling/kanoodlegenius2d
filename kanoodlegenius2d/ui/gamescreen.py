@@ -199,10 +199,13 @@ class BoardFrame(tk.Frame):
         self.after(500, commit)
 
     def _undo_place_noodle(self, _):
-        noodle = self._board.undo()
-        if noodle:
-            self._noodle_frame.reject(noodle)
-            self._draw_noodles_on_board()
+        num_board_noodles = len(self._board.noodles)
+        num_puzzle_noodles = len(self._board.puzzle.noodles)
+        if num_puzzle_noodles < num_board_noodles < 7:
+            noodle = self._board.undo()
+            if noodle:
+                self._noodle_frame.reject(noodle)
+                self._draw_noodles_on_board()
 
 
 class NoodleSelectionFrame(tk.Frame):
