@@ -149,8 +149,8 @@ class PlayerPaginator:
 
     def remove(self, player):
         self._players.remove(player)
+        self._total_pages = self._calc_total_pages()
         if not self.players():
-            self._total_pages = self._calc_total_pages()
             self.prev_page()
 
 if __name__ == '__main__':

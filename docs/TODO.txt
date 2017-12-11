@@ -13,7 +13,5 @@ function and class level
 - Disable noodle controls until noodle available (and next/prev when only one noodle). Needs a disable() method
     on CanvasButton
 - Game.resume() and board completed callback both need to start a new board. Create helper method if necessary.
-- Next button still enabled when delete items so that only left with singel page (but don't change screens when
-    deleting)
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
