@@ -352,6 +352,8 @@ class Board(BaseModel):
         for board_noodle in self.noodles.order_by(BoardNoodle.id.desc()):
             if board_noodle.noodle not in puzzle_noodles:
                 board_noodle.delete_instance()
+                self.player.game.last_played = datetime.now()
+                self.player.game.save()
                 return board_noodle.noodle
 
     @property

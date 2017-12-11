@@ -359,6 +359,29 @@ class BoardTest(TestCase):
             self.assertIsNone(noodle)
             PuzzleNoodle.get(PuzzleNoodle.position == 5)  # Should not raise a DoesNotExist
 
+    def test_undo_place_updates_last_played(self):
+        """Test that the undo function will update the last_played date on the Game instance."""
+        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle),
+                           create_tables=True):
+            board = self._create_board()
+            light_blue = Noodle.create(designation='D', colour='light_blue',
+                                       part1=orientation.E,
+                                       part2=orientation.E,
+                                       part3=orientation.NE,
+                                       part4=orientation.SE)
+            board.puzzle.place(light_blue, position=5)
+            yellow = Noodle.create(designation='B', colour='yellow',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NW,
+                                   part4=orientation.E)
+            board.place(yellow, position=20)
+            last_played = board.player.game.last_played
+
+            board.undo()
+
+            self.assertNotEqual(board.player.game.last_played, last_played)
+
     def _create_board(self):
         level = Level.create(number=1, name='test level')
         puzzle = Puzzle.create(level=level, number=1)
