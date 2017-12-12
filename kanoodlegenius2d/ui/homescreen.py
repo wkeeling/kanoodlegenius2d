@@ -27,7 +27,11 @@ class HomeScreen(tk.Frame):
         canvas = tk.Canvas(self, highlightthickness=0, **args)
         canvas.pack()
 
-        canvas.create_text(400, 100, text='Kanoodle Genius 2D', font=('helvetica', 32),
+        canvas.create_text(400, 100, text='Kanoodle', font=('wood stamp', 80),
+                           justify='center', fill='#FFFFFF')
+        canvas.create_text(380, 180, text='GENIUS', font=('KG Counting Stars', 60),
+                           justify='center', fill='#FFFFFF')
+        canvas.create_text(600, 180, text='2D', font=('cube vol.2', 48),
                            justify='center', fill='#FFFFFF')
 
         args = {
@@ -36,5 +40,5 @@ class HomeScreen(tk.Frame):
             'font': 'helvetica'
         }
 
-        CanvasButton(canvas, 'NEW PLAYER', (310, 220), onclick=lambda _: onnewplayer(), **args)
-        CanvasButton(canvas, 'EXISTING PLAYER', (490, 220), onclick=lambda _: onexistingplayer(), **args)
+        CanvasButton(canvas, 'NEW PLAYER', (310, 280), onclick=lambda _: onnewplayer(), **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (490, 280), onclick=lambda _: onexistingplayer(), **args)
