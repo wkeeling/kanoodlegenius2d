@@ -50,10 +50,10 @@ class HomeScreen(tk.Frame):
                            justify='center', fill='#FFFFFF')
 
         args = {
-            'width': 150,
+            'width': 170,
             'height': 50,
             'font': 'helvetica'
         }
 
-        CanvasButton(canvas, 'NEW PLAYER', (310, 280), onclick=lambda _: onnewplayer(), **args)
-        CanvasButton(canvas, 'EXISTING PLAYER', (490, 280), onclick=lambda _: onexistingplayer(), **args)
+        CanvasButton(canvas, 'NEW PLAYER', (305, 280), onclick=lambda _: onnewplayer(), **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (495, 280), onclick=lambda _: onexistingplayer(), **args)
