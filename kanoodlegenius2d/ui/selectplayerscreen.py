@@ -40,8 +40,8 @@ class SelectPlayerScreen(tk.Frame):
         title_frame = tk.Frame(self, highlightthickness=0, **args)
         title_frame.pack()
 
-        title = tk.Label(title_frame, width=800, height=4, text='Select Player', bg='#000000', fg='#FFFFFF',
-                         font=('helvetica', 22))
+        title = tk.Label(title_frame, width=800, height=2, text='Select Player', bg='#000000', fg='#FFFFFF',
+                         font=('wood stamp', 36))
         title.pack()
 
     def _init_player_list(self):

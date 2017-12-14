@@ -393,12 +393,12 @@ class StatusFrame(tk.Frame):
         canvas.pack()
 
         canvas_args = {
-            'font': 'helvetica',
+            'font': ('wood stamp', 20),
             'fill': '#ffffff'
         }
 
-        canvas.create_text(45, 17, text='LEVEL: {}'.format(board.puzzle.level.number), **canvas_args)
-        canvas.create_text(50, 40, text='PUZZLE: {}'.format(board.puzzle.number), **canvas_args)
+        canvas.create_text(45, 28, text='LEVEL: {}'.format(board.puzzle.level.number), **canvas_args)
+        canvas.create_text(120, 28, text='PUZZLE: {}'.format(board.puzzle.number), **canvas_args)
         canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **canvas_args)
         CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, font='helvetica',
                      onclick=lambda _: self._oncancel())
