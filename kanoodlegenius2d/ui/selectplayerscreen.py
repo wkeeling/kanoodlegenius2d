@@ -72,7 +72,7 @@ class SelectPlayerScreen(tk.Frame):
         CanvasButton(canvas, 'EXIT', (700, 25), font='helvetica', onclick=lambda _: self._oncancel())
 
     def _show_page(self):
-        x, y = 150, 20
+        x, y = 150, 40
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
@@ -82,9 +82,9 @@ class SelectPlayerScreen(tk.Frame):
                          onclick=self._create_onselect_player(player))
             y += 45
 
-        CanvasButton(self._canvas, '<< PREV', (345, 220), font='helvetica', onclick=self._onprev,
+        CanvasButton(self._canvas, '<< PREV', (345, 240), font='helvetica', onclick=self._onprev,
                      disabled=not self._paginator.has_prev_page())
-        CanvasButton(self._canvas, 'NEXT >>', (445, 220), font='helvetica', onclick=self._onnext,
+        CanvasButton(self._canvas, 'NEXT >>', (445, 240), font='helvetica', onclick=self._onnext,
                      disabled=not self._paginator.has_next_page())
 
     def _onnext(self, _):
