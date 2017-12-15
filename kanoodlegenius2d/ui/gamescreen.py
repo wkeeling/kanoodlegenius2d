@@ -392,14 +392,12 @@ class StatusFrame(tk.Frame):
         canvas = tk.Canvas(self, highlightthickness=0, **kwargs)
         canvas.pack()
 
-        canvas_args = {
-            'font': ('wood stamp', 20),
-            'fill': '#ffffff'
-        }
-
-        canvas.create_text(45, 28, text='LEVEL: {}'.format(board.puzzle.level.number), **canvas_args)
-        canvas.create_text(120, 28, text='PUZZLE: {}'.format(board.puzzle.number), **canvas_args)
-        canvas.create_text(250, 28, text='PLAYER: {}'.format(board.player.name), **canvas_args)
+        canvas.create_text(80, 26, text='PLAYER: {}'.format(board.player.name), font=('woodstamp', 28),
+                           fill=Noodle.get(Noodle.designation == 'B').colour)
+        canvas.create_text(300, 28, text='LEVEL: {}'.format(board.puzzle.level.number), font=('woodstamp', 20),
+                           fill=Noodle.get(Noodle.designation == 'F').colour)
+        canvas.create_text(380, 28, text='PUZZLE: {}'.format(board.puzzle.number), font=('woodstamp', 20),
+                           fill=Noodle.get(Noodle.designation == 'F').colour)
         CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, font='helvetica',
                      onclick=lambda _: self._oncancel())
 
@@ -428,7 +426,7 @@ if __name__ == '__main__':
     initialise()
     b = Game.start('Will')
     # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
-    game_screen = GameScreen(b, root, highlightthickness=1)
+    game_screen = GameScreen(b, lambda: None, lambda: None, root)
     game_screen.pack(fill='x')
     root.attributes('-topmost', True)
     root.update()
