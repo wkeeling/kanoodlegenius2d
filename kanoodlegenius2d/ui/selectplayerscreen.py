@@ -41,7 +41,7 @@ class SelectPlayerScreen(tk.Frame):
         title_frame.pack()
 
         title = tk.Label(title_frame, width=800, height=2, text='Select Player', bg='#000000', fg='#FFFFFF',
-                         font=('wood stamp', 36))
+                         font=('wood stamp', 48))
         title.pack()
 
     def _init_player_list(self):
@@ -138,7 +138,7 @@ class PlayerPaginator:
         self._current_page = min(self._current_page, self._total_pages)
 
     def has_next_page(self):
-        return self._current_page != self._total_pages
+        return self._total_pages and self._current_page != self._total_pages
 
     def prev_page(self):
         self._current_page -= 1

@@ -74,3 +74,8 @@ class PlayerPaginationTest(TestCase):
         self._paginator.next_page()
         self._paginator.next_page()
         self.assertEqual(self._paginator.players(), ['player5', 'player6'])
+
+    def test_does_not_paginate_no_players(self):
+        players = []
+        paginator = PlayerPaginator(players, page_size=4)
+        self.assertFalse(paginator.has_next_page())
