@@ -314,16 +314,18 @@ class NoodleSelectionFrame(tk.Frame):
         self._clear_items(items)
 
     def _rotate_noodle(self, _):
-        items = self._noodle_canvas.find_all()
-        self._selectable_noodles[0].rotate()
-        self._draw_noodle()
-        self._clear_items(items)
+        if self._selectable_noodles:
+            items = self._noodle_canvas.find_all()
+            self._selectable_noodles[0].rotate()
+            self._draw_noodle()
+            self._clear_items(items)
 
     def _flip_noodle(self, _):
-        items = self._noodle_canvas.find_all()
-        self._selectable_noodles[0].flip()
-        self._draw_noodle()
-        self._clear_items(items)
+        if self._selectable_noodles:
+            items = self._noodle_canvas.find_all()
+            self._selectable_noodles[0].flip()
+            self._draw_noodle()
+            self._clear_items(items)
 
     def _clear_items(self, items):
         def clear():
