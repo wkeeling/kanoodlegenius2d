@@ -4,7 +4,6 @@ function and class level
 - Change "onclick" references to "onpress"
 - Need arrow icons for shift and del
 - Fix width of buttons on select player and dialog box. Put cancel next to OK on dialog
-- Timing of noodle fade in does not work when more than 4 noodles on board.
 - Disable noodle controls until noodle available (and next/prev when only one noodle). Needs a disable() method
     on CanvasButton
 - Game.resume() and board completed callback both need to start a new board. Create helper method if necessary.
