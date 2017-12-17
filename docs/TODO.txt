@@ -2,9 +2,6 @@
 function and class level
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
 - Display "Puzzles completed (n/total)" on player selection screen (not on game screen)
-- May need to hold "completed" field on Board (already have "complete" property) as this will distinguish between
-    puzzles completed and puzzles auto-solved. completed() and complete() would both exist and have subtly
-    different meanings.
 - Change "onclick" references to "onpress"
 - Create a Player.puzzles_completed('name') helper method
 - Need arrow icons for shift and del
@@ -15,3 +12,8 @@ function and class level
 - Game.resume() and board completed callback both need to start a new board. Create helper method if necessary.
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
+- Need Player.puzzles_completed()
+    - Returns: 2-tuple (namedtuple?) of 'player_completed', 'auto_completed'. Uncompleted can be derived by
+        subtracting total completed from total puzzles.
+
+- Dialog congratulations should have title
