@@ -7,7 +7,7 @@ fonts = {
     'homescreen_genius': ('KG Counting Stars', 60),
     'homescreen_2d': ('cube vol.2', 36),
     'screen_title': ('wood stamp', 36),
-    'gamescreen_intro': ('wood stamp', 80),
+    'gamescreen_intro': ('wood stamp', 60),
     'gamescreen_player': ('wood stamp', 28),
     'gamescreen_status': ('wood stamp', 22),
     'player_name': ('FreeSans', 18),
