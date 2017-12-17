@@ -1,8 +1,11 @@
+from collections import deque
 import math
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
-                                            initialise)
+                                            initialise,
+                                            Noodle,
+                                            Puzzle)
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog)
 from kanoodlegenius2d.ui.settings import fonts
@@ -72,10 +75,14 @@ class SelectPlayerScreen(tk.Frame):
         CanvasButton(canvas, 'EXIT', (700, 25), onclick=lambda _: self._oncancel())
 
     def _show_page(self):
-        x, y = 150, 40
+        x, y = 170, 40
 
         for player in self._paginator.players():
-            self._canvas.create_text(x, y, text=player.name, font=fonts['player_name'], fill='#666666')
+            self._canvas.create_text(x, y, text=player.name, font=fonts['player_name'],
+                                     fill='#ffffff')
+            self._canvas.create_text(x + 220, y, text=' {}/{} puzzles completed'
+                                     .format(player.puzzles_completed.player_completed, Puzzle.select().count()),
+                                     font=fonts['puzzles_completed'], fill='#666666')
             CanvasButton(self._canvas, ' X ', (570, y), onclick=self._create_ondelete_player(player))
             CanvasButton(self._canvas, 'SELECT', (640, y), onclick=self._create_onselect_player(player))
             y += 45
