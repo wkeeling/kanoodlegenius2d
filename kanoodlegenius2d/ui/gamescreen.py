@@ -399,7 +399,7 @@ class StatusFrame(tk.Frame):
         canvas = tk.Canvas(self, highlightthickness=0, **kwargs)
         canvas.pack()
 
-        canvas.create_text(80, 26, text='PLAYER: {}'.format(board.player.name), font=fonts['gamescreen_player'],
+        canvas.create_text(120, 26, text='PLAYER: {}'.format(board.player.name), font=fonts['gamescreen_player'],
                            fill=Noodle.get(Noodle.designation == 'B').colour)
         canvas.create_text(300, 26, text='LEVEL: {}'.format(board.puzzle.level.number),
                            font=fonts['gamescreen_status'],
