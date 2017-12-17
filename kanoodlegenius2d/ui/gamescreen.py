@@ -393,12 +393,12 @@ class StatusFrame(tk.Frame):
 
         canvas.create_text(80, 26, text='PLAYER: {}'.format(board.player.name), font=fonts['gamescreen_player'],
                            fill=Noodle.get(Noodle.designation == 'B').colour)
-        canvas.create_text(300, 28, text='LEVEL: {}'.format(board.puzzle.level.number),
+        canvas.create_text(300, 26, text='LEVEL: {}'.format(board.puzzle.level.number),
                            font=fonts['gamescreen_status'],
                            fill=Noodle.get(Noodle.designation == 'F').colour)
-        canvas.create_text(380, 28, text='PUZZLE: {}'.format(board.puzzle.number), font=fonts['gamescreen_status'],
+        canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number), font=fonts['gamescreen_status'],
                            fill=Noodle.get(Noodle.designation == 'F').colour)
-        CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, onclick=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: self._oncancel())
 
 
 if __name__ == '__main__':
