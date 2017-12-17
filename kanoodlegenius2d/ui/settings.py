@@ -8,7 +8,7 @@ fonts = {
     'homescreen_2d': ('cube vol.2', 36),
     'screen_title': ('wood stamp', 36),
     'gamescreen_player': ('wood stamp', 28),
-    'gamescreen_status': ('wood stamp', 20),
+    'gamescreen_status': ('wood stamp', 22),
     'player_name': ('FreeSans', 18),
     'button_standard': 'FreeSans',
     'button_keyboard': ('FreeSans', 16),
