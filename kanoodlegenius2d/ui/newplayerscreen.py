@@ -7,6 +7,10 @@ from kanoodlegenius2d.ui.components import CanvasButton, Dialog
 from kanoodlegenius2d.ui.settings import fonts
 
 
+# The maximum length of a name a player can type in.
+MAX_NAME_LENGTH = 10
+
+
 class NewPlayerScreen(tk.Frame):
     """Represents the screen where a new player can be entered."""
 
@@ -71,8 +75,9 @@ class NewPlayerScreen(tk.Frame):
         return buttons
 
     def _onkeypress(self, key):
-        self._canvas.itemconfigure(self._player_name,
-                                   text=self._canvas.itemcget(self._player_name, 'text') + str(key))
+        current_name = self._canvas.itemcget(self._player_name, 'text')
+        if len(current_name) < MAX_NAME_LENGTH:
+            self._canvas.itemconfigure(self._player_name, text=current_name + str(key))
 
     def _ondelete(self, _):
         self._canvas.itemconfigure(self._player_name,
