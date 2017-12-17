@@ -34,3 +34,5 @@ if platform.system() == 'Darwin':  # MacOS
     fonts['dialog_message'] = ('helvetica', 18)
     fonts['dialog_title'] = ('wood stamp', 48)
 
+# Whether to show numbers in each hole on the board (useful for debugging)
+show_board_numbers = True

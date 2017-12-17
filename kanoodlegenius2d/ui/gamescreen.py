@@ -10,7 +10,7 @@ from kanoodlegenius2d.domain.models import (initialise,
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog,
                                             Fade)
-from kanoodlegenius2d.ui.settings import fonts
+from kanoodlegenius2d.ui import settings
 
 HIGHLIGHT_COLOUR = '#ffffff'
 REJECT_COLOUR = '#ff0000'
@@ -74,9 +74,9 @@ class BoardFrame(tk.Frame):
         self._holes = []
 
         level_text = self._canvas.create_text(200, 130, text='Level {}'.format(board.puzzle.level.number),
-                                              font=fonts['gamescreen_intro'], fill='#FFFFFF')
+                                              font=settings.fonts['gamescreen_intro'], fill='#FFFFFF')
         puzzle_text = self._canvas.create_text(200, 200, text='Puzzle {}'.format(board.puzzle.number),
-                                               font=fonts['gamescreen_intro'], fill='#FFFFFF')
+                                               font=settings.fonts['gamescreen_intro'], fill='#FFFFFF')
 
         def draw():
             self._canvas.delete(puzzle_text, level_text)
@@ -113,6 +113,10 @@ class BoardFrame(tk.Frame):
         hole_ids.extend(self._draw_row(x, y, 4))
 
         for index, hole_id in enumerate(hole_ids):
+            if settings.show_board_numbers:
+                x1, y1, x2, y2 = self._canvas.bbox(hole_id)
+                centre = x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2)
+                self._canvas.create_text(centre, text=str(index), fill='#ffffff')
             self._canvas.tag_bind(hole_id, '<ButtonPress-1>', self._create_on_hole_press(index, hole_id))
 
         return hole_ids
@@ -405,13 +409,13 @@ class StatusFrame(tk.Frame):
         canvas = tk.Canvas(self, highlightthickness=0, **kwargs)
         canvas.pack()
 
-        canvas.create_text(120, 26, text='PLAYER: {}'.format(board.player.name), font=fonts['gamescreen_player'],
-                           fill=Noodle.get(Noodle.designation == 'B').colour)
+        canvas.create_text(120, 26, text='PLAYER: {}'.format(board.player.name),
+                           font=settings.fonts['gamescreen_player'], fill=Noodle.get(Noodle.designation == 'B').colour)
         canvas.create_text(300, 26, text='LEVEL: {}'.format(board.puzzle.level.number),
-                           font=fonts['gamescreen_status'],
+                           font=settings.fonts['gamescreen_status'],
                            fill=Noodle.get(Noodle.designation == 'F').colour)
-        canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number), font=fonts['gamescreen_status'],
-                           fill=Noodle.get(Noodle.designation == 'F').colour)
+        canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number),
+                           font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
         CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: self._oncancel())
 
 
