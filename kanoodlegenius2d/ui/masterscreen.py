@@ -47,12 +47,14 @@ class MasterScreen(tk.Tk):
     def _oncomplete(self, board):
         next_puzzle = board.puzzle.next_puzzle()
         if next_puzzle is None:
-            message = 'Congratulations, you have completed the game!'
+            title = 'Congratulations'
+            message = 'You have completed the game!'
         else:
-            message = 'Congratulations you have completed puzzle {}!' \
+            title = 'Congratulations'
+            message = 'You have completed puzzle {}!' \
                 .format(board.puzzle.number, next_puzzle.number)
 
-        self.after(1500, lambda: Dialog(message, master=self))
+        self.after(1500, lambda: Dialog(message, title=title, master=self))
 
     def _switch_screen(self, new_screen):
         old_screen = self._current_screen

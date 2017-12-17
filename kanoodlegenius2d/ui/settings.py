@@ -31,4 +31,6 @@ if platform.system() == 'Darwin':  # MacOS
     fonts['gamescreen_intro'] = ('wood stamp', 80)
     fonts['gamescreen_player'] = ('wood stamp', 38)
     fonts['gamescreen_status'] = ('wood stamp', 30)
+    fonts['dialog_message'] = ('helvetica', 18)
+    fonts['dialog_title'] = ('wood stamp', 46)
 
