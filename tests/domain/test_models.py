@@ -437,8 +437,18 @@ class PlayerTest(TestCase):
             player = Player.create(name='test player', game=game)
             player.soft_delete()
 
-            deleted_player = Player.get(Player.name == 'test player')
-            self.assertTrue(deleted_player.deleted)
+            deleted_players = Player.select(Player.deleted == True).count()
+            self.assertEqual(deleted_players, 1)
+
+    def test_delete_player_named_updated(self):
+        """Test that when a player is soft deleted, that the name is updated."""
+        with test_database(test_db, (Game, Player)):
+            game = Game.create()
+            player = Player.create(name='test player', game=game)
+            player.soft_delete()
+
+            deleted_player = Player.get(Player.deleted == True)
+            self.assertTrue(deleted_player.name.startswith('test player_deleted_'))
 
     def test_get_active_players(self):
         with test_database(test_db, (Game, Player)):
