@@ -362,7 +362,7 @@ class Board(BaseModel):
                 return board_noodle.noodle
 
     @property
-    def complete(self):
+    def completed(self):
         """Whether the puzzle has been completed.
 
         Returns:

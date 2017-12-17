@@ -104,7 +104,7 @@ class GameIntegrationTest(TestCase):
         yellow.rotate(increment=2)
         board.place(yellow, position=17)
 
-        self.assertTrue(board.complete)
+        self.assertTrue(board.completed)
 
     def test_complete_game(self):
         """Test that the game indicates that it is fully complete."""
