@@ -14,6 +14,7 @@ class Dialog(tk.Toplevel):
             message: The text to display on the dialog.
             master: The parent widget.
             **kwargs: Optional keyword arguments that can include:
+                title: Title displayed above the message.
                 width: The width of the dialog in pixels (default 50% of parent).
                 height: The height of the dialog in pixels (default 50% of parent).
                 show_submit: Whether to show a submit button (default True).
@@ -38,6 +39,7 @@ class Dialog(tk.Toplevel):
         # Make the geometry update
         self.update_idletasks()
 
+        self._title = kwargs.get('title')
         self._width = kwargs.get('width', master.winfo_width() // 2)
         self._height = kwargs.get('height', master.winfo_height() // 2)
         self._x_offset = master.winfo_rootx() + ((master.winfo_width() - self._width) // 2)
@@ -81,9 +83,19 @@ class Dialog(tk.Toplevel):
             CanvasButton(self._canvas, text, (57, self._height - 40), onclick=cancel)
 
     def _init_message(self, message):
-        self._canvas.create_text((self._width // 2, (self._height // 2) - 20), text=message,
-                                 font=fonts['dialog_message'], width=self._width - 40,
-                                 justify='center', fill='#FFFFFF')
+        title = None
+        if self._title is not None:
+            title = self._canvas.create_text((self._width // 2, 40), text=self._title,
+                                             font=fonts['dialog_title'], width=self._width - 40,
+                                             justify='center', fill='#FFFFFF')
+
+        y = (self._height // 2) - 20
+
+        if title:
+            y = self._canvas.coords(title)[1] + 50
+
+        self._canvas.create_text(self._width // 2, y, text=message, font=fonts['dialog_message'],
+                                 width=self._width - 40, justify='center', fill='#FFFFFF')
 
 
 class CanvasButton:
