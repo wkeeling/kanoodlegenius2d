@@ -162,7 +162,7 @@ class BoardFrame(tk.Frame):
                     self._reject_place_noodle(noodle, hole_id)
                 else:
                     self._commit_place_noodle(noodle, hole_id, root_index)
-                    if self._board.complete:
+                    if self._board.completed:
                         self._oncomplete(self._board)
 
         return _on_hole_press
