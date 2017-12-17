@@ -468,6 +468,9 @@ class PlayerTest(TestCase):
             self.assertIn('test player 1', names)
             self.assertIn('test player 2', names)
 
+    def test_get_puzzles_completed(self):
+        self.fail('Implement')
+
 
 class PuzzleTest(TestCase):
 
