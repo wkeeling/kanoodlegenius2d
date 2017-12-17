@@ -11,5 +11,4 @@ function and class level
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
 
-- Dialog congratulations should have title
 - Have a settings.show_board_numbers for debug purposes

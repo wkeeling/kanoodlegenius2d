@@ -130,12 +130,15 @@ class BoardFrame(tk.Frame):
     def _draw_noodles_on_board(self, fade_duration=0):
         for hole_id in self._holes:
             self._canvas.itemconfig(hole_id, fill='#000000')
+
         for i, board_noodle in enumerate(self._board.noodles, start=3):
 
             def draw(i, n):
                 if fade_duration == 0:
                     i = 0
                 self.after(i*500, lambda: self._draw_noodle(n, n.position, fade_duration))
+                if i == len(self._board.noodles) + 2:
+                    self.after(i * 575, self._noodle_frame.board_initialised)
 
             draw(i, board_noodle)
 
@@ -148,6 +151,7 @@ class BoardFrame(tk.Frame):
 
         self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
         self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
+
         for part in noodle.parts:
             last_position = holes.find_position(last_position, part)
             self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
@@ -241,10 +245,12 @@ class NoodleSelectionFrame(tk.Frame):
         control_frame = tk.Frame(self, width=360, height=120, bg='#000000')
         control_frame.pack(side='top')
         self._init_buttons(control_frame)
-        self.after(4500, lambda: self._draw_noodle(fade_duration=1000))
 
         # The part of the noodle that a user has pressed (0 - 4)
         self._selected_part = None
+
+    def board_initialised(self):
+        self._draw_noodle(fade_duration=1000)
 
     def _draw_noodle(self, fade_duration=0):
         noodle_parts = []
