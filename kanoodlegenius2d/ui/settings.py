@@ -14,7 +14,7 @@ fonts = {
     'puzzles_completed': ('FreeSans', 16),
     'button_standard': 'FreeSans',
     'button_keyboard': ('FreeSans', 16),
-    'dialog_title': ('wood stamp', 28),
+    'dialog_title': ('wood stamp', 36),
     'dialog_message': ('FreeSans', 18)
 }
 
