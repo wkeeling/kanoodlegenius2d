@@ -469,7 +469,31 @@ class PlayerTest(TestCase):
             self.assertIn('test player 2', names)
 
     def test_get_puzzles_completed(self):
-        self.fail('Implement')
+        with test_database(test_db, (Game, Player, Board, BoardNoodle, Level, Puzzle, Noodle)):
+            game = Game.create()
+            player = Player.create(game=game, name='Test')
+            level = Level.create(number=1, name='Level 1')
+            Noodle.create(designation='A', colour='yellow', part1='NE', part2='SE', part3='E', part4='W')
+
+            # Configure 2 complete boards
+            for n in range(2):
+                puzzle = Puzzle.create(level=level, number=n)
+                board = Board.create(player=player, puzzle=puzzle)
+                for p in range(7):
+                    BoardNoodle.create(board=board, noodle=Noodle.get(designation='A'), position=p,
+                                       part1='NE', part2='SE', part3='E', part4='W')
+
+            # Configure 1 incomplete board
+            puzzle = Puzzle.create(level=level, number=2)
+            board = Board.create(player=player, puzzle=puzzle)
+            for p in range(6):
+                BoardNoodle.create(board=board, noodle=Noodle.get(designation='A'), position=p,
+                                   part1='NE', part2='SE', part3='E', part4='W')
+
+            completed = player.puzzles_completed()
+
+            self.assertEqual(completed.player_completed, 2)
+            self.assertEqual(len(player.boards), 3)
 
 
 class PuzzleTest(TestCase):

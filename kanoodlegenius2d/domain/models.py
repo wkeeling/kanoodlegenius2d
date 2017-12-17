@@ -1,3 +1,4 @@
+from collections import namedtuple
 import logging
 import os
 from datetime import datetime
@@ -238,10 +239,28 @@ class Player(BaseModel):
     def active_players():
         """Get players that have not been soft deleted.
 
-        Return:
+        Returns:
             A queryset of players.
         """
         return Player.select().where(Player.deleted == False)
+
+    def puzzles_completed(self):
+        """Get the number of puzzles that this player has completed.
+
+        Returns:
+            A named tuple with an attribute 'player_completed' for those
+            puzzles that the player has completed, and an attribute
+            'auto_completed' - for those puzzles completed by the game.
+        """
+        completed = namedtuple('completed', 'player_completed auto_completed')
+        player_completed = 0
+
+        for board in self.boards:
+            if board.completed:
+                player_completed += 1
+            # TODO: Add the auto_completed count
+
+        return completed(player_completed=player_completed, auto_completed=0)
 
     def soft_delete(self):
         """Mark a player as deleted, but do not physically delete the
