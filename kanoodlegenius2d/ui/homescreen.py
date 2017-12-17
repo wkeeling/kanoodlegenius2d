@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import tkinter as tk
 
-from kanoodlegenius2d.domain.models import Noodle
+from kanoodlegenius2d.domain.models import Noodle, Player
 from kanoodlegenius2d.ui.components import CanvasButton
 from kanoodlegenius2d.ui.settings import fonts
 
@@ -56,4 +56,5 @@ class HomeScreen(tk.Frame):
         }
 
         CanvasButton(canvas, 'NEW PLAYER', (305, 280), onclick=lambda _: onnewplayer(), **args)
-        CanvasButton(canvas, 'EXISTING PLAYER', (495, 280), onclick=lambda _: onexistingplayer(), **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (495, 280), onclick=lambda _: onexistingplayer(),
+                     disabled=len(Player.active_players()) == 0, **args)

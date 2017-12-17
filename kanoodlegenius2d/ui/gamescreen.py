@@ -73,11 +73,17 @@ class BoardFrame(tk.Frame):
         self._fade = Fade(self._canvas)
         self._holes = []
 
+        level_text = self._canvas.create_text(200, 130, text='Level {}'.format(board.puzzle.level.number),
+                                              font=fonts['gamescreen_intro'], fill='#FFFFFF')
+        puzzle_text = self._canvas.create_text(200, 200, text='Puzzle {}'.format(board.puzzle.number),
+                                               font=fonts['gamescreen_intro'], fill='#FFFFFF')
+
         def draw():
+            self._canvas.delete(puzzle_text, level_text)
             self._holes = self._draw_board()
             self._draw_noodles_on_board(fade_duration=100)
 
-        self.after(1000, draw)
+        self.after(2000, draw)
         CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
 
         self._hole_pressed = False
