@@ -254,6 +254,7 @@ class NoodleSelectionFrame(tk.Frame):
         self._selected_part = None
 
     def board_initialised(self):
+        """Called by the BoardFrame to indicate that it has finished initialising."""
         self._draw_noodle(fade_duration=1000)
 
     def _draw_noodle(self, fade_duration=0):
