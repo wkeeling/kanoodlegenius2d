@@ -72,7 +72,7 @@ class Dialog(tk.Toplevel):
         if kwargs.get('show_cancel', False):
             text = kwargs.get('submit_text', 'CANCEL')
 
-            def cancel():
+            def cancel(_):
                 self.destroy()
                 oncancel = kwargs.get('oncancel')
                 if callable(oncancel):
