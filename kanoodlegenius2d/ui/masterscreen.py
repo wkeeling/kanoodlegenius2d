@@ -39,6 +39,8 @@ class MasterScreen(tk.Tk):
         self._switch_screen(GameScreen(board, self._oncomplete, self._oncancel, self))
 
     def _onselectplayer(self, board):
+        if board.completed:
+            board = self._configure_next_puzzle(board)
         self._switch_screen(GameScreen(board, self._oncomplete, self._oncancel, self))
 
     def _oncancel(self):
@@ -59,8 +61,7 @@ class MasterScreen(tk.Tk):
                 .format(board.puzzle.number, next_puzzle.number)
 
             def ok():
-                new_board = Board.create(player=board.player, puzzle=board.puzzle.next_puzzle())
-                new_board.setup()
+                new_board = self._configure_next_puzzle(board)
                 self._switch_screen(GameScreen(new_board, self._oncomplete, self._oncancel, self))
 
         self.after(1500, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
@@ -72,6 +73,11 @@ class MasterScreen(tk.Tk):
         self._current_screen.tkraise()
         if old_screen:
             old_screen.destroy()
+
+    def _configure_next_puzzle(self, board):
+        board = Board.create(player=board.player, puzzle=board.puzzle.next_puzzle())
+        board.setup()
+        return board
 
 if __name__ == '__main__':
     MasterScreen()
