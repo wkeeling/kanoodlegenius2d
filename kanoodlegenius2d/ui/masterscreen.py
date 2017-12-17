@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from kanoodlegenius2d.domain.models import Board
 from kanoodlegenius2d.ui.components import Dialog
 from kanoodlegenius2d.ui.gamescreen import GameScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
@@ -49,12 +50,20 @@ class MasterScreen(tk.Tk):
         if next_puzzle is None:
             title = 'Congratulations'
             message = 'You have completed the game!'
+
+            def ok():
+                self._oncancel()
         else:
             title = 'Congratulations'
             message = 'You have completed puzzle {}!' \
                 .format(board.puzzle.number, next_puzzle.number)
 
-        self.after(1500, lambda: Dialog(message, title=title, master=self))
+            def ok():
+                new_board = Board.create(player=board.player, puzzle=board.puzzle.next_puzzle())
+                new_board.setup()
+                self._switch_screen(GameScreen(new_board, self._oncomplete, self._oncancel, self))
+
+        self.after(1500, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
 
     def _switch_screen(self, new_screen):
         old_screen = self._current_screen
