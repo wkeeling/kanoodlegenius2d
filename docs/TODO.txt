@@ -7,3 +7,4 @@ function and class level
     on CanvasButton
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
+- Need to create bootstrap script
