@@ -10,6 +10,7 @@ from kanoodlegenius2d.domain.models import (initialise,
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog,
                                             Fade)
+from kanoodlegenius2d.ui.settings import fonts
 
 HIGHLIGHT_COLOUR = '#ffffff'
 REJECT_COLOUR = '#ff0000'
@@ -77,8 +78,7 @@ class BoardFrame(tk.Frame):
             self._draw_noodles_on_board(fade_duration=100)
 
         self.after(1000, draw)
-        CanvasButton(self._canvas, 'UNDO', (400, 380), font='helvetica', onclick=self._undo_place_noodle,
-                     height=40)
+        CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
 
         self._hole_pressed = False
 
@@ -294,7 +294,6 @@ class NoodleSelectionFrame(tk.Frame):
         args = {
             'width': 100,
             'height': 40,
-            'font': 'helvetica'
         }
 
         CanvasButton(canvas, text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
@@ -392,14 +391,14 @@ class StatusFrame(tk.Frame):
         canvas = tk.Canvas(self, highlightthickness=0, **kwargs)
         canvas.pack()
 
-        canvas.create_text(80, 26, text='PLAYER: {}'.format(board.player.name), font=('woodstamp', 28),
+        canvas.create_text(80, 26, text='PLAYER: {}'.format(board.player.name), font=fonts['gamescreen_player'],
                            fill=Noodle.get(Noodle.designation == 'B').colour)
-        canvas.create_text(300, 28, text='LEVEL: {}'.format(board.puzzle.level.number), font=('woodstamp', 20),
+        canvas.create_text(300, 28, text='LEVEL: {}'.format(board.puzzle.level.number),
+                           font=fonts['gamescreen_status'],
                            fill=Noodle.get(Noodle.designation == 'F').colour)
-        canvas.create_text(380, 28, text='PUZZLE: {}'.format(board.puzzle.number), font=('woodstamp', 20),
+        canvas.create_text(380, 28, text='PUZZLE: {}'.format(board.puzzle.number), font=fonts['gamescreen_status'],
                            fill=Noodle.get(Noodle.designation == 'F').colour)
-        CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, font='helvetica',
-                     onclick=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', pos=(715, 27), width=140, height=40, onclick=lambda _: self._oncancel())
 
 
 if __name__ == '__main__':

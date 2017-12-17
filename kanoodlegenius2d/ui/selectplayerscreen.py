@@ -2,10 +2,10 @@ import math
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
-                                            Player,
                                             initialise)
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog)
+from kanoodlegenius2d.ui.settings import fonts
 
 
 class SelectPlayerScreen(tk.Frame):
@@ -41,7 +41,7 @@ class SelectPlayerScreen(tk.Frame):
         title_frame.pack()
 
         title = tk.Label(title_frame, width=800, height=2, text='Select Player', bg='#000000', fg='#FFFFFF',
-                         font=('wood stamp', 48))
+                         font=fonts['screen_title'])
         title.pack()
 
     def _init_player_list(self):
@@ -69,22 +69,20 @@ class SelectPlayerScreen(tk.Frame):
         canvas = tk.Canvas(canvas_frame, highlightthickness=0, **args)
         canvas.pack()
 
-        CanvasButton(canvas, 'EXIT', (700, 25), font='helvetica', onclick=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', (700, 25), onclick=lambda _: self._oncancel())
 
     def _show_page(self):
         x, y = 150, 40
 
         for player in self._paginator.players():
-            self._canvas.create_text(x, y, text=player.name, font=('helvetica', 18), fill='#666666')
-            CanvasButton(self._canvas, ' X ', (570, y), font='helvetica',
-                         onclick=self._create_ondelete_player(player))
-            CanvasButton(self._canvas, 'SELECT', (640, y), font='helvetica',
-                         onclick=self._create_onselect_player(player))
+            self._canvas.create_text(x, y, text=player.name, font=fonts['player_name'], fill='#666666')
+            CanvasButton(self._canvas, ' X ', (570, y), onclick=self._create_ondelete_player(player))
+            CanvasButton(self._canvas, 'SELECT', (640, y), onclick=self._create_onselect_player(player))
             y += 45
 
-        CanvasButton(self._canvas, '<< PREV', (345, 240), font='helvetica', onclick=self._onprev,
+        CanvasButton(self._canvas, '<< PREV', (345, 240), onclick=self._onprev,
                      disabled=not self._paginator.has_prev_page())
-        CanvasButton(self._canvas, 'NEXT >>', (445, 240), font='helvetica', onclick=self._onnext,
+        CanvasButton(self._canvas, 'NEXT >>', (445, 240), onclick=self._onnext,
                      disabled=not self._paginator.has_next_page())
 
     def _onnext(self, _):

@@ -4,6 +4,7 @@ from kanoodlegenius2d.domain.models import (DuplicatePlayerNameException,
                                             Game,
                                             initialise)
 from kanoodlegenius2d.ui.components import CanvasButton, Dialog
+from kanoodlegenius2d.ui.settings import fonts
 
 
 class NewPlayerScreen(tk.Frame):
@@ -27,10 +28,10 @@ class NewPlayerScreen(tk.Frame):
         self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=0)
         self._canvas.pack()
 
-        self._canvas.create_text(400, 60, text='Enter Player Name', font=('wood stamp', 36),
+        self._canvas.create_text(400, 60, text='Enter Player Name', font=fonts['screen_title'],
                                  justify='center', fill='#FFFFFF')
 
-        self._player_name = self._canvas.create_text(400, 120, text='', font=('helvetica', 18),
+        self._player_name = self._canvas.create_text(400, 120, text='', font=fonts['player_name'],
                                                      justify='center', fill='#666666')
 
         self._buttons = self._init_keyboard()
@@ -44,7 +45,7 @@ class NewPlayerScreen(tk.Frame):
         )
 
         button_args = {
-            'font': ('helvetica', 16),
+            'font': fonts['button_keyboard'],
             'width': 50,
             'height': 50
         }
@@ -58,7 +59,7 @@ class NewPlayerScreen(tk.Frame):
                 x += offset
             y += offset
 
-        button_args['font'] = 'helvetica'
+        button_args['font'] = fonts['button_standard']
         CanvasButton(self._canvas, 'DEL', (x, y - offset), onclick=self._ondelete, **button_args)
         x += offset
         CanvasButton(self._canvas, 'SHF', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)

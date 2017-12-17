@@ -3,6 +3,7 @@ import tkinter as tk
 
 from kanoodlegenius2d.domain.models import Noodle
 from kanoodlegenius2d.ui.components import CanvasButton
+from kanoodlegenius2d.ui.settings import fonts
 
 
 class HomeScreen(tk.Frame):
@@ -29,7 +30,7 @@ class HomeScreen(tk.Frame):
         canvas = tk.Canvas(self, highlightthickness=0, **args)
         canvas.pack()
 
-        canvas.create_text(400, 100, text='Kanoodle', font=('wood stamp', 80),
+        canvas.create_text(400, 100, text='Kanoodle', font=fonts['homescreen_kanoodle'],
                            justify='center', fill='#FFFFFF')
 
         colour_map = OrderedDict()
@@ -42,17 +43,16 @@ class HomeScreen(tk.Frame):
 
         x, x_offset = 250, 60
         for char in colour_map:
-            canvas.create_text(x, 180, text=char, font=('KG Counting Stars', 60),
+            canvas.create_text(x, 180, text=char, font=fonts['homescreen_genius'],
                                justify='center', fill=colour_map[char])
             x += x_offset
 
-        canvas.create_text(615, 140, text='2D', font=('cube vol.2', 36),
+        canvas.create_text(615, 140, text='2D', font=fonts['homescreen_2d'],
                            justify='center', fill='#FFFFFF')
 
         args = {
             'width': 170,
             'height': 50,
-            'font': 'helvetica'
         }
 
         CanvasButton(canvas, 'NEW PLAYER', (305, 280), onclick=lambda _: onnewplayer(), **args)

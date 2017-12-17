@@ -1,6 +1,8 @@
 import struct
 import tkinter as tk
 
+from kanoodlegenius2d.ui.settings import fonts
+
 
 class Dialog(tk.Toplevel):
     """A popup panel which overlays the frame beneath it and can be closed by the user."""
@@ -64,8 +66,7 @@ class Dialog(tk.Toplevel):
                 if callable(onsubmit):
                     onsubmit()
 
-            CanvasButton(self._canvas, text, (self._width - 50, self._height - 40),
-                         font='helvetica', onclick=submit)
+            CanvasButton(self._canvas, text, (self._width - 50, self._height - 40), onclick=submit)
 
     def _init_cancel_button(self, **kwargs):
         if kwargs.get('show_cancel', False):
@@ -77,12 +78,11 @@ class Dialog(tk.Toplevel):
                 if callable(oncancel):
                     oncancel()
 
-            CanvasButton(self._canvas, text, (57, self._height - 40),
-                         font='helvetica', onclick=cancel)
+            CanvasButton(self._canvas, text, (57, self._height - 40), onclick=cancel)
 
     def _init_message(self, message):
         self._canvas.create_text((self._width // 2, (self._height // 2) - 20), text=message,
-                                 font=('helvetica', 18), width=self._width - 40,
+                                 font=fonts['dialog_message'], width=self._width - 40,
                                  justify='center', fill='#FFFFFF')
 
 
@@ -140,10 +140,9 @@ class CanvasButton:
     def _draw_button(self, text, pos, **kwargs):
         args = {
             'text': text,
-            'fill': kwargs.get('text_colour', '#ffffff') if not kwargs.get('disabled') else self.DISABLED_COLOUR
+            'fill': kwargs.get('text_colour', '#ffffff') if not kwargs.get('disabled') else self.DISABLED_COLOUR,
+            'font': kwargs.get('font', fonts['button_standard'])
         }
-        if 'font' in kwargs:
-            args['font'] = kwargs['font']
 
         text = self._canvas.create_text(pos[0], pos[1], **args)
         bbox = self._canvas.bbox(text)
