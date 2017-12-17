@@ -490,7 +490,7 @@ class PlayerTest(TestCase):
                 BoardNoodle.create(board=board, noodle=Noodle.get(designation='A'), position=p,
                                    part1='NE', part2='SE', part3='E', part4='W')
 
-            completed = player.puzzles_completed()
+            completed = player.puzzles_completed
 
             self.assertEqual(completed.player_completed, 2)
             self.assertEqual(len(player.boards), 3)

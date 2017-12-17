@@ -244,6 +244,7 @@ class Player(BaseModel):
         """
         return Player.select().where(Player.deleted == False)
 
+    @property
     def puzzles_completed(self):
         """Get the number of puzzles that this player has completed.
 
