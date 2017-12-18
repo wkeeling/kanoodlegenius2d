@@ -248,7 +248,7 @@ class NoodleSelectionFrame(tk.Frame):
 
         control_frame = tk.Frame(self, width=360, height=120, bg='#000000')
         control_frame.pack(side='top')
-        self._init_buttons(control_frame)
+        self._prev, self._next, self._rotate, self._flip = self._init_buttons(control_frame)
 
         # The part of the noodle that a user has pressed (0 - 4)
         self._selected_part = None
@@ -313,10 +313,12 @@ class NoodleSelectionFrame(tk.Frame):
             'height': 40,
         }
 
-        CanvasButton(canvas, text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
-        CanvasButton(canvas, text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, **args)
-        CanvasButton(canvas, text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
-        CanvasButton(canvas, text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
+        prev = CanvasButton(canvas, text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
+        nxt = CanvasButton(canvas, text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, **args)
+        rotate = CanvasButton(canvas, text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
+        flip = CanvasButton(canvas, text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
+
+        return prev, nxt, rotate, flip
 
     def _next_noodle(self, _):
         items = self._noodle_canvas.find_all()
@@ -368,6 +370,8 @@ class NoodleSelectionFrame(tk.Frame):
             self._noodle_canvas.delete('all')
             if self._selectable_noodles:
                 self._draw_noodle(fade_duration=40)
+            self._next.disable(len(self._selectable_noodles) <= 1)
+            self._prev.disable(len(self._selectable_noodles) <= 1)
 
         self.after(500, redraw)
 
@@ -383,6 +387,8 @@ class NoodleSelectionFrame(tk.Frame):
         self._selectable_noodles.insert(0, noodle)
         self._noodle_canvas.delete('all')
         self._draw_noodle()
+        self._next.disable(len(self._selectable_noodles) <= 1)
+        self._prev.disable(len(self._selectable_noodles) <= 1)
 
 
 class StatusFrame(tk.Frame):
@@ -413,8 +419,7 @@ class StatusFrame(tk.Frame):
         canvas.create_text(120, 26, text='PLAYER: {}'.format(board.player.name),
                            font=settings.fonts['gamescreen_player'], fill=Noodle.get(Noodle.designation == 'B').colour)
         canvas.create_text(300, 26, text='LEVEL: {}'.format(board.puzzle.level.number),
-                           font=settings.fonts['gamescreen_status'],
-                           fill=Noodle.get(Noodle.designation == 'F').colour)
+                           font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
         canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number),
                            font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
         CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: self._oncancel())
