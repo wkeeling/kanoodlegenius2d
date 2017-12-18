@@ -125,47 +125,35 @@ class CanvasButton:
             A CanvasButton object that represents the rendered button.
         """
         self._canvas = canvas
-        self._text, self._button = self._draw_button(text, pos, **kwargs)
+        self._text = text
+        self._pos = pos
+        self._onclick = onclick
+        self._lockable = lockable
+        self._options = kwargs
+
         self._locked = False
         self._fade = Fade(canvas)
+        self._btext, self._button = self._draw_button(text, pos, kwargs.get('disabled', False))
+        self._configure_button(kwargs.get('disabled', False))
 
-        def onpress(_):
-            self._canvas.itemconfigure(self._button, fill='#ffffff')
-            self._canvas.itemconfigure(self._text, fill='#000000')
-
-        def onrelease(_):
-            if lockable:
-                self._locked = not self._locked
-
-            if not self._locked:
-                self._fade.fadeout(self._button, duration=20)
-                self._canvas.itemconfigure(self._text, fill='#ffffff')
-
-            onclick(self.text)
-
-        if not kwargs.get('disabled'):
-            self._canvas.tag_bind(self._text, '<ButtonPress-1>', onpress)
-            self._canvas.tag_bind(self._button, '<ButtonPress-1>', onpress)
-            self._canvas.tag_bind(self._text, '<ButtonRelease-1>', onrelease)
-            self._canvas.tag_bind(self._button, '<ButtonRelease-1>', onrelease)
-
-    def _draw_button(self, text, pos, **kwargs):
+    def _draw_button(self, text, pos, disabled=False):
         args = {
             'text': text,
-            'fill': kwargs.get('text_colour', '#ffffff') if not kwargs.get('disabled') else self.DISABLED_COLOUR,
-            'font': kwargs.get('font', fonts['button_standard'])
+            'fill': self._options.get('text_colour', '#ffffff')
+            if not disabled else self.DISABLED_COLOUR,
+            'font': self._options.get('font', fonts['button_standard'])
         }
 
         text = self._canvas.create_text(pos[0], pos[1], **args)
         bbox = self._canvas.bbox(text)
-        padding = kwargs.get('padding', 10)
-        width = kwargs.get('width', ((bbox[2] - bbox[0]) + (padding * 2)))
-        height = kwargs.get('height', ((bbox[3] - bbox[1]) + (padding * 2)))
+        padding = self._options.get('padding', 10)
+        width = self._options.get('width', ((bbox[2] - bbox[0]) + (padding * 2)))
+        height = self._options.get('height', ((bbox[3] - bbox[1]) + (padding * 2)))
         x_offset = (width - (bbox[2] - bbox[0])) // 2
         y_offset = (height - (bbox[3] - bbox[1])) // 2
 
         args = {
-            'outline': '#ffffff' if not kwargs.get('disabled') else self.DISABLED_COLOUR,
+            'outline': '#ffffff' if not disabled else self.DISABLED_COLOUR,
             'fill': '#000000'
         }
 
@@ -177,6 +165,27 @@ class CanvasButton:
 
         return text, button
 
+    def _configure_button(self, disabled):
+        def onpress(_):
+            self._canvas.itemconfigure(self._button, fill='#ffffff')
+            self._canvas.itemconfigure(self._btext, fill='#000000')
+
+        def onrelease(_):
+            if self._lockable:
+                self._locked = not self._locked
+
+            if not self._locked:
+                self._fade.fadeout(self._button, duration=20)
+                self._canvas.itemconfigure(self._btext, fill='#ffffff')
+
+            self._onclick(self.text)
+
+        if not disabled:
+            self._canvas.tag_bind(self._btext, '<ButtonPress-1>', onpress)
+            self._canvas.tag_bind(self._button, '<ButtonPress-1>', onpress)
+            self._canvas.tag_bind(self._btext, '<ButtonRelease-1>', onrelease)
+            self._canvas.tag_bind(self._button, '<ButtonRelease-1>', onrelease)
+
     @property
     def text(self):
         """Get the text of the button.
@@ -184,7 +193,7 @@ class CanvasButton:
         Returns:
             The button text.
         """
-        return self._canvas.itemcget(self._text, 'text')
+        return self._canvas.itemcget(self._btext, 'text')
 
     @text.setter
     def text(self, text):
@@ -193,7 +202,18 @@ class CanvasButton:
         Args:
             text: The button text to set.
         """
-        self._canvas.itemconfigure(self._text, text=text)
+        self._canvas.itemconfigure(self._btext, text=text)
+
+    def disable(self, disabled):
+        """Set the disabled state of the button.
+
+        Args:
+            disabled: True if the button should be disabled,
+                False if it should be enabled.
+        """
+        self._canvas.delete(self._btext, self._button)
+        self._btext, self._button = self._draw_button(self._text, self._pos, disabled)
+        self._configure_button(disabled)
 
 
 class Fade:
