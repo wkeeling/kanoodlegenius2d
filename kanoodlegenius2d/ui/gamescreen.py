@@ -84,7 +84,8 @@ class BoardFrame(tk.Frame):
             self._draw_noodles_on_board(fade_duration=100)
 
         self.after(2000, draw)
-        CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40)
+        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40,
+                                  disabled=True)
 
         self._hole_pressed = False
 
@@ -161,6 +162,8 @@ class BoardFrame(tk.Frame):
             self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
             self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
+        self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles))
+
     def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
             if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == '#000000':
@@ -217,6 +220,7 @@ class BoardFrame(tk.Frame):
         num_puzzle_noodles = len(self._board.puzzle.noodles)
         if num_puzzle_noodles < num_board_noodles < 7:
             noodle = self._board.undo()
+            self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles))
             if noodle:
                 self._noodle_frame.reject(noodle)
                 self._draw_noodles_on_board()
@@ -256,6 +260,7 @@ class NoodleSelectionFrame(tk.Frame):
     def board_initialised(self):
         """Called by the BoardFrame to indicate that it has finished initialising."""
         self._draw_noodle(fade_duration=1000)
+        self._toggle_disable_buttons()
 
     def _draw_noodle(self, fade_duration=0):
         noodle_parts = []
@@ -311,6 +316,7 @@ class NoodleSelectionFrame(tk.Frame):
         args = {
             'width': 100,
             'height': 40,
+            'disabled': True
         }
 
         prev = CanvasButton(canvas, text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
@@ -354,6 +360,12 @@ class NoodleSelectionFrame(tk.Frame):
         for item in items:
             self._fade.fadeout(item, duration=60, elements=['fill', 'outline'], onfaded=clear)
 
+    def _toggle_disable_buttons(self):
+        self._next.disable(len(self._selectable_noodles) <= 1)
+        self._prev.disable(len(self._selectable_noodles) <= 1)
+        self._flip.disable(len(self._selectable_noodles) == 0)
+        self._rotate.disable(len(self._selectable_noodles) == 0)
+
     def accept(self):
         """Accept the currently selected noodle and part and remove them
         from the current list of selectable noodles.
@@ -370,8 +382,7 @@ class NoodleSelectionFrame(tk.Frame):
             self._noodle_canvas.delete('all')
             if self._selectable_noodles:
                 self._draw_noodle(fade_duration=40)
-            self._next.disable(len(self._selectable_noodles) <= 1)
-            self._prev.disable(len(self._selectable_noodles) <= 1)
+            self._toggle_disable_buttons()
 
         self.after(500, redraw)
 
@@ -387,8 +398,7 @@ class NoodleSelectionFrame(tk.Frame):
         self._selectable_noodles.insert(0, noodle)
         self._noodle_canvas.delete('all')
         self._draw_noodle()
-        self._next.disable(len(self._selectable_noodles) <= 1)
-        self._prev.disable(len(self._selectable_noodles) <= 1)
+        self._toggle_disable_buttons()
 
 
 class StatusFrame(tk.Frame):
