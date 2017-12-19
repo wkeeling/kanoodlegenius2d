@@ -3,8 +3,5 @@ function and class level
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
 - Change "onclick" references to "onpress"
 - Need arrow icons for shift and del
-- Disable noodle controls until noodle available (and next/prev when only one noodle). Needs a disable() method
-    on CanvasButton
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
-- Need to create bootstrap script
