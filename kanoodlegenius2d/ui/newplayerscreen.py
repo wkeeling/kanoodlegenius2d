@@ -102,22 +102,3 @@ class NewPlayerScreen(tk.Frame):
                 Dialog('That name is already taken', master=self)
             else:
                 self._oncreate(board)
-
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
-    try:
-        import os
-
-        os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
-    except OSError:
-        pass
-    initialise()
-
-    game_screen = NewPlayerScreen(lambda _: None, lambda _: None, root, highlightthickness=2)
-    game_screen.pack(fill='x')
-    root.attributes('-topmost', True)
-    root.update()
-    root.attributes('-topmost', False)
-    root.mainloop()

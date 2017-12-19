@@ -78,6 +78,3 @@ class MasterScreen(tk.Tk):
         board = Board.create(player=board.player, puzzle=board.puzzle.next_puzzle())
         board.setup()
         return board
-
-if __name__ == '__main__':
-    MasterScreen()

@@ -433,35 +433,3 @@ class StatusFrame(tk.Frame):
         canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number),
                            font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
         CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: self._oncancel())
-
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
-
-    def board_complete(board):
-        next_puzzle = board.puzzle.next_puzzle()
-        if next_puzzle is None:
-            message = 'Congratulations, you have completed the game!'
-        else:
-            message = 'Congratulations you have completed puzzle {}!' \
-                .format(board.puzzle.number, next_puzzle.number)
-
-        root.after(1500, lambda: Dialog(message, master=root))
-
-    root.board_complete = board_complete
-
-    try:
-        import os
-        os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
-    except OSError:
-        pass
-    initialise()
-    b = Game.start('Will')
-    # b = Game.resume('Will')  # The board instance will be passed by our parent eventually
-    game_screen = GameScreen(b, lambda: None, lambda: None, root)
-    game_screen.pack(fill='x')
-    root.attributes('-topmost', True)
-    root.update()
-    root.attributes('-topmost', False)
-    root.mainloop()

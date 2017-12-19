@@ -1,10 +1,8 @@
-from collections import deque
 import math
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
                                             initialise,
-                                            Noodle,
                                             Puzzle)
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog)
@@ -157,29 +155,3 @@ class PlayerPaginator:
         self._total_pages = self._calc_total_pages()
         if not self.players():
             self.prev_page()
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.geometry('800x480+500+300')  # Will eventually be set by the main kanoodlegenius2d root screen
-    try:
-        import os
-
-        os.remove(os.path.join(os.path.expanduser('~'), '.kanoodlegenius2d.db'))
-    except OSError:
-        pass
-    initialise()
-
-    Game.start('Will')
-    Game.start('John')
-    Game.start('Fred')
-    Game.start('Jack')
-    Game.start('Gary')
-    Game.start('Lucy')
-    Game.start('Emma')
-    import sys
-    game_screen = SelectPlayerScreen(lambda _: None, lambda _: sys.exit(), root)
-    game_screen.pack(fill='x')
-    root.attributes('-topmost', True)
-    root.update()
-    root.attributes('-topmost', False)
-    root.mainloop()
