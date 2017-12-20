@@ -139,9 +139,9 @@ class BoardFrame(tk.Frame):
             def draw(i, n):
                 if fade_duration == 0:
                     i = 0
-                self.after(i*500, lambda: self._draw_noodle(n, n.position, fade_duration))
+                self.after(i*600, lambda: self._draw_noodle(n, n.position, fade_duration))
                 if i == len(self._board.noodles) + 2:
-                    self.after(i * 575, self._noodle_frame.board_initialised)
+                    self.after(i * 700, self._noodle_frame.board_initialised)
 
             draw(i, board_noodle)
 
