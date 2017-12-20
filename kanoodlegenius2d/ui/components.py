@@ -17,6 +17,7 @@ class Dialog(tk.Toplevel):
                 title: Title displayed above the message.
                 width: The width of the dialog in pixels (default 50% of parent).
                 height: The height of the dialog in pixels (default 50% of parent).
+                justify: The justify setting for the message (default center).
                 show_submit: Whether to show a submit button (default True).
                 submit_text: The text of the submit button (default OK).
                 onsubmit: Callable invoked when the submit button pressed (default None).
@@ -44,6 +45,7 @@ class Dialog(tk.Toplevel):
         self._height = kwargs.get('height', master.winfo_height() // 2)
         self._x_offset = master.winfo_rootx() + ((master.winfo_width() - self._width) // 2)
         self._y_offset = master.winfo_rooty() + ((master.winfo_height() - self._height) // 2)
+        self._justify = kwargs.get('justify', 'center')
 
         self.geometry("%dx%d+%d+%d" % (self._width, self._height, self._x_offset, self._y_offset))
 
@@ -92,10 +94,10 @@ class Dialog(tk.Toplevel):
         y = (self._height // 2) - 20
 
         if title:
-            y = self._canvas.coords(title)[1] + 60
+            y = self._canvas.coords(title)[1] + 100
 
         self._canvas.create_text(self._width // 2, y, text=message, font=fonts['dialog_message'],
-                                 width=self._width - 40, justify='center', fill='#FFFFFF')
+                                 width=self._width - 40, justify=self._justify, fill='#FFFFFF')
 
 
 class CanvasButton:
