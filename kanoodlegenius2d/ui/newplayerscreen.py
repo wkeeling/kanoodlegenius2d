@@ -1,8 +1,7 @@
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (DuplicatePlayerNameException,
-                                            Game,
-                                            initialise)
+                                            Game)
 from kanoodlegenius2d.ui.components import CanvasButton, Dialog
 from kanoodlegenius2d.ui.settings import fonts
 

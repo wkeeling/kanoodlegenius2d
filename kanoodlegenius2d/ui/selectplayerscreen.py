@@ -2,7 +2,6 @@ import math
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
-                                            initialise,
                                             Puzzle)
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog)
