@@ -3,9 +3,7 @@ from collections import deque
 
 from kanoodlegenius2d.domain import (holes,
                                      orientation)
-from kanoodlegenius2d.domain.models import (initialise,
-                                            Game,
-                                            Noodle,
+from kanoodlegenius2d.domain.models import (Noodle,
                                             PositionUnavailableException)
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog,
@@ -261,6 +259,21 @@ class NoodleSelectionFrame(tk.Frame):
         """Called by the BoardFrame to indicate that it has finished initialising."""
         self._draw_noodle(fade_duration=1000)
         self._toggle_disable_buttons()
+
+        if not self._board.player.seen_instructions:
+            def close():
+                self._board.player.seen_instructions = True
+                self._board.player.save()
+                
+            Dialog(message='i. Manipulate the noodle using the control buttons\nii. Touch '
+                           'the part of the noodle you want to place\niii. Touch the '
+                           'hole on the board where you want to place it',
+                   title='Instructions',
+                   justify='left',
+                   master=self.master,
+                   width=600,
+                   height=300,
+                   onsubmit=close)
 
     def _draw_noodle(self, fade_duration=0):
         noodle_parts = []

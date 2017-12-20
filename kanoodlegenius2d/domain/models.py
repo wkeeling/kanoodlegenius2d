@@ -53,7 +53,7 @@ class Game(BaseModel):
 
     @property
     def player(self):
-        """Convenience method for getting the game for a player.
+        """Convenience method for getting the player for a game.
 
         Although Game -> Player is technically a one to many relationship,
         a game only ever has a single player and so the relationship is
@@ -233,6 +233,7 @@ class Player(BaseModel):
 
     game = ForeignKeyField(Game)
     name = CharField(max_length=50, unique=True)
+    seen_instructions = BooleanField(default=False)
     deleted = BooleanField(default=False)
 
     @staticmethod
