@@ -4,7 +4,6 @@ from unittest import TestCase
 
 from peewee import (IntegrityError,
                     SqliteDatabase)
-from playhouse.test_utils import test_database
 
 from kanoodlegenius2d.domain import orientation
 from kanoodlegenius2d.domain.models import (Board,
@@ -21,6 +20,27 @@ from kanoodlegenius2d.domain.models import (Board,
                                             shutdown)
 
 test_db = SqliteDatabase(':memory:')
+
+
+class ModelTestCase(TestCase):
+    requires = None
+
+    def setUp(self):
+        super(ModelTestCase, self).setUp()
+        if self.requires:
+            self.orig = []
+            for m in self.requires:
+                self.orig.append(m._meta.database)
+                m._meta.database = test_db
+            test_db.drop_tables(self.requires, True)
+            test_db.create_tables(self.requires)
+
+    def tearDown(self):
+        super(ModelTestCase, self).tearDown()
+        if self.requires:
+            test_db.drop_tables(self.requires, True)
+            for i, m in enumerate(self.requires):
+                m._meta.database = self.orig[i]
 
 
 class InitialiseTest(TestCase):
@@ -158,39 +178,39 @@ class GameIntegrationTest(TestCase):
             pass
 
 
-class NoodleTest(TestCase):
+class NoodleTest(ModelTestCase):
+
+    requires = (Noodle, )
 
     def test_rotate_noodle_single_increment(self):
-        with test_database(test_db, (Noodle,), create_tables=True):
-            Noodle.create(designation='D', colour='light_blue',
-                          part1=orientation.E,
-                          part2=orientation.E,
-                          part3=orientation.NE,
-                          part4=orientation.SE)
+        Noodle.create(designation='D', colour='light_blue',
+                      part1=orientation.E,
+                      part2=orientation.E,
+                      part3=orientation.NE,
+                      part4=orientation.SE)
 
-            light_blue = Noodle.light_blue()
-            light_blue.rotate()
+        light_blue = Noodle.light_blue()
+        light_blue.rotate()
 
-            self.assertEqual(light_blue.part1, orientation.SE)
-            self.assertEqual(light_blue.part2, orientation.SE)
-            self.assertEqual(light_blue.part3, orientation.E)
-            self.assertEqual(light_blue.part4, orientation.SW)
+        self.assertEqual(light_blue.part1, orientation.SE)
+        self.assertEqual(light_blue.part2, orientation.SE)
+        self.assertEqual(light_blue.part3, orientation.E)
+        self.assertEqual(light_blue.part4, orientation.SW)
 
     def test_rotate_noodle_multiple_increments(self):
-        with test_database(test_db, (Noodle,), create_tables=True):
-            Noodle.create(designation='D', colour='light_blue',
-                          part1=orientation.E,
-                          part2=orientation.E,
-                          part3=orientation.NE,
-                          part4=orientation.SE)
+        Noodle.create(designation='D', colour='light_blue',
+                      part1=orientation.E,
+                      part2=orientation.E,
+                      part3=orientation.NE,
+                      part4=orientation.SE)
 
-            light_blue = Noodle.light_blue()
-            light_blue.rotate(3)
+        light_blue = Noodle.light_blue()
+        light_blue.rotate(3)
 
-            self.assertEqual(light_blue.part1, orientation.W)
-            self.assertEqual(light_blue.part2, orientation.W)
-            self.assertEqual(light_blue.part3, orientation.SW)
-            self.assertEqual(light_blue.part4, orientation.NW)
+        self.assertEqual(light_blue.part1, orientation.W)
+        self.assertEqual(light_blue.part2, orientation.W)
+        self.assertEqual(light_blue.part3, orientation.SW)
+        self.assertEqual(light_blue.part4, orientation.NW)
 
     def test_get_part_positions(self):
         noodle = Noodle(designation='D', code='light_blue',
@@ -218,169 +238,159 @@ class NoodleTest(TestCase):
         self.assertEqual(noodle.part4, orientation.SW)
 
 
-class BoardTest(TestCase):
+class BoardTest(ModelTestCase):
+
+    requires = (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle)
 
     def test_setup(self):
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle),
-                           create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-            light_blue.rotate(increment=3)
-            board.puzzle.place(light_blue, position=3)
-            board.setup()
-
-            self.assertEqual(len(board.noodles), 1)
-            self.assertEqual(board.noodles[0].id, 1)
-            self.assertEqual(board.noodles[0].part1, orientation.W)
-            self.assertEqual(board.noodles[0].part2, orientation.W)
-            self.assertEqual(board.noodles[0].part3, orientation.SW)
-            self.assertEqual(board.noodles[0].part4, orientation.NW)
-
-    def test_place_noodle(self):
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-
-            board.place(light_blue, position=5)
-
-            board_noodle = BoardNoodle.get(BoardNoodle.position == 5)
-            self.assertEqual(board_noodle.part1, light_blue.part1)
-            self.assertEqual(board_noodle.part2, light_blue.part2)
-            self.assertEqual(board_noodle.part3, light_blue.part3)
-            self.assertEqual(board_noodle.part4, light_blue.part4)
-
-    def test_place_raises_exception_when_root_position_occupied(self):
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-            yellow = Noodle.create(designation='B', colour='yellow',
-                                   part1=orientation.E,
-                                   part2=orientation.NE,
-                                   part3=orientation.SE,
-                                   part4=orientation.NE)
-            board.place(light_blue, position=5)
-
-            with self.assertRaises(PositionUnavailableException):
-                board.place(yellow, position=5)
-
-    def test_place_raises_exception_when_child_position_occupied(self):
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-            yellow = Noodle.create(designation='B', colour='yellow',
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
                                    part1=orientation.E,
                                    part2=orientation.E,
-                                   part3=orientation.NW,
-                                   part4=orientation.E)
-            board.place(light_blue, position=5)
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+        light_blue.rotate(increment=3)
+        board.puzzle.place(light_blue, position=3)
+        board.setup()
 
-            with self.assertRaises(PositionUnavailableException):
-                board.place(yellow, position=11)
+        self.assertEqual(len(board.noodles), 1)
+        self.assertEqual(board.noodles[0].id, 1)
+        self.assertEqual(board.noodles[0].part1, orientation.W)
+        self.assertEqual(board.noodles[0].part2, orientation.W)
+        self.assertEqual(board.noodles[0].part3, orientation.SW)
+        self.assertEqual(board.noodles[0].part4, orientation.NW)
+
+    def test_place_noodle(self):
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+
+        board.place(light_blue, position=5)
+
+        board_noodle = BoardNoodle.get(BoardNoodle.position == 5)
+        self.assertEqual(board_noodle.part1, light_blue.part1)
+        self.assertEqual(board_noodle.part2, light_blue.part2)
+        self.assertEqual(board_noodle.part3, light_blue.part3)
+        self.assertEqual(board_noodle.part4, light_blue.part4)
+
+    def test_place_raises_exception_when_root_position_occupied(self):
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+        yellow = Noodle.create(designation='B', colour='yellow',
+                               part1=orientation.E,
+                               part2=orientation.NE,
+                               part3=orientation.SE,
+                               part4=orientation.NE)
+        board.place(light_blue, position=5)
+
+        with self.assertRaises(PositionUnavailableException):
+            board.place(yellow, position=5)
+
+    def test_place_raises_exception_when_child_position_occupied(self):
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+        yellow = Noodle.create(designation='B', colour='yellow',
+                               part1=orientation.E,
+                               part2=orientation.E,
+                               part3=orientation.NW,
+                               part4=orientation.E)
+        board.place(light_blue, position=5)
+
+        with self.assertRaises(PositionUnavailableException):
+            board.place(yellow, position=11)
 
     def test_place_raises_exception_when_root_position_off_board(self):
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
 
-            with self.assertRaises(PositionUnavailableException):
-                board.place(light_blue, position=37)
+        with self.assertRaises(PositionUnavailableException):
+            board.place(light_blue, position=37)
 
     def test_place_raises_exception_when_child_position_off_board(self):
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, BoardNoodle, Noodle), create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
 
-            with self.assertRaises(PositionUnavailableException):
-                board.place(light_blue, position=0)
+        with self.assertRaises(PositionUnavailableException):
+            board.place(light_blue, position=0)
 
     def test_undo_place(self):
         """Test that the previous place noodle action can be undone."""
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle), create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-            board.puzzle.place(light_blue, position=5)
-            yellow = Noodle.create(designation='B', colour='yellow',
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
                                    part1=orientation.E,
                                    part2=orientation.E,
-                                   part3=orientation.NW,
-                                   part4=orientation.E)
-            board.place(yellow, position=20)
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+        board.puzzle.place(light_blue, position=5)
+        yellow = Noodle.create(designation='B', colour='yellow',
+                               part1=orientation.E,
+                               part2=orientation.E,
+                               part3=orientation.NW,
+                               part4=orientation.E)
+        board.place(yellow, position=20)
 
-            BoardNoodle.get(BoardNoodle.position == 20)  # Should not raise a DoesNotExist
+        BoardNoodle.get(BoardNoodle.position == 20)  # Should not raise a DoesNotExist
 
-            noodle = board.undo()
+        noodle = board.undo()
 
-            self.assertEqual(noodle, yellow)
-            with self.assertRaises(BoardNoodle.DoesNotExist):
-                BoardNoodle.get(BoardNoodle.position == 20)  # Noodle has been removed so will raise DoesNotExist
+        self.assertEqual(noodle, yellow)
+        with self.assertRaises(BoardNoodle.DoesNotExist):
+            BoardNoodle.get(BoardNoodle.position == 20)  # Noodle has been removed so will raise DoesNotExist
 
     def test_undo_no_place_does_nothing(self):
         """Test that attempting to undo when no place has occurred does nothing."""
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle),
-                           create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-            board.puzzle.place(light_blue, position=5)
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+        board.puzzle.place(light_blue, position=5)
 
-            noodle = board.undo()  # Nothing to undo, because undo does not remove puzzle noddles (only board noodles)
+        noodle = board.undo()  # Nothing to undo, because undo does not remove puzzle noddles (only board noodles)
 
-            self.assertIsNone(noodle)
-            PuzzleNoodle.get(PuzzleNoodle.position == 5)  # Should not raise a DoesNotExist
+        self.assertIsNone(noodle)
+        PuzzleNoodle.get(PuzzleNoodle.position == 5)  # Should not raise a DoesNotExist
 
     def test_undo_place_updates_last_played(self):
         """Test that the undo function will update the last_played date on the Game instance."""
-        with test_database(test_db, (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle),
-                           create_tables=True):
-            board = self._create_board()
-            light_blue = Noodle.create(designation='D', colour='light_blue',
-                                       part1=orientation.E,
-                                       part2=orientation.E,
-                                       part3=orientation.NE,
-                                       part4=orientation.SE)
-            board.puzzle.place(light_blue, position=5)
-            yellow = Noodle.create(designation='B', colour='yellow',
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
                                    part1=orientation.E,
                                    part2=orientation.E,
-                                   part3=orientation.NW,
-                                   part4=orientation.E)
-            board.place(yellow, position=20)
-            last_played = board.player.game.last_played
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+        board.puzzle.place(light_blue, position=5)
+        yellow = Noodle.create(designation='B', colour='yellow',
+                               part1=orientation.E,
+                               part2=orientation.E,
+                               part3=orientation.NW,
+                               part4=orientation.E)
+        board.place(yellow, position=20)
+        last_played = board.player.game.last_played
 
-            board.undo()
+        board.undo()
 
-            self.assertNotEqual(board.player.game.last_played, last_played)
+        self.assertNotEqual(board.player.game.last_played, last_played)
 
     def _create_board(self):
         level = Level.create(number=1, name='test level')
@@ -420,96 +430,94 @@ class BoardNoodleTest(TestCase):
         self.assertEqual(positions, [5, 6, 7, 3, 8])
 
 
-class PlayerTest(TestCase):
+class PlayerTest(ModelTestCase):
+
+    requires = (Game, Player, Board, BoardNoodle, Level, Puzzle, Noodle)
 
     def test_player_with_same_name_raises_exception(self):
-        with test_database(test_db, (Game, Player)):
-            game = Game.create()
+        # with test_database(test_db, (Game, Player)):
+        game = Game.create()
+        Player.create(name='test player', game=game)
+        game = Game.create()
+        with self.assertRaises(IntegrityError):
             Player.create(name='test player', game=game)
-            game = Game.create()
-            with self.assertRaises(IntegrityError):
-                Player.create(name='test player', game=game)
 
     def test_delete_player(self):
         """Test that a player is soft deleted."""
-        with test_database(test_db, (Game, Player)):
-            game = Game.create()
-            player = Player.create(name='test player', game=game)
-            player.soft_delete()
+        game = Game.create()
+        player = Player.create(name='test player', game=game)
+        player.soft_delete()
 
-            deleted_players = Player.select(Player.deleted == True).count()
-            self.assertEqual(deleted_players, 1)
+        deleted_players = Player.select(Player.deleted == True).count()
+        self.assertEqual(deleted_players, 1)
 
     def test_delete_player_named_updated(self):
         """Test that when a player is soft deleted, that the name is updated."""
-        with test_database(test_db, (Game, Player)):
-            game = Game.create()
-            player = Player.create(name='test player', game=game)
-            player.soft_delete()
+        game = Game.create()
+        player = Player.create(name='test player', game=game)
+        player.soft_delete()
 
-            deleted_player = Player.get(Player.deleted == True)
-            self.assertTrue(deleted_player.name.startswith('test player_deleted_'))
+        deleted_player = Player.get(Player.deleted == True)
+        self.assertTrue(deleted_player.name.startswith('test player_deleted_'))
 
     def test_get_active_players(self):
-        with test_database(test_db, (Game, Player)):
-            game = Game.create()
-            Player.create(name='test player', game=game).soft_delete()
+        game = Game.create()
+        Player.create(name='test player', game=game).soft_delete()
 
-            game = Game.create()
-            Player.create(name='test player 1', game=game)
+        game = Game.create()
+        Player.create(name='test player 1', game=game)
 
-            game = Game.create()
-            Player.create(name='test player 2', game=game)
+        game = Game.create()
+        Player.create(name='test player 2', game=game)
 
-            active_players = Player.active_players()
+        active_players = Player.active_players()
 
-            self.assertEqual(len(active_players), 2)
-            names = [player.name for player in active_players]
-            self.assertIn('test player 1', names)
-            self.assertIn('test player 2', names)
+        self.assertEqual(len(active_players), 2)
+        names = [player.name for player in active_players]
+        self.assertIn('test player 1', names)
+        self.assertIn('test player 2', names)
 
     def test_get_puzzles_completed(self):
-        with test_database(test_db, (Game, Player, Board, BoardNoodle, Level, Puzzle, Noodle)):
-            game = Game.create()
-            player = Player.create(game=game, name='Test')
-            level = Level.create(number=1, name='Level 1')
-            Noodle.create(designation='A', colour='yellow', part1='NE', part2='SE', part3='E', part4='W')
+        game = Game.create()
+        player = Player.create(game=game, name='Test')
+        level = Level.create(number=1, name='Level 1')
+        Noodle.create(designation='A', colour='yellow', part1='NE', part2='SE', part3='E', part4='W')
 
-            # Configure 2 complete boards
-            for n in range(2):
-                puzzle = Puzzle.create(level=level, number=n)
-                board = Board.create(player=player, puzzle=puzzle)
-                for p in range(7):
-                    BoardNoodle.create(board=board, noodle=Noodle.get(designation='A'), position=p,
-                                       part1='NE', part2='SE', part3='E', part4='W')
-
-            # Configure 1 incomplete board
-            puzzle = Puzzle.create(level=level, number=2)
+        # Configure 2 complete boards
+        for n in range(2):
+            puzzle = Puzzle.create(level=level, number=n)
             board = Board.create(player=player, puzzle=puzzle)
-            for p in range(6):
+            for p in range(7):
                 BoardNoodle.create(board=board, noodle=Noodle.get(designation='A'), position=p,
                                    part1='NE', part2='SE', part3='E', part4='W')
 
-            completed = player.puzzles_completed
+        # Configure 1 incomplete board
+        puzzle = Puzzle.create(level=level, number=2)
+        board = Board.create(player=player, puzzle=puzzle)
+        for p in range(6):
+            BoardNoodle.create(board=board, noodle=Noodle.get(designation='A'), position=p,
+                               part1='NE', part2='SE', part3='E', part4='W')
 
-            self.assertEqual(completed.player_completed, 2)
-            self.assertEqual(len(player.boards), 3)
+        completed = player.puzzles_completed
+
+        self.assertEqual(completed.player_completed, 2)
+        self.assertEqual(len(player.boards), 3)
 
 
-class PuzzleTest(TestCase):
+class PuzzleTest(ModelTestCase):
+
+    requires = (Level, Puzzle)
 
     def test_next_puzzle(self):
-        with test_database(test_db, (Level, Puzzle)):
-            level = Level.create(number=1, name='Super Pro')
-            puzzle1 = Puzzle.create(level=level, number=1)
-            puzzle2 = Puzzle.create(level=level, number=2)
+        level = Level.create(number=1, name='Super Pro')
+        puzzle1 = Puzzle.create(level=level, number=1)
+        puzzle2 = Puzzle.create(level=level, number=2)
 
-            self.assertEqual(puzzle1.next_puzzle(), puzzle2)
+        self.assertEqual(puzzle1.next_puzzle(), puzzle2)
 
     def test_no_next_puzzle(self):
-        with test_database(test_db, (Level, Puzzle)):
-            level = Level.create(number=1, name='Super Pro')
-            Puzzle.create(level=level, number=1)
-            puzzle2 = Puzzle.create(level=level, number=2)
+        level = Level.create(number=1, name='Super Pro')
+        Puzzle.create(level=level, number=1)
+        puzzle2 = Puzzle.create(level=level, number=2)
 
-            self.assertIsNone(puzzle2.next_puzzle())
+        self.assertIsNone(puzzle2.next_puzzle())
