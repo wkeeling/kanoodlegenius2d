@@ -94,7 +94,7 @@ class Dialog(tk.Toplevel):
         y = (self._height // 2) - 20
 
         if title:
-            y = self._canvas.coords(title)[1] + 100
+            y = self._canvas.coords(title)[1] + 60
 
         self._canvas.create_text(self._width // 2, y, text=message, font=fonts['dialog_message'],
                                  width=self._width - 40, justify=self._justify, fill='#FFFFFF')

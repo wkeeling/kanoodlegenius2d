@@ -139,9 +139,9 @@ class BoardFrame(tk.Frame):
             def draw(i, n):
                 if fade_duration == 0:
                     i = 0
-                self.after(i*500, lambda: self._draw_noodle(n, n.position, fade_duration))
+                self.after(i*600, lambda: self._draw_noodle(n, n.position, fade_duration))
                 if i == len(self._board.noodles) + 2:
-                    self.after(i * 575, self._noodle_frame.board_initialised)
+                    self.after(i * 700, self._noodle_frame.board_initialised)
 
             draw(i, board_noodle)
 
@@ -264,16 +264,17 @@ class NoodleSelectionFrame(tk.Frame):
             def close():
                 self._board.player.seen_instructions = True
                 self._board.player.save()
-                
-            Dialog(message='i. Manipulate the noodle using the control buttons\nii. Touch '
-                           'the part of the noodle you want to place\niii. Touch the '
-                           'hole on the board where you want to place it',
-                   title='Instructions',
-                   justify='left',
-                   master=self.master,
-                   width=600,
-                   height=300,
-                   onsubmit=close)
+
+            self.after(1000, lambda: Dialog(
+                message='i. Manipulate the noodle using the control buttons\nii. Touch '
+                        'the part of the noodle you want to place\niii. Touch the '
+                        'hole on the board where you want to place it',
+                title='Instructions',
+                justify='left',
+                master=self.master,
+                width=600,
+                height=300,
+                onsubmit=close))
 
     def _draw_noodle(self, fade_duration=0):
         noodle_parts = []
