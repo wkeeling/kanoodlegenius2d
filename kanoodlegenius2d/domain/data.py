@@ -209,3 +209,92 @@ def setup():
     light_blue = Noodle.light_blue()
     light_blue.flip()
     puzzle.place(light_blue, position=34)
+
+    # Puzzle 9/1 ######################################
+    puzzle = Puzzle.create(level=level1, number=9)
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    puzzle.place(light_blue, position=7)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=3)
+    puzzle.place(pink, position=12)
+
+    dark_green = Noodle.dark_green()
+    puzzle.place(dark_green, position=20)
+
+    light_green = Noodle.light_green()
+    light_green.flip()
+    light_green.rotate(increment=5)
+    puzzle.place(light_green, position=23)
+
+    # Puzzle 10/1 ######################################
+    puzzle = Puzzle.create(level=level1, number=10)
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=3)
+    puzzle.place(dark_blue, position=2)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=2)
+    puzzle.place(pink, position=5)
+
+    yellow = Noodle.yellow()
+    yellow.rotate(increment=1)
+    yellow.flip()
+    puzzle.place(yellow, position=17)
+
+    light_blue = Noodle.light_blue()
+    puzzle.place(light_blue, position=31)
+
+    # Puzzle 11/1 ######################################
+    puzzle = Puzzle.create(level=level1, number=11)
+    light_green = Noodle.light_green()
+    light_green.rotate(increment=4)
+    puzzle.place(light_green, position=12)
+
+    dark_green = Noodle.dark_green()
+    dark_green.flip()
+    dark_green.rotate(increment=3)
+    puzzle.place(dark_green, position=17)
+
+    yellow = Noodle.yellow()
+    yellow.rotate(increment=1)
+    puzzle.place(yellow, position=20)
+
+    light_blue = Noodle.light_blue()
+    light_blue.rotate(increment=4)
+    puzzle.place(light_blue, position=33)
+
+    # Puzzle 12/1 ######################################
+    puzzle = Puzzle.create(level=level1, number=12)
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    puzzle.place(light_blue, position=7)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=3)
+    puzzle.place(pink, position=12)
+
+    dark_green = Noodle.dark_green()
+    puzzle.place(dark_green, position=20)
+
+    red = Noodle.red()
+    red.rotate(increment=3)
+    puzzle.place(red, position=28)
+
+    # Puzzle 13/1 ######################################
+    puzzle = Puzzle.create(level=level1, number=13)
+    dark_green = Noodle.dark_green()
+    dark_green.rotate(increment=3)
+    puzzle.place(dark_green, position=2)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=5)
+    puzzle.place(pink, position=5)
+
+    light_green = Noodle.light_green()
+    puzzle.place(light_green, position=11)
+
+    yellow = Noodle.yellow()
+    yellow.rotate(increment=2)
+    puzzle.place(yellow, position=16)
