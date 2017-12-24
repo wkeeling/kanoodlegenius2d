@@ -5,3 +5,6 @@ function and class level
 - Need arrow icons for shift and del
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
+- Auto add fonts
+- Add more levels
+- Installer for Mac/Windows/Linux?
