@@ -500,3 +500,18 @@ def setup():
     light_green = Noodle.light_green()
     light_green.rotate(increment=5)
     puzzle.place(light_green, position=30)
+
+    # Puzzle 1/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=1)
+    dark_green = Noodle.dark_green()
+    dark_green.rotate(increment=3)
+    puzzle.place(dark_green, position=2)
+
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=2)
+    puzzle.place(dark_blue, position=3)
+
+    yellow = Noodle.yellow()
+    yellow.flip()
+    yellow.rotate(increment=1)
+    puzzle.place(yellow, position=25)
