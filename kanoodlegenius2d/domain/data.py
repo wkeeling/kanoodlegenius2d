@@ -515,3 +515,45 @@ def setup():
     yellow.flip()
     yellow.rotate(increment=1)
     puzzle.place(yellow, position=25)
+
+    # Puzzle 2/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=2)
+    red = Noodle.red()
+    puzzle.place(red, position=4)
+
+    pink = Noodle.pink()
+    pink.rotate()
+    puzzle.place(pink, position=9)
+
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=1)
+    puzzle.place(dark_blue, position=20)
+
+    # Puzzle 3/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=3)
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    light_blue.rotate(increment=3)
+    puzzle.place(light_blue, position=0)
+
+    red = Noodle.red()
+    puzzle.place(red, position=9)
+
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=1)
+    puzzle.place(dark_blue, position=20)
+
+    # Puzzle 4/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=4)
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=3)
+    puzzle.place(dark_blue, position=2)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=2)
+    puzzle.place(pink, position=5)
+
+    red = Noodle.red()
+    red.rotate(increment=3)
+    puzzle.place(red, position=28)
+
