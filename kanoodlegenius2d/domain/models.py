@@ -308,8 +308,13 @@ class Puzzle(BaseModel):
         try:
             return Puzzle.get(Puzzle.number == self.number+1)
         except Puzzle.DoesNotExist:
-            # End of game
-            return None
+            try:
+                next_level = Level.get(Level.number == self.level.number+1)
+            except Level.DoesNotExist:
+                # End of game
+                return None
+            else:
+                return Puzzle.get(Puzzle.level == next_level, Puzzle.number == 1)
 
     def __str__(self):
         return '<Puzzle: {}>'.format(self.number)

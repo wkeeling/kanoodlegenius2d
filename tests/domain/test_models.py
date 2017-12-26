@@ -521,3 +521,12 @@ class PuzzleTest(ModelTestCase):
         puzzle2 = Puzzle.create(level=level, number=2)
 
         self.assertIsNone(puzzle2.next_puzzle())
+
+    def test_next_puzzle_new_level(self):
+        level1 = Level.create(number=1, name='Super Pro')
+        level2 = Level.create(number=2, name='Champ')
+        Puzzle.create(level=level1, number=1)
+        puzzle2 = Puzzle.create(level=level1, number=2)
+        puzzle3 = Puzzle.create(level=level2, number=1)
+
+        self.assertEqual(puzzle2.next_puzzle(), puzzle3)
