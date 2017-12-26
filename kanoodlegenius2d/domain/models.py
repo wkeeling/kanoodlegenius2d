@@ -306,7 +306,7 @@ class Puzzle(BaseModel):
             The next puzzle, or None if no next puzzle (end of game).
         """
         try:
-            return Puzzle.get(Puzzle.number == self.number+1)
+            return Puzzle.get(Puzzle.level == self.level, Puzzle.number == self.number+1)
         except Puzzle.DoesNotExist:
             try:
                 next_level = Level.get(Level.number == self.level.number+1)
