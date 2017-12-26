@@ -51,7 +51,7 @@ class MasterScreen(tk.Tk):
         next_puzzle = board.puzzle.next_puzzle()
         if next_puzzle is None:
             title = 'Congratulations'
-            message = 'You have completed the game!'
+            message = 'You have completed the game.\nYou are a genius!'
 
             def ok():
                 self._oncancel()
