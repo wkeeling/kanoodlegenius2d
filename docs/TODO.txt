@@ -8,3 +8,4 @@ function and class level
 - Add more levels
 - Installer for Mac/Windows/Linux?
 - Message vertical alignment/centering in dialog doesn't work so well. Review this logic.
+- "You are a genius" message should only appear if all puzzles were completed without auto-solving
