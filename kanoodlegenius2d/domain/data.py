@@ -845,3 +845,78 @@ def setup():
     dark_green.rotate(increment=3)
     dark_green.flip()
     puzzle.place(dark_green, position=1)
+
+    # Puzzle 1/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=1)
+    dark_green = Noodle.dark_green()
+    dark_green.rotate(increment=3)
+    puzzle.place(dark_green, position=2)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=4)
+    puzzle.place(pink, position=23)
+
+    # Puzzle 2/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=2)
+    pink = Noodle.pink()
+    pink.rotate(increment=3)
+    puzzle.place(pink, position=3)
+
+    yellow = Noodle.yellow()
+    yellow.flip()
+    yellow.rotate(increment=1)
+    puzzle.place(yellow, position=21)
+
+    # Puzzle 3/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=3)
+    red = Noodle.red()
+    red.rotate(increment=4)
+    puzzle.place(red, position=11)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=1)
+    puzzle.place(pink, position=9)
+
+    # Puzzle 4/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=4)
+    pink = Noodle.pink()
+    pink.rotate(increment=4)
+    puzzle.place(pink, position=17)
+
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    light_blue.rotate(increment=1)
+    puzzle.place(light_blue, position=18)
+
+    # Puzzle 5/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=5)
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    puzzle.place(light_blue, position=7)
+
+    red = Noodle.red()
+    red.rotate(increment=1)
+    puzzle.place(red, position=10)
+
+    # Puzzle 6/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=6)
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=3)
+    puzzle.place(dark_blue, position=2)
+
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    light_blue.rotate(increment=2)
+    puzzle.place(light_blue, position=20)
+
+    # Puzzle 7/3 ######################################
+    puzzle = Puzzle.create(level=level3, number=7)
+    yellow = Noodle.yellow()
+    yellow.flip()
+    yellow.rotate(increment=2)
+    puzzle.place(yellow, position=9)
+
+    light_blue = Noodle.light_blue()
+    light_blue.flip()
+    light_blue.rotate(increment=5)
+    puzzle.place(light_blue, position=2)
