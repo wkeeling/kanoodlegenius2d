@@ -287,11 +287,11 @@ class Puzzle(BaseModel):
     number = IntegerField()
 
     def place(self, noodle, *, position):
-        """Place the specified noodle onto the puzzle at the specified position.
+        """Place the specified noodle onto the puzzle at the specified hole position.
 
         Args:
             noodle: The noodle to place on the puzzle.
-            position: The puzzle position to place the noodle's root part onto.
+            position: The hole position to place the noodle's root part onto.
         """
         PuzzleNoodle.create(puzzle=self, noodle=noodle, position=position,
                             part1=noodle.part1,
