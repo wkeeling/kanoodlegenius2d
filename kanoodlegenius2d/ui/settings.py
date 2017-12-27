@@ -36,3 +36,6 @@ if platform.system() == 'Darwin':  # MacOS
 
 # Whether to show numbers in each hole on the board (useful for debugging)
 show_board_numbers = True
+
+# When admin mode is True, players can be deleted
+admin_mode = False

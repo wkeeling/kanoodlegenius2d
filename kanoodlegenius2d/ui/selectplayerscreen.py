@@ -3,9 +3,9 @@ import tkinter as tk
 
 from kanoodlegenius2d.domain.models import (Game,
                                             Puzzle)
+from kanoodlegenius2d.ui import settings
 from kanoodlegenius2d.ui.components import (CanvasButton,
                                             Dialog)
-from kanoodlegenius2d.ui.settings import fonts
 
 
 class SelectPlayerScreen(tk.Frame):
@@ -41,7 +41,7 @@ class SelectPlayerScreen(tk.Frame):
         title_frame.pack()
 
         title = tk.Label(title_frame, width=800, height=2, text='Select Player', bg='#000000', fg='#FFFFFF',
-                         font=fonts['screen_title'])
+                         font=settings.fonts['screen_title'])
         title.pack()
 
     def _init_player_list(self):
@@ -75,12 +75,13 @@ class SelectPlayerScreen(tk.Frame):
         x, y = 170, 40
 
         for player in self._paginator.players():
-            self._canvas.create_text(x, y, text=player.name, font=fonts['player_name'],
+            self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
                                      fill='#ffffff')
             self._canvas.create_text(x + 220, y, text=' {}/{} puzzles completed'
                                      .format(player.puzzles_completed.player_completed, Puzzle.select().count()),
-                                     font=fonts['puzzles_completed'], fill='#666666')
-            CanvasButton(self._canvas, ' X ', (570, y), onclick=self._create_ondelete_player(player))
+                                     font=settings.fonts['puzzles_completed'], fill='#666666')
+            if settings.admin_mode:
+                CanvasButton(self._canvas, ' X ', (570, y), onclick=self._create_ondelete_player(player))
             CanvasButton(self._canvas, 'SELECT', (640, y), onclick=self._create_onselect_player(player))
             y += 45
 
