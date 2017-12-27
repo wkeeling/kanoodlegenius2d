@@ -800,3 +800,48 @@ def setup():
 
     red = Noodle.red()
     puzzle.place(red, position=20)
+
+    # Puzzle 22/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=22)
+    pink = Noodle.pink()
+    pink.rotate(increment=3)
+    puzzle.place(pink, position=3)
+
+    light_blue = Noodle.light_blue()
+    light_blue.rotate(increment=4)
+    puzzle.place(light_blue, position=23)
+
+    dark_green = Noodle.dark_green()
+    dark_green.flip()
+    dark_green.rotate(increment=1)
+    puzzle.place(dark_green, position=21)
+
+    # Puzzle 23/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=23)
+    dark_green = Noodle.dark_green()
+    dark_green.rotate(increment=3)
+    puzzle.place(dark_green, position=2)
+
+    yellow = Noodle.yellow()
+    yellow.flip()
+    yellow.rotate(increment=4)
+    puzzle.place(yellow, position=3)
+
+    pink = Noodle.pink()
+    pink.rotate(increment=5)
+    puzzle.place(pink, position=20)
+
+    # Puzzle 24/2 ######################################
+    puzzle = Puzzle.create(level=level2, number=24)
+    yellow = Noodle.yellow()
+    yellow.rotate(increment=5)
+    puzzle.place(yellow, position=20)
+
+    dark_blue = Noodle.dark_blue()
+    dark_blue.rotate(increment=5)
+    puzzle.place(dark_blue, position=21)
+
+    dark_green = Noodle.dark_green()
+    dark_green.rotate(increment=3)
+    dark_green.flip()
+    puzzle.place(dark_green, position=1)
