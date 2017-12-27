@@ -9,3 +9,5 @@ function and class level
 - Installer for Mac/Windows/Linux?
 - Message vertical alignment/centering in dialog doesn't work so well. Review this logic.
 - "You are a genius" message should only appear if all puzzles were completed without auto-solving
+- When move to a new level, should have a "Congratulations, you have completed Level x". When complete just a puzzle,
+    the message should instead show "Puzzle Completed!"
