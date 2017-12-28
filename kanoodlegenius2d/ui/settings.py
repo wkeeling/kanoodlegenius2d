@@ -35,7 +35,7 @@ if platform.system() == 'Darwin':  # MacOS
     fonts['dialog_title'] = ('wood stamp', 48)
 
 # Whether to show numbers in each hole on the board (useful for debugging)
-show_board_numbers = True
+show_board_numbers = False
 
 # When admin mode is True, players can be deleted
 admin_mode = False
