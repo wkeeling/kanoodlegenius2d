@@ -324,6 +324,7 @@ class Board(BaseModel):
     """Represents the board that a player is solving a puzzle on."""
     player = ForeignKeyField(Player, related_name='boards')
     puzzle = ForeignKeyField(Puzzle)
+    auto_completed = BooleanField(default=False)
 
     def place(self, noodle, *, position):
         """Place a noodle onto the board in the specified position.
