@@ -172,7 +172,7 @@ class BoardFrame(tk.Frame):
                     return
                 self._hole_pressed = True
                 try:
-                    root_index = self._place_noodle(noodle, selected_part, hole_index)
+                    root_index = self._board.place(noodle, position=hole_index, part_pos=selected_part)
                 except PositionUnavailableException:
                     self._reject_place_noodle(noodle, hole_id)
                 else:
@@ -181,16 +181,6 @@ class BoardFrame(tk.Frame):
                         self._oncomplete(self._board)
 
         return _on_hole_press
-
-    def _place_noodle(self, noodle, part_pos, hole_index):
-        index = hole_index
-        # Traverse backwards along the noodle to the root position
-        for pos in reversed(range(part_pos)):
-            if index is None:
-                raise PositionUnavailableException()
-            index = holes.find_position(index, orientation.opposite(noodle.parts[pos]))
-        self._board.place(noodle, position=index)
-        return index
 
     def _reject_place_noodle(self, noodle, hole_id):
         self._noodle_frame.reject(noodle)

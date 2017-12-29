@@ -326,19 +326,25 @@ class Board(BaseModel):
     puzzle = ForeignKeyField(Puzzle)
     auto_completed = BooleanField(default=False)
 
-    def place(self, noodle, *, position):
+    def place(self, noodle, *, position, part_pos=0):
         """Place a noodle onto the board in the specified position.
 
         Args:
             noodle: The noodle instance to place on the board.
-            position: The hole position to place the root part of the noodle on to.
+            position: The board hole position to place a specific part of the noodle on to.
                 Board hole positions begin at 0.
+            part_pos: The part of the noodle that should be targeted at the hole. Part
+                positions run from 0 - 4. If not specified, the root part (part 0) is assumed.
+        Returns: The board hole position for the root part of the noodle placed.
         Raises:
             PositionOccupiedException: If any of the positions targeted by the specified
                 noodle's parts are occupied.
         """
         if position not in range(35):
             raise PositionUnavailableException('Position {} is not on the board')
+
+        if part_pos:
+            position = self._find_root_pos(noodle, part_pos, position)
 
         target_positions = set(noodle.get_part_positions(position))
         board_noodles = BoardNoodle.select().where(BoardNoodle.board == self)
@@ -359,6 +365,18 @@ class Board(BaseModel):
                            part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
         self.player.game.last_played = datetime.now()
         self.player.game.save()
+
+        return position
+
+    def _find_root_pos(self, noodle, part_pos, hole_index):
+        """Find the board hole position for the root part of the noodle."""
+        index = hole_index
+        # Traverse backwards along the noodle to the root position
+        for pos in reversed(range(part_pos)):
+            index = holes.find_position(index, orientation.opposite(noodle.parts[pos]))
+            if index is None:
+                raise PositionUnavailableException('Part {} of the noodle is not on the board'.format(pos))
+        return index
 
     def setup(self):
         """Set up the board based on the puzzle it is referencing.

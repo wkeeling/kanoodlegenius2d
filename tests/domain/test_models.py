@@ -276,6 +276,40 @@ class BoardTest(ModelTestCase):
         self.assertEqual(board_noodle.part3, light_blue.part3)
         self.assertEqual(board_noodle.part4, light_blue.part4)
 
+    def test_place_noodle_specific_part(self):
+        """Test place a noodle onto the board supplying the specific noodle
+        part that should be placed.
+        """
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+
+        pos = board.place(light_blue, position=3, part_pos=3)
+        self.assertEqual(pos, 5)
+        board_noodle = BoardNoodle.get(BoardNoodle.position == 5)
+        self.assertEqual(board_noodle.part1, light_blue.part1)
+        self.assertEqual(board_noodle.part2, light_blue.part2)
+        self.assertEqual(board_noodle.part3, light_blue.part3)
+        self.assertEqual(board_noodle.part4, light_blue.part4)
+
+    def test_place_noodle_specific_part_raises_exception_when_off_board(self):
+        """Test place a noodle onto the board supplying the specific noodle
+        part that should be placed, but part of the noodle is off the board.
+        """
+        board = self._create_board()
+        light_blue = Noodle.create(designation='D', colour='light_blue',
+                                   part1=orientation.E,
+                                   part2=orientation.E,
+                                   part3=orientation.NE,
+                                   part4=orientation.SE)
+
+        with self.assertRaises(PositionUnavailableException) as ctx:
+            board.place(light_blue, position=0, part_pos=3)
+        self.assertEqual(str(ctx.exception), 'Part 1 of the noodle is not on the board')
+
     def test_place_raises_exception_when_root_position_occupied(self):
         board = self._create_board()
         light_blue = Noodle.create(designation='D', colour='light_blue',
