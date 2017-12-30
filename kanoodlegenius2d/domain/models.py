@@ -231,7 +231,7 @@ class Noodle(PartAccessorMixin, BaseModel):
 class Player(BaseModel):
     """Represents a player playing the game."""
 
-    game = ForeignKeyField(Game)
+    game = ForeignKeyField(Game, on_delete='CASCADE')
     name = CharField(max_length=50, unique=True)
     seen_instructions = BooleanField(default=False)
     deleted = BooleanField(default=False)
@@ -283,7 +283,7 @@ class Puzzle(BaseModel):
     """Represents a Kanoodle Genius puzzle, which is basically a
     board preconfigured with some noodles.
     """
-    level = ForeignKeyField(Level, related_name='puzzles')
+    level = ForeignKeyField(Level, related_name='puzzles', on_delete='CASCADE')
     number = IntegerField()
 
     def place(self, noodle, *, position):
@@ -322,8 +322,8 @@ class Puzzle(BaseModel):
 
 class Board(BaseModel):
     """Represents the board that a player is solving a puzzle on."""
-    player = ForeignKeyField(Player, related_name='boards')
-    puzzle = ForeignKeyField(Puzzle)
+    player = ForeignKeyField(Player, related_name='boards', on_delete='CASCADE')
+    puzzle = ForeignKeyField(Puzzle, on_delete='CASCADE')
     auto_completed = BooleanField(default=False)
 
     def place(self, noodle, *, position, part_pos=0):
@@ -422,8 +422,8 @@ class Board(BaseModel):
 class BoardNoodle(PartAccessorMixin, BaseModel):
     """Represents an instance of a noodle on a player's board."""
 
-    board = ForeignKeyField(Board, related_name='noodles')
-    noodle = ForeignKeyField(Noodle)
+    board = ForeignKeyField(Board, related_name='noodles', on_delete='CASCADE')
+    noodle = ForeignKeyField(Noodle, on_delete='CASCADE')
     # The position of the root part on the board
     position = IntegerField()
     # The orientations of each part (excluding the root), relative to one another
@@ -440,8 +440,8 @@ class PuzzleNoodle(PartAccessorMixin, BaseModel):
     """Represents an instance of a noodle preconfigured on a
     puzzle board.
     """
-    puzzle = ForeignKeyField(Puzzle, related_name='noodles')
-    noodle = ForeignKeyField(Noodle)
+    puzzle = ForeignKeyField(Puzzle, related_name='noodles', on_delete='CASCADE')
+    noodle = ForeignKeyField(Noodle, on_delete='CASCADE')
     # The position of the root part on the puzzle
     position = IntegerField()
     # The orientations of each part (excluding the root), relative to one another
