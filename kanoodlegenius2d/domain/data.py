@@ -290,7 +290,7 @@ def setup():
 
     pink = Noodle.pink()
     pink.rotate(increment=5)
-    puzzle.place(pink, position=5)
+    puzzle.place(pink, position=20)
 
     light_green = Noodle.light_green()
     puzzle.place(light_green, position=11)
