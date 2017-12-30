@@ -57,8 +57,10 @@ class MasterScreen(tk.Tk):
                 self._oncancel()
         else:
             title = 'Congratulations'
-            message = 'Puzzle complete!' \
-                .format(board.puzzle.number, next_puzzle.number)
+            if next_puzzle.level.number != board.puzzle.level.number:
+                message = 'Level {} complete!'.format(board.puzzle.level.number)
+            else:
+                message = 'Puzzle complete!'
 
             def ok():
                 new_board = self._configure_next_puzzle(board)
