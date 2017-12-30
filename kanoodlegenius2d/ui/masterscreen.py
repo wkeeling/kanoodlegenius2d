@@ -57,7 +57,7 @@ class MasterScreen(tk.Tk):
                 self._oncancel()
         else:
             title = 'Congratulations'
-            message = 'You have completed puzzle {}!' \
+            message = 'Puzzle complete!' \
                 .format(board.puzzle.number, next_puzzle.number)
 
             def ok():
