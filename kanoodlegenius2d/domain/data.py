@@ -255,7 +255,7 @@ def setup():
     dark_green = Noodle.dark_green()
     dark_green.flip()
     dark_green.rotate(increment=3)
-    puzzle.place(dark_green, position=17)
+    puzzle.place(dark_green, position=9)
 
     yellow = Noodle.yellow()
     yellow.rotate(increment=1)
