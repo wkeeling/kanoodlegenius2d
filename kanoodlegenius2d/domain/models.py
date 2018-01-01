@@ -406,6 +406,38 @@ class Board(BaseModel):
                 self.player.game.save()
                 return board_noodle.noodle
 
+    def solve(self):
+        """Solve the puzzle and complete the board.
+
+        This will find the locations of each of the noodles that are not
+        preconfigured as part of the puzzle and place each noodle onto
+        the board.
+        """
+        # Establish whether the player has already placed any noodles on the board
+        noodles_placed = len(self.noodles) - len(self.puzzle.noodles)
+
+        for _ in range(noodles_placed):
+            # Remove any noodles the player has already placed on the board (we need to start from a clean state)
+            self.undo()
+
+        to_place = set(Noodle.select()) - set([noodle.noodle for noodle in self.noodles])
+        placed = {}
+
+    def _unoccupied_holes(self):
+        """Return a sequence of the hole numbers on the board that are empty."""
+        occupied = set()
+
+        for noodle in self.noodles:
+            position = noodle.position
+            occupied.add(position)
+            for part in noodle.parts:
+                position = holes.find_position(position, part)
+                occupied.add(position)
+
+        return set(range(35)) - occupied
+
+
+
     @property
     def completed(self):
         """Whether the puzzle has been completed.

@@ -221,11 +221,7 @@ class BoardTest(ModelTestCase):
 
     def test_setup(self):
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
         light_blue.rotate(increment=3)
         board.puzzle.place(light_blue, position=3)
         board.setup()
@@ -239,11 +235,7 @@ class BoardTest(ModelTestCase):
 
     def test_place_noodle(self):
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
 
         board.place(light_blue, position=5)
 
@@ -258,13 +250,10 @@ class BoardTest(ModelTestCase):
         part that should be placed.
         """
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
 
         pos = board.place(light_blue, position=3, part_pos=3)
+
         self.assertEqual(pos, 5)
         board_noodle = BoardNoodle.get(BoardNoodle.position == 5)
         self.assertEqual(board_noodle.part1, light_blue.part1)
@@ -289,16 +278,9 @@ class BoardTest(ModelTestCase):
 
     def test_place_raises_exception_when_root_position_occupied(self):
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
-        yellow = Noodle.create(designation='B', colour='yellow',
-                               part1=orientation.E,
-                               part2=orientation.NE,
-                               part3=orientation.SE,
-                               part4=orientation.NE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
+        yellow = Noodle.get(Noodle.designation == 'B')
+
         board.place(light_blue, position=5)
 
         with self.assertRaises(PositionUnavailableException):
@@ -306,16 +288,9 @@ class BoardTest(ModelTestCase):
 
     def test_place_raises_exception_when_child_position_occupied(self):
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
-        yellow = Noodle.create(designation='B', colour='yellow',
-                               part1=orientation.E,
-                               part2=orientation.E,
-                               part3=orientation.NW,
-                               part4=orientation.E)
+        light_blue = Noodle.get(Noodle.designation == 'D')
+        yellow = Noodle.get(Noodle.designation == 'B')
+
         board.place(light_blue, position=5)
 
         with self.assertRaises(PositionUnavailableException):
@@ -323,22 +298,14 @@ class BoardTest(ModelTestCase):
 
     def test_place_raises_exception_when_root_position_off_board(self):
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
 
         with self.assertRaises(PositionUnavailableException):
             board.place(light_blue, position=37)
 
     def test_place_raises_exception_when_child_position_off_board(self):
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
 
         with self.assertRaises(PositionUnavailableException):
             board.place(light_blue, position=0)
@@ -346,17 +313,10 @@ class BoardTest(ModelTestCase):
     def test_undo_place(self):
         """Test that the previous place noodle action can be undone."""
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
         board.puzzle.place(light_blue, position=5)
-        yellow = Noodle.create(designation='B', colour='yellow',
-                               part1=orientation.E,
-                               part2=orientation.E,
-                               part3=orientation.NW,
-                               part4=orientation.E)
+        yellow = Noodle.get(Noodle.designation == 'B')
+
         board.place(yellow, position=20)
 
         BoardNoodle.get(BoardNoodle.position == 20)  # Should not raise a DoesNotExist
@@ -370,11 +330,8 @@ class BoardTest(ModelTestCase):
     def test_undo_no_place_does_nothing(self):
         """Test that attempting to undo when no place has occurred does nothing."""
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
+
         board.puzzle.place(light_blue, position=5)
 
         noodle = board.undo()  # Nothing to undo, because undo does not remove puzzle noddles (only board noodles)
@@ -385,23 +342,38 @@ class BoardTest(ModelTestCase):
     def test_undo_place_updates_last_played(self):
         """Test that the undo function will update the last_played date on the Game instance."""
         board = self._create_board()
-        light_blue = Noodle.create(designation='D', colour='light_blue',
-                                   part1=orientation.E,
-                                   part2=orientation.E,
-                                   part3=orientation.NE,
-                                   part4=orientation.SE)
+        light_blue = Noodle.get(Noodle.designation == 'D')
         board.puzzle.place(light_blue, position=5)
-        yellow = Noodle.create(designation='B', colour='yellow',
-                               part1=orientation.E,
-                               part2=orientation.E,
-                               part3=orientation.NW,
-                               part4=orientation.E)
+        yellow = Noodle.get(Noodle.designation == 'B')
         board.place(yellow, position=20)
         last_played = board.player.game.last_played
 
         board.undo()
 
         self.assertNotEqual(board.player.game.last_played, last_played)
+
+    def test_solve_easy(self):
+        board = self._create_board()
+        self._configure_puzzle_easy(board.puzzle)
+        board.setup()
+
+        board.solve()
+
+        self.assertTrue(board.completed)
+        self.assertTrue(board.auto_completed)
+        noodles = {noodle.position: noodle for noodle in board.noodles}
+        self.assertEqual(noodles[29].part1, orientation.NE)
+        self.assertEqual(noodles[29].part2, orientation.NW)
+        self.assertEqual(noodles[29].part3, orientation.E)
+        self.assertEqual(noodles[29].part4, orientation.NE)
+        self.assertEqual(noodles[17].part1, orientation.NE)
+        self.assertEqual(noodles[17].part2, orientation.E)
+        self.assertEqual(noodles[17].part3, orientation.NW)
+        self.assertEqual(noodles[17].part4, orientation.E)
+        self.assertEqual(noodles[32].part1, orientation.E)
+        self.assertEqual(noodles[32].part2, orientation.E)
+        self.assertEqual(noodles[32].part3, orientation.NE)
+        self.assertEqual(noodles[32].part4, orientation.NE)
 
     def _create_board(self):
         level = Level.create(number=1, name='test level')
@@ -411,6 +383,61 @@ class BoardTest(ModelTestCase):
         board = Board.create(player=player, puzzle=puzzle)
 
         return board
+
+    def _configure_puzzle_easy(self, puzzle):
+        light_blue = Noodle.light_blue()
+        light_blue.rotate(increment=3)
+        puzzle.place(light_blue, position=3)
+
+        dark_green = Noodle.dark_green()
+        puzzle.place(dark_green, position=9)
+
+        light_green = Noodle.light_green()
+        light_green.flip()
+        light_green.rotate(increment=3)
+        puzzle.place(light_green, position=15)
+
+        red = Noodle.red()
+        red.rotate()
+        puzzle.place(red, position=20)
+
+    def setUp(self):
+        super().setUp()
+        Noodle.create(designation='A', colour='#00e600',
+                      part1=orientation.E,
+                      part2=orientation.NE,
+                      part3=orientation.NE,
+                      part4=orientation.SE)
+        Noodle.create(designation='B', colour='#ffff00',
+                      part1=orientation.E,
+                      part2=orientation.NE,
+                      part3=orientation.SE,
+                      part4=orientation.NE)
+        Noodle.create(designation='C', colour='#000099',
+                      part1=orientation.E,
+                      part2=orientation.E,
+                      part3=orientation.NE,
+                      part4=orientation.NE)
+        Noodle.create(designation='D', colour='#00ccff',
+                      part1=orientation.E,
+                      part2=orientation.E,
+                      part3=orientation.NE,
+                      part4=orientation.SE)
+        Noodle.create(designation='E', colour='#e60000',
+                      part1=orientation.NE,
+                      part2=orientation.SE,
+                      part3=orientation.NE,
+                      part4=orientation.SE)
+        Noodle.create(designation='F', colour='#ff00ff',
+                      part1=orientation.E,
+                      part2=orientation.NE,
+                      part3=orientation.SE,
+                      part4=orientation.E)
+        Noodle.create(designation='G', colour='#004d00',
+                      part1=orientation.NE,
+                      part2=orientation.SE,
+                      part3=orientation.E,
+                      part4=orientation.NE)
 
 
 class PuzzleNoodleTest(TestCase):
