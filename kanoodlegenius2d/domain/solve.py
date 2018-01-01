@@ -46,6 +46,9 @@ class NoodleManipulator:
                 self._holes_tried.add(self._current_hole)
                 self._current_hole = self._next_unoccupied_hole(unoccupied_holes)
 
+                if self._current_hole is None:
+                    return None
+
         self._noodle.rotate(increment=1)
         self._rotation_count += 1
         pos = position(noodle=self._noodle, part=self._part_count, hole=self._current_hole)
