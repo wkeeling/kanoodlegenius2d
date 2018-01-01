@@ -52,6 +52,13 @@ class NoodleManipulator:
 
         return pos
 
+    def reset(self):
+        """Reset the manipulator back to its starting state."""
+        self._rotation_count = 0
+        self._part_count = 0
+        self._current_hole = None
+        self._holes_tried = set()
+
     def _next_unoccupied_hole(self, unoccupied_holes):
         for hole in unoccupied_holes:
             if hole not in self._holes_tried:

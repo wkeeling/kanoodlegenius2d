@@ -17,6 +17,7 @@ from peewee import (BooleanField,
 from kanoodlegenius2d.domain import data
 from kanoodlegenius2d.domain import holes
 from kanoodlegenius2d.domain import orientation
+from kanoodlegenius2d.domain.solve import NoodleManipulator
 
 _LOG = logging.getLogger(__name__)
 
@@ -421,7 +422,31 @@ class Board(BaseModel):
             self.undo()
 
         to_place = set(Noodle.select()) - set([noodle.noodle for noodle in self.noodles])
-        placed = {}
+        to_place = [NoodleManipulator(noodle) for noodle in to_place]
+        placed = []
+
+        manipulator = to_place.pop()
+
+        while len(self.noodles) < 7:
+            pos = manipulator.manipulate(self._unoccupied_holes())
+
+            if pos is None:
+                self.undo()
+                manipulator.reset()
+                to_place.append(manipulator)
+                manipulator = placed.pop()
+            else:
+                try:
+                    self.place(pos.noodle, position=pos.hole, part_pos=pos.part)
+                except PositionUnavailableException:
+                    pass
+                else:
+                    placed.append(manipulator)
+                    if to_place:
+                        manipulator = to_place.pop()
+
+        self.auto_completed = True
+        self.save()
 
     def _unoccupied_holes(self):
         """Return a sequence of the hole numbers on the board that are empty."""
