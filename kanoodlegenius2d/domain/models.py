@@ -427,12 +427,9 @@ class Board(BaseModel):
         placed = []
 
         manipulator = to_place.pop()
-        count = 0
 
         while len(self.noodles) < 7:
-            count += 1
             pos = manipulator.manipulate(self._unoccupied_holes())
-            print(pos)
 
             if pos is None:
                 self.undo()
@@ -449,9 +446,6 @@ class Board(BaseModel):
                     if to_place:
                         manipulator = to_place.pop()
 
-        # for noodle in self.noodles:
-        #     print('{} {} {}'.format(noodle.noodle.designation, noodle.position, noodle.parts))
-        print('Count is: {}'.format(count))
         self.auto_completed = True
         self.save()
 
