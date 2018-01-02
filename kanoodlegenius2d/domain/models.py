@@ -327,6 +327,10 @@ class Board(BaseModel):
     puzzle = ForeignKeyField(Puzzle, on_delete='CASCADE')
     auto_completed = BooleanField(default=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._board_noodle_cache = set()
+
     def place(self, noodle, *, position, part_pos=0):
         """Place a noodle onto the board in the specified position.
 
@@ -347,12 +351,15 @@ class Board(BaseModel):
         if part_pos:
             position = self._find_root_pos(noodle, part_pos, position)
 
+        if not self._board_noodle_cache:
+            self._board_noodle_cache.update(self.noodles)
+
         target_positions = set(noodle.get_part_positions(position))
 
-        if self.noodles:
+        if self._board_noodle_cache:
             occupied_positions = set()
 
-            for board_noodle in self.noodles:
+            for board_noodle in self._board_noodle_cache:
                 occupied_positions.update(board_noodle.get_part_positions())
 
             overlap = occupied_positions & target_positions
@@ -363,6 +370,8 @@ class Board(BaseModel):
 
         BoardNoodle.create(board=self, noodle=noodle, position=position, part1=noodle.part1,
                            part2=noodle.part2, part3=noodle.part3, part4=noodle.part4)
+        self._board_noodle_cache.clear()
+        self._board_noodle_cache.update(self.noodles)
         self.player.game.last_played = datetime.now()
         self.player.game.save()
 
@@ -402,6 +411,8 @@ class Board(BaseModel):
         for board_noodle in self.noodles.order_by(BoardNoodle.id.desc()):
             if board_noodle.noodle not in puzzle_noodles:
                 board_noodle.delete_instance()
+                self._board_noodle_cache.clear()
+                self._board_noodle_cache.update(self.noodles)
                 self.player.game.last_played = datetime.now()
                 self.player.game.save()
                 return board_noodle.noodle
@@ -424,17 +435,20 @@ class Board(BaseModel):
         to_place = [NoodleManipulator(noodle, symmetrical=noodle.designation in ('C', 'E', 'F'))
                     for noodle in to_place]
         placed = []
+        total_to_place = len(to_place)
 
         manipulator = to_place.pop()
+        unoccupied_holes = self._unoccupied_holes()
 
-        while len(self.noodles) < 7:
-            pos = manipulator.manipulate(self._unoccupied_holes())
+        while len(placed) < total_to_place:
+            pos = manipulator.manipulate(unoccupied_holes)
 
             if pos is None:
                 self.undo()
                 manipulator.reset()
                 to_place.append(manipulator)
                 manipulator = placed.pop()
+                unoccupied_holes = self._unoccupied_holes()
             else:
                 try:
                     self.place(pos.noodle, position=pos.hole, part_pos=pos.part)
@@ -444,6 +458,7 @@ class Board(BaseModel):
                     placed.append(manipulator)
                     if to_place:
                         manipulator = to_place.pop()
+                    unoccupied_holes = self._unoccupied_holes()
 
         self.auto_completed = True
         self.save()
