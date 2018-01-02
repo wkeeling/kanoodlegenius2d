@@ -29,6 +29,8 @@ class NoodleManipulator:
 
         Args:
             unoccupied_holes: A list of unoccupied board holes.
+        Returns: A named tuple with attributes, 'noodle', 'part', and 'hole' or
+            None if the noodle has been manipulated in all unoccupied holes.
         """
         if self._current_hole is None:
             self._current_hole = self._next_unoccupied_hole(unoccupied_holes)
@@ -36,11 +38,12 @@ class NoodleManipulator:
                 return None  # Tried all holes
 
         if self._rotation_count > 0:
-            if self._rotation_count % 6 == 0:
+            if not self._symmetrical and self._rotation_count % 6 == 0:
                 self._noodle.flip()
-            if self._rotation_count % 12 == 0:
+            if self._rotation_count % 12 == 0 or self._symmetrical and self._rotation_count % 6 == 0:
                 self._part_count += 1
-            if self._rotation_count == 60:  # All rotations (x12) per part (x5) tried
+            if self._rotation_count == 60 or self._symmetrical and self._rotation_count == 30:
+                # All rotations per part now tried
                 self._rotation_count = 0
                 self._part_count = 0
                 self._holes_tried.add(self._current_hole)

@@ -422,7 +422,8 @@ class Board(BaseModel):
             self.undo()
 
         to_place = set(Noodle.select()) - set([noodle.noodle for noodle in self.noodles])
-        to_place = [NoodleManipulator(noodle) for noodle in to_place]
+        to_place = [NoodleManipulator(noodle, symmetrical=noodle.designation in ('C', 'E', 'F'))
+                    for noodle in to_place]
         placed = []
 
         manipulator = to_place.pop()
