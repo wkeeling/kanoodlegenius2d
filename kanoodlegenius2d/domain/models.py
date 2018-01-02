@@ -348,12 +348,11 @@ class Board(BaseModel):
             position = self._find_root_pos(noodle, part_pos, position)
 
         target_positions = set(noodle.get_part_positions(position))
-        board_noodles = BoardNoodle.select().where(BoardNoodle.board == self)
 
-        if board_noodles:
+        if self.noodles:
             occupied_positions = set()
 
-            for board_noodle in board_noodles:
+            for board_noodle in self.noodles:
                 occupied_positions.update(board_noodle.get_part_positions())
 
             overlap = occupied_positions & target_positions
