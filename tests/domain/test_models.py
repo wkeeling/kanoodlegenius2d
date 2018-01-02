@@ -18,6 +18,7 @@ from kanoodlegenius2d.domain.models import (Board,
                                             PositionUnavailableException,
                                             shutdown)
 from tests.domain.common import ModelTestCase
+import cProfile
 
 
 class InitialiseTest(TestCase):
@@ -357,23 +358,24 @@ class BoardTest(ModelTestCase):
         self._configure_puzzle_easy(board.puzzle)
         board.setup()
 
-        board.solve()
-
-        self.assertTrue(board.completed)
-        self.assertTrue(board.auto_completed)
-        noodles = {noodle.position: noodle for noodle in board.noodles}
-        self.assertEqual(noodles[29].part1, orientation.NE)
-        self.assertEqual(noodles[29].part2, orientation.NW)
-        self.assertEqual(noodles[29].part3, orientation.E)
-        self.assertEqual(noodles[29].part4, orientation.NE)
-        self.assertEqual(noodles[17].part1, orientation.NE)
-        self.assertEqual(noodles[17].part2, orientation.E)
-        self.assertEqual(noodles[17].part3, orientation.NW)
-        self.assertEqual(noodles[17].part4, orientation.E)
-        self.assertEqual(noodles[32].part1, orientation.E)
-        self.assertEqual(noodles[32].part2, orientation.E)
-        self.assertEqual(noodles[32].part3, orientation.NE)
-        self.assertEqual(noodles[32].part4, orientation.NE)
+        cProfile.runctx('board.solve()', globals=globals(), locals=locals(), sort='cumulative')
+        # board.solve()
+        #
+        # self.assertTrue(board.completed)
+        # self.assertTrue(board.auto_completed)
+        # noodles = {noodle.position: noodle for noodle in board.noodles}
+        # self.assertEqual(noodles[29].part1, orientation.NE)
+        # self.assertEqual(noodles[29].part2, orientation.NW)
+        # self.assertEqual(noodles[29].part3, orientation.E)
+        # self.assertEqual(noodles[29].part4, orientation.NE)
+        # self.assertEqual(noodles[17].part1, orientation.NE)
+        # self.assertEqual(noodles[17].part2, orientation.E)
+        # self.assertEqual(noodles[17].part3, orientation.NW)
+        # self.assertEqual(noodles[17].part4, orientation.E)
+        # self.assertEqual(noodles[32].part1, orientation.E)
+        # self.assertEqual(noodles[32].part2, orientation.E)
+        # self.assertEqual(noodles[32].part3, orientation.NE)
+        # self.assertEqual(noodles[32].part4, orientation.NE)
 
     def _create_board(self):
         level = Level.create(number=1, name='test level')
