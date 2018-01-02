@@ -150,6 +150,8 @@ class NoodleManipulatorTest(TestCase):
         self.assertEqual(pos.part, 0)
 
     def test_symmetrical_hole_n_iterations(self):
+        self._create_manipulator(symmetrical=True)
+
         pos = self._manipulate(iterations=6)
         self.assertEqual(pos.hole, 0)
 
