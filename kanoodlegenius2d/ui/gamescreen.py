@@ -36,7 +36,7 @@ class GameScreen(tk.Frame):
         board_frame = BoardFrame(board, oncomplete, noodle_selection_frame, master=board_and_noodle)
         board_frame.pack(side='left')
         noodle_selection_frame.pack()
-        status_frame = StatusFrame(board, oncancel, master=self)
+        status_frame = InfoFrame(board, oncancel, master=self)
         status_frame.pack()
 
 
@@ -254,9 +254,10 @@ class NoodleSelectionFrame(tk.Frame):
                 self._board.player.save()
 
             self.after(1000, lambda: Dialog(
-                message='i. Manipulate the noodle using the control buttons\nii. Touch '
-                        'the part of the noodle you want to place\niii. Touch the '
-                        'hole on the board where you want to place it',
+                message='\n\n\nArrange the remaining noodles to fill in every remaining space on the board.\n\n'
+                        'i. Manipulate the noodle using the control buttons\n'
+                        'ii. Touch the part of the noodle you want to place\n'
+                        'iii. Touch the hole on the board where you want to place it',
                 title='Instructions',
                 justify='left',
                 master=self.master,
@@ -403,14 +404,15 @@ class NoodleSelectionFrame(tk.Frame):
         self._toggle_disable_buttons()
 
 
-class StatusFrame(tk.Frame):
+class InfoFrame(tk.Frame):
     """The bar at the bottom that holds information about the player, current level etc."""
 
     def __init__(self, board, oncancel, master=None, **kwargs):
-        """Initialise a new StatusFrame frame.
+        """Initialise a new InfoFrame frame.
 
         Args:
             board: The Board instance.
+            onsolve: Callback called when the Solve button is pressed.
             oncancel: Callback called when the Exit button is pressed.
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
@@ -423,8 +425,6 @@ class StatusFrame(tk.Frame):
         kwargs.update(frame_args)
         super().__init__(master, highlightthickness=1, **kwargs)
 
-        self._board = board
-        self._oncancel = oncancel
         canvas = tk.Canvas(self, highlightthickness=0, **kwargs)
         canvas.pack()
 
@@ -434,4 +434,4 @@ class StatusFrame(tk.Frame):
                            font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
         canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number),
                            font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
-        CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: oncancel())
