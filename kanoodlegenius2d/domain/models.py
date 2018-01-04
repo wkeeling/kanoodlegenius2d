@@ -286,6 +286,7 @@ class Puzzle(BaseModel):
     """
     level = ForeignKeyField(Level, related_name='puzzles', on_delete='CASCADE')
     number = IntegerField()
+    solution = CharField()
 
     def place(self, noodle, *, position):
         """Place the specified noodle onto the puzzle at the specified hole position.
