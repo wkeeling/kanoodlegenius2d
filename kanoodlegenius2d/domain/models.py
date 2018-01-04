@@ -49,7 +49,7 @@ class BaseModel(Model):
 
 
 class Game(BaseModel):
-    """Represents a single Kanoodle Genius game for a given player."""
+    """Represents the Kanoodle Genius game for a given player."""
     last_played = DateTimeField(default=datetime.now())
 
     @property
@@ -113,6 +113,7 @@ class Game(BaseModel):
 
 class Level(BaseModel):
     """Represents a level within the game."""
+
     number = IntegerField()
     name = CharField(max_length=20)
 
@@ -121,6 +122,7 @@ class Level(BaseModel):
 
 
 class PartAccessorMixin:
+    """Provides functionality common to all noodle-like objects."""
 
     @property
     def parts(self):
@@ -324,6 +326,7 @@ class Puzzle(BaseModel):
 
 class Board(BaseModel):
     """Represents the board that a player is solving a puzzle on."""
+
     player = ForeignKeyField(Player, related_name='boards', on_delete='CASCADE')
     puzzle = ForeignKeyField(Puzzle, on_delete='CASCADE')
     auto_completed = BooleanField(default=False)
@@ -528,7 +531,7 @@ class PuzzleNoodle(PartAccessorMixin, BaseModel):
 
 
 class DuplicatePlayerNameException(Exception):
-    """Raised when an attempt is made to create a new player with the same name
+    """Indicates that an attempt was made to create a new player with the same name
     as an existing player.
     """
 

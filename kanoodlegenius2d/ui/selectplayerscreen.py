@@ -9,7 +9,7 @@ from kanoodlegenius2d.ui.components import (CanvasButton,
 
 
 class SelectPlayerScreen(tk.Frame):
-    """Represents the screen where an existing player can be selected."""
+    """The screen where an existing player can be selected."""
 
     def __init__(self, onselect, oncancel, master=None, **kwargs):
         """Initialise a new SelectPlayerScreen frame.

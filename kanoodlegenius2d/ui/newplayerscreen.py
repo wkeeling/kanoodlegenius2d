@@ -11,7 +11,7 @@ MAX_NAME_LENGTH = 10
 
 
 class NewPlayerScreen(tk.Frame):
-    """Represents the screen where a new player can be entered."""
+    """The screen where a new player can be entered."""
 
     def __init__(self, oncreate, oncancel, master=None, **kwargs):
         """Initialise a NewPlayerScreen frame.

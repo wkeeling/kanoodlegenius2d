@@ -15,9 +15,7 @@ REJECT_COLOUR = '#ff0000'
 
 
 class GameScreen(tk.Frame):
-    """Represents the main screen of the game where a player interacts with
-    a puzzle board and selects noodles to place.
-    """
+    """The main screen of the game where a player interacts with a puzzle board and selects noodles to place."""
 
     def __init__(self, board, oncomplete, oncancel, master=None, **kwargs):
         """Initialise a new GameScreen frame.

@@ -7,7 +7,7 @@ from kanoodlegenius2d.ui.settings import fonts
 
 
 class HomeScreen(tk.Frame):
-    """Represents the starting screen."""
+    """The starting screen."""
 
     def __init__(self, onnewplayer, onexistingplayer, master=None, **kwargs):
         """Initialise a HomeScreen frame.
