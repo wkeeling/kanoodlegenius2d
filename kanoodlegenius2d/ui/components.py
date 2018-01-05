@@ -7,7 +7,7 @@ from kanoodlegenius2d.ui.settings import fonts
 class Dialog(tk.Toplevel):
     """A popup panel which overlays the panel beneath it and can be closed by the user."""
 
-    def __init__(self, message, master=None, **kwargs):
+    def __init__(self, message, master, **kwargs):
         """Initialise and display a new dialog popup.
 
         Args:
