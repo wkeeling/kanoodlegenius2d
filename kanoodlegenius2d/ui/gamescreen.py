@@ -67,11 +67,24 @@ class BoardFrame(tk.Frame):
         self._canvas = tk.Canvas(self, highlightthickness=0, **args)
         self._canvas.pack()
         self._fade = Fade(self._canvas)
+        self._hole_pressed = False
         self._holes = []
 
-        level_text = self._canvas.create_text(200, 130, text='Level {}'.format(board.puzzle.level.number),
+        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40,
+                                  disabled=True)
+        self._solve = CanvasButton(
+            self._canvas, 'SOLVE', (50, 380),
+            onclick=lambda _: Dialog(message='If you auto-solve the puzzle, it will not '
+                                             'count towards your completed puzzle total.',
+                                     master=self.master,
+                                     title='Are you sure?',
+                                     onsubmit=self._solve_puzzle,
+                                     show_cancel=True),
+            height=40, disabled=True)
+
+        level_text = self._canvas.create_text(220, 130, text='Level {}'.format(board.puzzle.level.number),
                                               font=settings.fonts['gamescreen_intro'], fill='#FFFFFF')
-        puzzle_text = self._canvas.create_text(200, 200, text='Puzzle {}'.format(board.puzzle.number),
+        puzzle_text = self._canvas.create_text(220, 200, text='Puzzle {}'.format(board.puzzle.number),
                                                font=settings.fonts['gamescreen_intro'], fill='#FFFFFF')
 
         def draw():
@@ -80,13 +93,9 @@ class BoardFrame(tk.Frame):
             self._draw_noodles_on_board(fade_duration=100)
 
         self.after(2000, draw)
-        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40,
-                                  disabled=True)
-
-        self._hole_pressed = False
 
     def _draw_board(self):
-        x, y = 110, 38
+        x, y = 115, 38
         x_incr, y_incr = 29, 49
         hole_ids = []
         hole_ids.extend(self._draw_row(x, y, 4))
@@ -128,7 +137,7 @@ class BoardFrame(tk.Frame):
             tl_x += 56
         return holes_
 
-    def _draw_noodles_on_board(self, fade_duration=0):
+    def _draw_noodles_on_board(self, fade_duration=0, oncomplete=None):
         for hole_id in self._holes:
             self._canvas.itemconfig(hole_id, fill='#000000')
 
@@ -137,9 +146,17 @@ class BoardFrame(tk.Frame):
             def draw(i, n):
                 if fade_duration == 0:
                     i = 0
+
                 self.after(i*600, lambda: self._draw_noodle(n, n.position, fade_duration))
+
                 if i == len(self._board.noodles) + 2:
-                    self.after(i * 700, self._noodle_frame.board_initialised)
+
+                    def draw_complete():
+                        self._noodle_frame.board_initialised()
+                        if oncomplete:
+                            oncomplete()
+
+                    self.after(i * 700, draw_complete)
 
             draw(i, board_noodle)
 
@@ -158,7 +175,7 @@ class BoardFrame(tk.Frame):
             self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
             self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
-        self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles))
+        self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles) or self._board.auto_completed)
 
     def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
@@ -207,9 +224,24 @@ class BoardFrame(tk.Frame):
         if num_puzzle_noodles < num_board_noodles < 7:
             noodle = self._board.undo()
             self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles))
+            self._solve.disable(False)
             if noodle:
                 self._noodle_frame.reject(noodle)
                 self._draw_noodles_on_board()
+
+    def _solve_puzzle(self):
+        self._board.solve()
+        self._canvas.delete(*self._holes)
+        self._solve.disable(True)
+
+        def draw_solution():
+            self._holes = self._draw_board()
+            self._draw_noodles_on_board(fade_duration=100, oncomplete=lambda: self._oncomplete(self._board))
+
+        self.after(1000, draw_solution)
+
+        for _ in range(7 - len(self._board.puzzle.noodles)):
+            self._noodle_frame.accept()
 
 
 class NoodleSelectionFrame(tk.Frame):
