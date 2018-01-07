@@ -231,14 +231,24 @@ class BoardFrame(tk.Frame):
 
     def _solve_puzzle(self):
         self._board.solve()
-        self._canvas.delete(*self._holes)
         self._solve.disable(True)
 
-        def draw_solution():
-            self._holes = self._draw_board()
-            self._draw_noodles_on_board(fade_duration=100, oncomplete=lambda: self._oncomplete(self._board))
+        for hole_id in self._holes:
+            self._canvas.itemconfig(hole_id, fill='#000000')
 
-        self.after(1000, draw_solution)
+        puzzle_noodles = [noodle.noodle for noodle in self._board.puzzle.noodles]
+
+        for noodle in self._board.noodles:
+            if noodle.noodle in puzzle_noodles:
+                self._draw_noodle(noodle, noodle.position)
+
+        def draw_remaining():
+            for noodle in self._board.noodles:
+                if noodle.noodle not in puzzle_noodles:
+                    self._draw_noodle(noodle, noodle.position, fade_duration=1500)
+            self.after(3000, lambda: self._oncomplete(self._board))
+
+        self.after(2000, draw_remaining)
 
         for _ in range(7 - len(self._board.puzzle.noodles)):
             self._noodle_frame.accept()
