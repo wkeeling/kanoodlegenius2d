@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from kanoodlegenius2d.domain.models import Board
+from kanoodlegenius2d.domain.models import Board, Puzzle
 from kanoodlegenius2d.ui.components import Dialog
 from kanoodlegenius2d.ui.gamescreen import GameScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
@@ -51,7 +51,12 @@ class MasterScreen(tk.Tk):
         next_puzzle = board.puzzle.next_puzzle()
         if next_puzzle is None:
             title = 'Congratulations'
-            message = 'You have completed the game.\n\nYou are a genius!'
+            puzzles_completed = board.player.puzzles_completed
+            if puzzles_completed.auto_completed == 0:
+                message = 'You have completed every puzzle.\n\nYou are a genius!'
+            else:
+                message = 'You completed {} puzzles out of {}'.format(puzzles_completed.player_completed,
+                                                                      Puzzle.select().count())
 
             def ok():
                 self._oncancel()
