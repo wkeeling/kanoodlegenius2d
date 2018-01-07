@@ -287,9 +287,9 @@ class NoodleSelectionFrame(tk.Frame):
 
             self.after(1000, lambda: Dialog(
                 message='\n\n\nArrange the remaining noodles to fill in every remaining space on the board.\n\n'
-                        'i. Manipulate the noodle using the control buttons\n'
-                        'ii. Touch the part of the noodle you want to place\n'
-                        'iii. Touch the hole on the board where you want to place it',
+                        'i. Manipulate the noodle using the control buttons.\n'
+                        'ii. Touch the part of the noodle you want to place.\n'
+                        'iii. Touch the hole on the board where you want to place it.',
                 title='Instructions',
                 justify='left',
                 master=self.master,
