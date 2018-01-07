@@ -258,14 +258,15 @@ class Player(BaseModel):
             'auto_completed' - for those puzzles completed by the game.
         """
         completed = namedtuple('completed', 'player_completed auto_completed')
-        player_completed = 0
+        player_completed, auto_completed = 0, 0
 
         for board in self.boards:
-            if board.completed:
+            if board.auto_completed:
+                auto_completed += 1
+            elif board.completed:
                 player_completed += 1
-            # TODO: Add the auto_completed count
 
-        return completed(player_completed=player_completed, auto_completed=0)
+        return completed(player_completed=player_completed, auto_completed=auto_completed)
 
     def soft_delete(self):
         """Mark a player as deleted, but do not physically delete the
