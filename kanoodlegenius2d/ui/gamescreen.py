@@ -246,7 +246,7 @@ class BoardFrame(tk.Frame):
             for noodle in self._board.noodles:
                 if noodle.noodle not in puzzle_noodles:
                     self._draw_noodle(noodle, noodle.position, fade_duration=1500)
-            self.after(3000, lambda: self._oncomplete(self._board))
+            self.after(4000, lambda: self._oncomplete(self._board))
 
         self.after(2000, draw_remaining)
 
@@ -454,7 +454,6 @@ class InfoFrame(tk.Frame):
 
         Args:
             board: The Board instance.
-            onsolve: Callback called when the Solve button is pressed.
             oncancel: Callback called when the Exit button is pressed.
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.

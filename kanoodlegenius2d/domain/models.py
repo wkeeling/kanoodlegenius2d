@@ -481,8 +481,6 @@ class Board(BaseModel):
 
         return set(range(35)) - occupied
 
-
-
     @property
     def completed(self):
         """Whether the puzzle has been completed.

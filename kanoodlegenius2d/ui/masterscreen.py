@@ -49,6 +49,11 @@ class MasterScreen(tk.Tk):
 
     def _oncomplete(self, board):
         next_puzzle = board.puzzle.next_puzzle()
+
+        def switch_to_next_puzzle():
+            new_board = self._configure_next_puzzle(board)
+            self._switch_screen(GameScreen(new_board, self._oncomplete, self._oncancel, self))
+
         if next_puzzle is None:
             title = 'Congratulations'
             puzzles_completed = board.player.puzzles_completed
@@ -68,10 +73,12 @@ class MasterScreen(tk.Tk):
                 message = 'Puzzle complete!'
 
             def ok():
-                new_board = self._configure_next_puzzle(board)
-                self._switch_screen(GameScreen(new_board, self._oncomplete, self._oncancel, self))
+                switch_to_next_puzzle()
 
-        self.after(1500, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
+        if not board.auto_completed:
+            self.after(1500, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
+        else:
+            switch_to_next_puzzle()
 
     def _switch_screen(self, new_screen):
         old_screen = self._current_screen
