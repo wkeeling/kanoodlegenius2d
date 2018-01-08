@@ -18,7 +18,6 @@ from kanoodlegenius2d.domain.models import (Board,
                                             PositionUnavailableException,
                                             shutdown)
 from tests.domain.common import ModelTestCase
-import cProfile
 
 
 class InitialiseTest(TestCase):
