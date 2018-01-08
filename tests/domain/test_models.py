@@ -377,7 +377,11 @@ class BoardTest(ModelTestCase):
 
     def _create_board(self):
         level = Level.create(number=1, name='test level')
-        puzzle = Puzzle.create(level=level, number=1)
+        puzzle = Puzzle.create(
+            level=level,
+            number=1,
+            solution='3,32,E,E,NE,NE;6,29,NE,NW,E,NE;2,17,NE,E,NW,E;'
+        )
         game = Game.create()
         player = Player.create(name='test', game=game)
         board = Board.create(player=player, puzzle=puzzle)

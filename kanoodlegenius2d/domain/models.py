@@ -424,7 +424,15 @@ class Board(BaseModel):
             # Remove any noodles the player has already placed on the board (we need to start from a clean state)
             self.undo()
 
-        to_place = set(Noodle.select()) - set([noodle.noodle for noodle in self.noodles])
+        for noodle_field in self.puzzle.solution.rstrip(';').split(';'):
+            fields = noodle_field.split(',')
+            noodle = Noodle.get(Noodle.id == int(fields[0]))
+            noodle.part1 = fields[2]
+            noodle.part2 = fields[3]
+            noodle.part3 = fields[4]
+            noodle.part4 = fields[5]
+
+            self.place(noodle, position=int(fields[1]))
 
         self.auto_completed = True
         self.save()
