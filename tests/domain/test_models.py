@@ -353,13 +353,12 @@ class BoardTest(ModelTestCase):
 
         self.assertNotEqual(board.player.game.last_played, last_played)
 
-    def test_solve_easy(self):
+    def test_solve(self):
         board = self._create_board()
-        self._configure_puzzle_easy(board.puzzle)
+        self._configure_puzzle(board.puzzle)
         board.setup()
 
-        cProfile.runctx('board.solve()', globals=globals(), locals=locals(), sort='cumulative')
-        # board.solve()
+        board.solve()
 
         self.assertTrue(board.completed)
         self.assertTrue(board.auto_completed)
@@ -386,7 +385,7 @@ class BoardTest(ModelTestCase):
 
         return board
 
-    def _configure_puzzle_easy(self, puzzle):
+    def _configure_puzzle(self, puzzle):
         light_blue = Noodle.light_blue()
         light_blue.rotate(increment=3)
         puzzle.place(light_blue, position=3)
@@ -394,14 +393,14 @@ class BoardTest(ModelTestCase):
         dark_green = Noodle.dark_green()
         puzzle.place(dark_green, position=9)
 
-        # light_green = Noodle.light_green()
-        # light_green.flip()
-        # light_green.rotate(increment=3)
-        # puzzle.place(light_green, position=15)
-        #
-        # red = Noodle.red()
-        # red.rotate()
-        # puzzle.place(red, position=20)
+        light_green = Noodle.light_green()
+        light_green.flip()
+        light_green.rotate(increment=3)
+        puzzle.place(light_green, position=15)
+
+        red = Noodle.red()
+        red.rotate()
+        puzzle.place(red, position=20)
 
     def setUp(self):
         super().setUp()
