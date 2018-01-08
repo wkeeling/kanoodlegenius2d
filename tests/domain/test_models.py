@@ -394,14 +394,14 @@ class BoardTest(ModelTestCase):
         dark_green = Noodle.dark_green()
         puzzle.place(dark_green, position=9)
 
-        light_green = Noodle.light_green()
-        light_green.flip()
-        light_green.rotate(increment=3)
-        puzzle.place(light_green, position=15)
-
-        red = Noodle.red()
-        red.rotate()
-        puzzle.place(red, position=20)
+        # light_green = Noodle.light_green()
+        # light_green.flip()
+        # light_green.rotate(increment=3)
+        # puzzle.place(light_green, position=15)
+        #
+        # red = Noodle.red()
+        # red.rotate()
+        # puzzle.place(red, position=20)
 
     def setUp(self):
         super().setUp()
@@ -440,6 +440,35 @@ class BoardTest(ModelTestCase):
                       part2=orientation.SE,
                       part3=orientation.E,
                       part4=orientation.NE)
+
+
+class CreateSolutionTest(ModelTestCase):
+
+    requires = (Game, Player, Board, Level, Puzzle, PuzzleNoodle, BoardNoodle, Noodle)
+
+    def test_create_solution_data(self):
+        from kanoodlegenius2d.domain.data import setup
+        setup()
+        game = Game.create()
+        player = Player.create(name='solution', game=game)
+
+        with open('/home/wkeeling/Documents/solutions.txt', 'wt') as out:
+            for level in Level.select():
+                for puzzle in level.puzzles:
+                    board = Board.create(player=player, puzzle=puzzle)
+                    board.setup()
+                    print('Solving puzzle {}, level {}...'.format(puzzle.number, level.number))
+                    board.solve()
+                    out.write('{},{},'.format(puzzle.id, level.id))
+                    existing = set()
+                    for noodle in puzzle.noodles:
+                        existing.add(noodle.noodle)
+                        # out.write('{},{},{};'.format(noodle.noodle.id, noodle.position, ','.join(noodle.parts)))
+                    for noodle in board.noodles:
+                        if noodle.noodle not in existing:
+                            out.write('{},{},{};'.format(noodle.noodle.id, noodle.position, ','.join(noodle.parts)))
+                    out.write('\n')
+                    out.flush()
 
 
 class PuzzleNoodleTest(TestCase):

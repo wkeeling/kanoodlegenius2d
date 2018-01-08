@@ -1446,14 +1446,22 @@ def setup():
     puzzle.place(pink, position=0)
 
     # Puzzle 30/3 ######################################
-    puzzle = Puzzle.create(level=level3, number=30)
+    puzzle = Puzzle.create(
+        level=level3,
+        number=30,
+        solution='3,20,SE,SE,E,E;4,9,SE,SE,E,SW;5,18,E,SW,E,SW;6,34,NW,W,NE,NW;1,13,W,NW,NW,SW;2,14,NW,W,NE,W;'
+    )
     dark_green = Noodle.dark_green()
     dark_green.flip()
     dark_green.rotate(increment=1)
     puzzle.place(dark_green, position=16)
 
     # Puzzle 31/3 ######################################
-    puzzle = Puzzle.create(level=level3, number=31)
+    puzzle = Puzzle.create(
+        level=level3,
+        number=31,
+        solution='3,20,SE,SE,E,E;4,27,E,E,SE,NE;5,9,E,SW,E,SW;6,22,E,NE,SE,E;7,14,SW,NW,W,SW;1,11,NE,E,E,NW;'
+    )
     yellow = Noodle.yellow()
     yellow.rotate(increment=3)
     puzzle.place(yellow, position=2)

@@ -335,6 +335,7 @@ class Board(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._board_noodle_cache = set()
+        self._part_position_cache = {}
 
     def place(self, noodle, *, position, part_pos=0):
         """Place a noodle onto the board in the specified position.
@@ -359,13 +360,24 @@ class Board(BaseModel):
         if not self._board_noodle_cache:
             self._board_noodle_cache.update(self.noodles)
 
-        target_positions = set(noodle.get_part_positions(position))
+        key = (noodle, position, noodle.parts)
+        if key in self._part_position_cache:
+            target_positions = self._part_position_cache[key]
+        else:
+            target_positions = set(noodle.get_part_positions(position))
+            self._part_position_cache[key] = target_positions
 
         if self._board_noodle_cache:
             occupied_positions = set()
 
             for board_noodle in self._board_noodle_cache:
-                occupied_positions.update(board_noodle.get_part_positions())
+                key = (board_noodle, board_noodle.position, board_noodle.parts)
+                if key in self._part_position_cache:
+                    occupied_positions.update(self._part_position_cache[key])
+                else:
+                    positions = board_noodle.get_part_positions()
+                    occupied_positions.update(positions)
+                    self._part_position_cache[key] = positions
 
             overlap = occupied_positions & target_positions
 
