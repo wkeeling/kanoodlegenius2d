@@ -82,7 +82,11 @@ class SelectPlayerScreen(tk.Frame):
                                      font=settings.fonts['puzzles_completed'], fill='#666666')
             if settings.admin_mode:
                 CanvasButton(self._canvas, ' X ', (570, y), onclick=self._create_ondelete_player(player))
-            CanvasButton(self._canvas, 'SELECT', (640, y), onclick=self._create_onselect_player(player))
+
+            next_puzzle = player.boards[-1].puzzle.next_puzzle()
+            button_text = 'SELECT' if next_puzzle is not None else 'COMPLETE'
+            CanvasButton(self._canvas, button_text, (640, y), onclick=self._create_onselect_player(player),
+                         disabled=next_puzzle is None)
             y += 45
 
         CanvasButton(self._canvas, '<< PREV', (345, 240), onclick=self._onprev,
