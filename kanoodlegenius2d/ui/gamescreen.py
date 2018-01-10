@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from collections import deque
 
@@ -284,6 +285,7 @@ class NoodleSelectionFrame(tk.Frame):
 
         # The part of the noodle that a user has pressed (0 - 4)
         self._selected_part = None
+        self._images = []
 
     def board_initialised(self):
         """Called by the BoardFrame to indicate that it has finished initialising."""
@@ -312,8 +314,13 @@ class NoodleSelectionFrame(tk.Frame):
 
         if self._selectable_noodles:
             noodle = self._selectable_noodles[0]
-            noodle_parts.append(self._noodle_canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d',
-                                                                width=2))
+            # noodle_parts.append(self._noodle_canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d',
+            #                                                     width=2))
+            image_file = os.path.join(os.path.dirname(__file__), '..', '..', 'images', 'red.gif')
+            print(os.path.exists(image_file))
+            image = tk.PhotoImage(file=image_file)
+            self._images.append(image)
+            noodle_parts.append(self._noodle_canvas.create_image((0, 0), image=image))
 
             for p in noodle.parts:
                 offsets = self.orientation_offsets[p]
@@ -326,9 +333,9 @@ class NoodleSelectionFrame(tk.Frame):
                 # Now that a new part has been drawn, re-centre the noodle as it currently stands
                 self._recentre(noodle_parts)
 
-            for i, part in enumerate(noodle_parts):
-                self._fade.fadein(part, noodle.colour, duration=fade_duration)
-                self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
+            # for i, part in enumerate(noodle_parts):
+            #     self._fade.fadein(part, noodle.colour, duration=fade_duration)
+            #     self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
         canvas_width = int(self._noodle_canvas.config()['width'][4])
