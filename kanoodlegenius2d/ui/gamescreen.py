@@ -13,6 +13,9 @@ from kanoodlegenius2d.ui import settings
 
 HIGHLIGHT_COLOUR = '#ffffff'
 REJECT_COLOUR = '#ff0000'
+# Hold these globally to prevent images disappearing
+# from a canvas due to garbage collection.
+NOODLE_IMAGES = {}
 
 
 class GameScreen(tk.Frame):
@@ -39,6 +42,12 @@ class GameScreen(tk.Frame):
         noodle_selection_frame.pack()
         status_frame = InfoFrame(board, oncancel, master=self)
         status_frame.pack()
+
+        # Initialise the cache of noodle images.
+        if not NOODLE_IMAGES:
+            for noodle in Noodle.select():
+                NOODLE_IMAGES[noodle.designation] = tk.PhotoImage(
+                    file=os.path.join(os.path.dirname(__file__), 'images', noodle.image))
 
 
 class BoardFrame(tk.Frame):
@@ -167,13 +176,23 @@ class BoardFrame(tk.Frame):
             colour = noodle.colour
         except AttributeError:
             colour = noodle.noodle.colour
+        try:
+            image = NOODLE_IMAGES[noodle.image]
+        except AttributeError:
+            image = NOODLE_IMAGES[noodle.noodle.image]
 
-        self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
+        def show_image(item):
+            x1, y1, x2, y2 = self._canvas.bbox(item)
+            return lambda: self._canvas.create_image((x2 - x1, y2 - y1), image=image)
+
+        self._fade.fadein(self._holes[last_position], colour, duration=fade_duration,
+                          onfaded=show_image(self._holes[last_position]))
         self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
         for part in noodle.parts:
             last_position = holes.find_position(last_position, part)
-            self._fade.fadein(self._holes[last_position], colour, duration=fade_duration)
+            self._fade.fadein(self._holes[last_position], colour, duration=fade_duration,
+                              onfaded=show_image(self._holes[last_position]))
             self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
         self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles) or self._board.auto_completed)
@@ -314,13 +333,8 @@ class NoodleSelectionFrame(tk.Frame):
 
         if self._selectable_noodles:
             noodle = self._selectable_noodles[0]
-            # noodle_parts.append(self._noodle_canvas.create_oval(0, 0, 55, 55, fill=noodle.colour, outline='#4d4d4d',
-            #                                                     width=2))
-            image_file = os.path.join(os.path.dirname(__file__), '..', '..', 'images', 'red.gif')
-            print(os.path.exists(image_file))
-            image = tk.PhotoImage(file=image_file)
-            self._images.append(image)
-            noodle_parts.append(self._noodle_canvas.create_image((0, 0), image=image))
+            noodle_parts.append(self._noodle_canvas.create_oval(0, 0, 55, 55, fill='#ffffff', outline='#4d4d4d',
+                                                                width=2))
 
             for p in noodle.parts:
                 offsets = self.orientation_offsets[p]
@@ -330,12 +344,16 @@ class NoodleSelectionFrame(tk.Frame):
                                                                     coords[0] + offsets[0] + 55,
                                                                     coords[1] + offsets[1] + 55,
                                                                     fill='#ffffff', outline='#4d4d4d', width=2))
+
                 # Now that a new part has been drawn, re-centre the noodle as it currently stands
                 self._recentre(noodle_parts)
 
-            # for i, part in enumerate(noodle_parts):
-            #     self._fade.fadein(part, noodle.colour, duration=fade_duration)
-            #     self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
+            for i, part in enumerate(noodle_parts):
+                x1, y1, x2, y2 = self._noodle_canvas.bbox(part)
+                self._fade.fadein(part, noodle.colour, duration=fade_duration,
+                                  onfaded=lambda: self._noodle_canvas.create_image((x2 - x1, y2 - y1),
+                                                                                   image=noodle.image))
+                self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
         canvas_width = int(self._noodle_canvas.config()['width'][4])
