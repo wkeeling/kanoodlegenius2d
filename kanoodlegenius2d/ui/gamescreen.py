@@ -177,13 +177,13 @@ class BoardFrame(tk.Frame):
         except AttributeError:
             colour = noodle.noodle.colour
         try:
-            image = NOODLE_IMAGES[noodle.image]
+            image = NOODLE_IMAGES[noodle.designation]
         except AttributeError:
-            image = NOODLE_IMAGES[noodle.noodle.image]
+            image = NOODLE_IMAGES[noodle.noodle.designation]
 
         def show_image(item):
             x1, y1, x2, y2 = self._canvas.bbox(item)
-            return lambda: self._canvas.create_image((x2 - x1, y2 - y1), image=image)
+            return lambda: self._canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2), image=image)
 
         self._fade.fadein(self._holes[last_position], colour, duration=fade_duration,
                           onfaded=show_image(self._holes[last_position]))
@@ -308,7 +308,7 @@ class NoodleSelectionFrame(tk.Frame):
 
     def board_initialised(self):
         """Called by the BoardFrame to indicate that it has finished initialising."""
-        self._draw_noodle(fade_duration=1000)
+        self._draw_noodle(fade_duration=300)
         self._toggle_disable_buttons()
 
         if not self._board.player.seen_instructions:
@@ -348,11 +348,13 @@ class NoodleSelectionFrame(tk.Frame):
                 # Now that a new part has been drawn, re-centre the noodle as it currently stands
                 self._recentre(noodle_parts)
 
+            def show_image(index, part_ids):
+                x1, y1, x2, y2 = self._noodle_canvas.bbox(part_ids[index])
+                return lambda: self._noodle_canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2),
+                                                                image=NOODLE_IMAGES[noodle.designation])
+
             for i, part in enumerate(noodle_parts):
-                x1, y1, x2, y2 = self._noodle_canvas.bbox(part)
-                self._fade.fadein(part, noodle.colour, duration=fade_duration,
-                                  onfaded=lambda: self._noodle_canvas.create_image((x2 - x1, y2 - y1),
-                                                                                   image=noodle.image))
+                self._fade.fadein(part, noodle.colour, duration=fade_duration, onfaded=show_image(i, noodle_parts))
                 self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
 
     def _recentre(self, noodle_parts):
@@ -399,13 +401,13 @@ class NoodleSelectionFrame(tk.Frame):
     def _next_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate()
-        self._draw_noodle()
+        self._draw_noodle(fade_duration=60)
         self._clear_items(items)
 
     def _prev_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate(-1)
-        self._draw_noodle()
+        self._draw_noodle(fade_duration=60)
         self._clear_items(items)
 
     def _rotate_noodle(self, _):
