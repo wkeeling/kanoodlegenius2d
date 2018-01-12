@@ -47,7 +47,7 @@ class GameScreen(tk.Frame):
         if not NOODLE_IMAGES:
             for noodle in Noodle.select():
                 NOODLE_IMAGES[noodle.designation] = tk.PhotoImage(
-                    file=os.path.join(os.path.dirname(__file__), 'images', noodle.image))
+                    file=os.path.join(os.path.dirname(__file__), 'images', 'red_sphere.gif'))
 
 
 class BoardFrame(tk.Frame):
@@ -329,7 +329,7 @@ class NoodleSelectionFrame(tk.Frame):
                 onsubmit=close))
 
     def _draw_noodle(self, fade_duration=0):
-        noodle_parts = []
+        noodle_parts, image_parts = [], []
 
         if self._selectable_noodles:
             noodle = self._selectable_noodles[0]
@@ -348,14 +348,19 @@ class NoodleSelectionFrame(tk.Frame):
                 # Now that a new part has been drawn, re-centre the noodle as it currently stands
                 self._recentre(noodle_parts)
 
-            def show_image(index, part_ids):
-                x1, y1, x2, y2 = self._noodle_canvas.bbox(part_ids[index])
-                return lambda: self._noodle_canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2),
-                                                                image=NOODLE_IMAGES[noodle.designation])
+            for noodle_part in noodle_parts:
+                x1, y1, x2, y2 = self._noodle_canvas.bbox(noodle_part)
+                image_parts.append(self._noodle_canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2),
+                                                                    image=NOODLE_IMAGES[noodle.designation],
+                                                                    state='hidden'))
+
+            def show_image(index):
+                return lambda: self._noodle_canvas.itemconfig(image_parts[index], state='normal')
 
             for i, part in enumerate(noodle_parts):
-                self._fade.fadein(part, noodle.colour, duration=fade_duration, onfaded=show_image(i, noodle_parts))
-                self._noodle_canvas.tag_bind(part, '<ButtonPress-1>', self._create_on_part_press(i, noodle_parts))
+                self._fade.fadein(part, noodle.colour, duration=fade_duration, onfaded=show_image(i))
+                self._noodle_canvas.tag_bind(image_parts[i], '<ButtonPress-1>',
+                                             self._create_on_part_press(i, noodle_parts, image_parts))
 
     def _recentre(self, noodle_parts):
         canvas_width = int(self._noodle_canvas.config()['width'][4])
@@ -366,17 +371,18 @@ class NoodleSelectionFrame(tk.Frame):
         for part in noodle_parts:
             self._noodle_canvas.move(part, x_offset, y_offset)
 
-    def _create_on_part_press(self, index, part_ids):
+    def _create_on_part_press(self, index, part_ids, image_ids):
         def _on_part_press(_):
             for part_id in part_ids:
                 self._noodle_canvas.itemconfig(part_id, outline='#4d4d4d', width=2)
 
-            if self._selected_part == part_ids[index]:
+            if self._selected_part == index:
                 self._noodle_canvas.itemconfig(part_ids[index], outline='#4d4d4d', width=2)
                 self._selected_part = None
             else:
                 self._noodle_canvas.itemconfig(part_ids[index], outline=HIGHLIGHT_COLOUR, width=4)
                 self._noodle_canvas.tag_raise(part_ids[index])
+                self._noodle_canvas.tag_raise(image_ids[index])
                 self._selected_part = index
 
         return _on_part_press
@@ -414,14 +420,14 @@ class NoodleSelectionFrame(tk.Frame):
         if self._selectable_noodles:
             items = self._noodle_canvas.find_all()
             self._selectable_noodles[0].rotate()
-            self._draw_noodle()
+            self._draw_noodle(fade_duration=60)
             self._clear_items(items)
 
     def _flip_noodle(self, _):
         if self._selectable_noodles:
             items = self._noodle_canvas.find_all()
             self._selectable_noodles[0].flip()
-            self._draw_noodle()
+            self._draw_noodle(fade_duration=60)
             self._clear_items(items)
 
     def _clear_items(self, items):
