@@ -219,7 +219,8 @@ class BoardFrame(tk.Frame):
 
             def show():
                 self._canvas.itemconfig(item, fill='#4d4d4d')
-                self._canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2), image=image)
+                self._canvas.create_image(x1 + settings.image_offsets['x'] + ((x2 - x1) // 2),
+                                          y1 + settings.image_offsets['y'] + ((y2 - y1) // 2), image=image)
 
             return show
 
@@ -398,7 +399,8 @@ class NoodleSelectionFrame(tk.Frame):
             for noodle_part in noodle_parts:
                 x1, y1, x2, y2 = self._noodle_canvas.bbox(noodle_part)
                 image_parts.append(self._noodle_canvas.create_image(
-                    x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2),
+                    x1 + settings.image_offsets['x'] + ((x2 - x1) // 2),
+                    y1 + settings.image_offsets['y'] + ((y2 - y1) // 2),
                     image=NOODLE_IMAGES[noodle.designation],
                     state='hidden'))
 

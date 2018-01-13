@@ -15,7 +15,12 @@ fonts = {
     'button_standard': 'FreeSans',
     'button_keyboard': ('FreeSans', 16),
     'dialog_title': ('wood stamp', 36),
-    'dialog_message': ('FreeSans', 18)
+    'dialog_message': ('FreeSans', 16)
+}
+
+image_offsets = {
+    'x': 1,
+    'y': 1,
 }
 
 # System specific font overrides
@@ -33,6 +38,9 @@ if platform.system() == 'Darwin':  # MacOS
     fonts['gamescreen_status'] = ('wood stamp', 30)
     fonts['dialog_message'] = ('helvetica', 18)
     fonts['dialog_title'] = ('wood stamp', 48)
+
+    image_offsets['x'] = 0
+    image_offsets['y'] = 0
 
 # Whether to show numbers in each hole on the board (useful for debugging)
 show_board_numbers = False
