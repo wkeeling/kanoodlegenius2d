@@ -489,7 +489,7 @@ class NoodleSelectionFrame(tk.Frame):
             if self._noodle_canvas.type(item) == 'image':
                 self._noodle_canvas.delete(item)
             else:
-                self._fade.fadeout(item, duration=60, elements=['fill', 'outline'],
+                self._fade.fadeout(item, duration=250, elements=['fill', 'outline'],
                                    onfaded=lambda: self._noodle_canvas.delete(*items))
 
     def _toggle_disable_buttons(self):
