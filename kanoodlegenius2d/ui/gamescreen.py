@@ -278,7 +278,7 @@ class BoardFrame(tk.Frame):
         def draw_remaining():
             for noodle in self._board.noodles:
                 if noodle.noodle not in puzzle_noodles:
-                    self._draw_noodle(noodle, noodle.position, fade_duration=1500)
+                    self._draw_noodle(noodle, noodle.position, fade_duration=100)
             self.after(4000, lambda: self._oncomplete(self._board))
 
         self.after(2000, draw_remaining)
