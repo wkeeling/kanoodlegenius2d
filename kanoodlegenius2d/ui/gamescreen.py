@@ -394,12 +394,17 @@ class NoodleSelectionFrame(tk.Frame):
 
             for noodle_part in noodle_parts:
                 x1, y1, x2, y2 = self._noodle_canvas.bbox(noodle_part)
-                image_parts.append(self._noodle_canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2),
-                                                                    image=NOODLE_IMAGES[noodle.designation],
-                                                                    state='hidden'))
+                image_parts.append(self._noodle_canvas.create_image(
+                    x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2),
+                    image=NOODLE_IMAGES[noodle.designation],
+                    state='hidden'))
 
             def show_image(index):
-                return lambda: self._noodle_canvas.itemconfig(image_parts[index], state='normal')
+                def show():
+                    self._noodle_canvas.itemconfig(noodle_parts[index], fill='#4d4d4d')
+                    self._noodle_canvas.itemconfig(image_parts[index], state='normal')
+
+                return show
 
             for i, part in enumerate(noodle_parts):
                 self._fade.fadein(part, noodle.colour, duration=fade_duration, onfaded=show_image(i))
