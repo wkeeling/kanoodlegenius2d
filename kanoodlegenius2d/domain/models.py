@@ -163,6 +163,7 @@ class Noodle(PartAccessorMixin, BaseModel):
 
     designation = FixedCharField(max_length=1)
     colour = CharField()
+    image = CharField()
 
     # The default orientations of each part (excluding the root), relative to one another
     part1 = FixedCharField(max_length=2)

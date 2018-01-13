@@ -19,37 +19,37 @@ def setup():
             getattr(v, 'create_table')(fail_silently=True)  # Don't error if the tables already exist
 
     # Set up the initial data where is does not already exist
-    Noodle.create(designation='A', colour='#00e600',
+    Noodle.create(designation='A', colour='#00e600', image='light_green_sphere.png',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='B', colour='#ffff00',
+    Noodle.create(designation='B', colour='#ffff00', image='yellow_sphere.png',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.NE)
-    Noodle.create(designation='C', colour='#000099',
+    Noodle.create(designation='C', colour='#000099', image='dark_blue_sphere.png',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.NE)
-    Noodle.create(designation='D', colour='#00ccff',
+    Noodle.create(designation='D', colour='#00ccff', image='light_blue_sphere.png',
                   part1=orientation.E,
                   part2=orientation.E,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='E', colour='#e60000',
+    Noodle.create(designation='E', colour='#e60000', image='red_sphere.png',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.NE,
                   part4=orientation.SE)
-    Noodle.create(designation='F', colour='#ff00ff',
+    Noodle.create(designation='F', colour='#ff00ff', image='pink_sphere.png',
                   part1=orientation.E,
                   part2=orientation.NE,
                   part3=orientation.SE,
                   part4=orientation.E)
-    Noodle.create(designation='G', colour='#004d00',
+    Noodle.create(designation='G', colour='#004d00', image='dark_green_sphere.png',
                   part1=orientation.NE,
                   part2=orientation.SE,
                   part3=orientation.E,
