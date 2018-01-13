@@ -303,6 +303,8 @@ class BoardFrame(tk.Frame):
 
         puzzle_noodles = [noodle.noodle for noodle in self._board.puzzle.noodles]
 
+        self._clear_board()
+
         for noodle in self._board.noodles:
             if noodle.noodle in puzzle_noodles:
                 self._draw_noodle(noodle, noodle.position)
@@ -315,11 +317,11 @@ class BoardFrame(tk.Frame):
 
         self.after(2000, draw_remaining)
 
-        for _ in range(len(self._board.noodles) - len(self._board.puzzle.noodles)):
-            self._undo_place_noodle(None)
-
-        for _ in range(7 - len(self._board.puzzle.noodles)):
-            self._noodle_frame.accept()
+        while True:
+            try:
+                self._noodle_frame.accept()
+            except IndexError:
+                break
 
 
 class NoodleSelectionFrame(tk.Frame):
