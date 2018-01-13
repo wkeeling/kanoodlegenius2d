@@ -148,8 +148,7 @@ class BoardFrame(tk.Frame):
         return holes_
 
     def _draw_noodles_on_board(self, fade_duration=0, oncomplete=None):
-        for hole_id in self._holes:
-            self._canvas.itemconfig(hole_id, fill='#000000')
+        self._clear_board()
 
         for i, board_noodle in enumerate(self._board.noodles, start=3):
 
@@ -169,6 +168,14 @@ class BoardFrame(tk.Frame):
                     self.after(i * 700, draw_complete)
 
             draw(i, board_noodle)
+
+    def _clear_board(self):
+        for hole_id in self._holes:
+            self._canvas.itemconfig(hole_id, fill='#000000')
+
+        for item in self._canvas.find_all():
+            if self._canvas.type(item) == 'image':
+                self._canvas.delete(item)
 
     def _draw_noodle(self, noodle, position, fade_duration=0):
         last_position = position
@@ -201,17 +208,21 @@ class BoardFrame(tk.Frame):
         def _on_hole_press(_):
             if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == '#000000':
                 noodle, selected_part = self._noodle_frame.accept()
+
                 if selected_part is None:
                     # No noodle selected in NoodleSelectionFrame
                     self._noodle_frame.reject(noodle)
                     return
+
                 self._hole_pressed = True
+
                 try:
                     root_index = self._board.place(noodle, position=hole_index, part_pos=selected_part)
                 except PositionUnavailableException:
                     self._reject_place_noodle(noodle, hole_id)
                 else:
                     self._commit_place_noodle(noodle, hole_id, root_index)
+
                     if self._board.completed:
                         self._oncomplete(self._board)
 
@@ -241,10 +252,12 @@ class BoardFrame(tk.Frame):
     def _undo_place_noodle(self, _):
         num_board_noodles = len(self._board.noodles)
         num_puzzle_noodles = len(self._board.puzzle.noodles)
+
         if num_puzzle_noodles < num_board_noodles < 7:
             noodle = self._board.undo()
             self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles))
             self._solve.disable(False)
+
             if noodle:
                 self._noodle_frame.reject(noodle)
                 self._draw_noodles_on_board()
