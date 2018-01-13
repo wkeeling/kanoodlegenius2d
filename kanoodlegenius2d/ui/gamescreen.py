@@ -2,6 +2,8 @@ import os
 import tkinter as tk
 from collections import deque
 
+from PIL import Image, ImageTk
+
 from kanoodlegenius2d.domain import (holes,
                                      orientation)
 from kanoodlegenius2d.domain.models import (Noodle,
@@ -46,8 +48,8 @@ class GameScreen(tk.Frame):
         # Initialise the cache of noodle images.
         if not NOODLE_IMAGES:
             for noodle in Noodle.select():
-                NOODLE_IMAGES[noodle.designation] = tk.PhotoImage(
-                    file=os.path.join(os.path.dirname(__file__), 'images', 'red_sphere.gif'))
+                image = Image.open(os.path.join(os.path.dirname(__file__), 'images', noodle.image)).convert('RGBA')
+                NOODLE_IMAGES[noodle.designation] = ImageTk.PhotoImage(image)
 
 
 class BoardFrame(tk.Frame):
