@@ -431,12 +431,12 @@ class NoodleSelectionFrame(tk.Frame):
             self._clear_items(items)
 
     def _clear_items(self, items):
-        def clear():
-            for i in items:
-                self._noodle_canvas.delete(i)
-
         for item in items:
-            self._fade.fadeout(item, duration=60, elements=['fill', 'outline'], onfaded=clear)
+            if self._noodle_canvas.type(item) == 'image':
+                self._noodle_canvas.delete(item)
+            else:
+                self._fade.fadeout(item, duration=60, elements=['fill', 'outline'],
+                                   onfaded=lambda: self._noodle_canvas.delete(*items))
 
     def _toggle_disable_buttons(self):
         self._next.disable(len(self._selectable_noodles) <= 1)
