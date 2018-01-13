@@ -427,27 +427,27 @@ class NoodleSelectionFrame(tk.Frame):
     def _next_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate()
-        self._draw_noodle(fade_duration=60)
+        self._draw_noodle(fade_duration=30)
         self._clear_items(items)
 
     def _prev_noodle(self, _):
         items = self._noodle_canvas.find_all()
         self._selectable_noodles.rotate(-1)
-        self._draw_noodle(fade_duration=60)
+        self._draw_noodle(fade_duration=30)
         self._clear_items(items)
 
     def _rotate_noodle(self, _):
         if self._selectable_noodles:
             items = self._noodle_canvas.find_all()
             self._selectable_noodles[0].rotate()
-            self._draw_noodle(fade_duration=60)
+            self._draw_noodle(fade_duration=30)
             self._clear_items(items)
 
     def _flip_noodle(self, _):
         if self._selectable_noodles:
             items = self._noodle_canvas.find_all()
             self._selectable_noodles[0].flip()
-            self._draw_noodle(fade_duration=60)
+            self._draw_noodle(fade_duration=30)
             self._clear_items(items)
 
     def _clear_items(self, items):
@@ -455,7 +455,7 @@ class NoodleSelectionFrame(tk.Frame):
             if self._noodle_canvas.type(item) == 'image':
                 self._noodle_canvas.delete(item)
             else:
-                self._fade.fadeout(item, duration=60, elements=['fill', 'outline'],
+                self._fade.fadeout(item, duration=30, elements=['fill', 'outline'],
                                    onfaded=lambda: self._noodle_canvas.delete(*items))
 
     def _toggle_disable_buttons(self):
