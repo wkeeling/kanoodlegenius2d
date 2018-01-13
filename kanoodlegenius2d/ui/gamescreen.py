@@ -192,7 +192,12 @@ class BoardFrame(tk.Frame):
 
         def show_image(item):
             x1, y1, x2, y2 = self._canvas.bbox(item)
-            return lambda: self._canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2), image=image)
+
+            def show():
+                self._canvas.itemconfig(item, fill='#4d4d4d')
+                self._canvas.create_image(x1 + ((x2 - x1) // 2), y1 + ((y2 - y1) // 2), image=image)
+
+            return show
 
         self._fade.fadein(self._holes[last_position], colour, duration=fade_duration,
                           onfaded=show_image(self._holes[last_position]))
