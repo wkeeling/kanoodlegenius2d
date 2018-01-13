@@ -1,5 +1,3 @@
-- Explore whether from playhouse.test_utils import test_database could also support being a decorator - both at the
-function and class level
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
 - Change "onclick" references to "onpress"
 - Need arrow icons for shift and del
@@ -7,7 +5,4 @@ function and class level
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
 - Installer for Mac/Windows/Linux?
 - Message vertical alignment/centering in dialog doesn't work so well. Review this logic.
-- "You are a genius" message should only appear if all puzzles were completed without auto-solving
-- When move to a new level, should have a "Congratulations, you have completed Level x". When complete just a puzzle,
-    the message should instead show "Puzzle Completed!"
 - May need special indicator for final 9 bonus puzzles (currently part of level 3)?
