@@ -76,7 +76,7 @@ class MasterScreen(tk.Tk):
                 switch_to_next_puzzle()
 
         if not board.auto_completed or next_puzzle is None:
-            self.after(1500, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
+            self.after(2000, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
         else:
             switch_to_next_puzzle()
 
