@@ -45,6 +45,7 @@ Section: Building Kanoodle Genius
         - Graphics. Just use GIMP to create some spheres.
         - Mention platform specific tweaks. Used Python's platform in order to have specific font and position
             overrides for the Mac (Linux the default).
+        - Platform specific tweaks for raspberry pi: hide the mouse pointer, default to fullscreen
     - Putting it all together
         - Installing on the Raspberry PI touchscreen
         - Bought the touchscreen, case, raspberry pi model B, power supply, SD card preloaded with Raspbian. Cost $100?
