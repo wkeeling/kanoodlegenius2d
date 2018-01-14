@@ -6,7 +6,7 @@
 - Installer for Mac/Windows/Linux?
 - Message vertical alignment/centering in dialog doesn't work so well. Review this logic.
 - May need special indicator for final 9 bonus puzzles (currently part of level 3)?
-- Hide mouse cursor
+- Hide mouse cursor (when screensize is raspberry pi)
 - Full screen when on raspberry pi (platform specific setting)
 - Iconise all buttons
 - Round corners of all buttons
