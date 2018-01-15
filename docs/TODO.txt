@@ -9,7 +9,6 @@
 - Hide mouse cursor (when screensize is raspberry pi)
 - Full screen when on raspberry pi (platform specific setting)
 - Iconise all buttons
-- Round corners of all buttons
 - Create highscore page
 - Put a delayed callback in that releases a pressed button after 1s if it hasn't already been released
 
