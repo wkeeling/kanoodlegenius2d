@@ -12,7 +12,7 @@ fonts = {
     'gamescreen_status': ('wood stamp', 22),
     'player_name': ('FreeSans', 18, 'bold'),
     'puzzles_completed': ('FreeSans', 16),
-    'button_standard': 'FreeSans',
+    'button_standard': ('wood stamp', 22),
     'button_keyboard': ('FreeSans', 16),
     'dialog_title': ('wood stamp', 36),
     'dialog_message': ('FreeSans', 16)
