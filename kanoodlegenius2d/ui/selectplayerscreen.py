@@ -69,7 +69,7 @@ class SelectPlayerScreen(tk.Frame):
         canvas = tk.Canvas(canvas_frame, highlightthickness=0, **args)
         canvas.pack()
 
-        CanvasButton(canvas, 'EXIT', (700, 25), onclick=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', (700, 30), onclick=lambda _: self._oncancel())
 
     def _show_page(self):
         x, y = 170, 40
@@ -87,11 +87,11 @@ class SelectPlayerScreen(tk.Frame):
             button_text = 'SELECT' if next_puzzle is not None else 'COMPLETE'
             CanvasButton(self._canvas, button_text, (640, y), onclick=self._create_onselect_player(player),
                          disabled=next_puzzle is None)
-            y += 45
+            y += 60
 
-        CanvasButton(self._canvas, '<< PREV', (345, 240), onclick=self._onprev,
+        CanvasButton(self._canvas, '<< PREV', (345, 250), onclick=self._onprev,
                      disabled=not self._paginator.has_prev_page())
-        CanvasButton(self._canvas, 'NEXT >>', (445, 240), onclick=self._onnext,
+        CanvasButton(self._canvas, 'NEXT >>', (445, 250), onclick=self._onnext,
                      disabled=not self._paginator.has_next_page())
 
     def _onnext(self, _):
@@ -126,7 +126,7 @@ class SelectPlayerScreen(tk.Frame):
 class PlayerPaginator:
     """Helper class for paginating a list of players in memory."""
 
-    def __init__(self, players, page_size=4):
+    def __init__(self, players, page_size=3):
         self._players = list(players)
         self._page_size = page_size
         self._current_page = 1

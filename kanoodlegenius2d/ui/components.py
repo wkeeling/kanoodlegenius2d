@@ -70,7 +70,7 @@ class Dialog(tk.Toplevel):
                 if callable(onsubmit):
                     onsubmit()
 
-            CanvasButton(self._canvas, text, (self._width - 50, self._height - 40), onclick=submit)
+            CanvasButton(self._canvas, text, (self._width - 50, self._height - 50), onclick=submit)
 
     def _init_cancel_button(self, **kwargs):
         if kwargs.get('show_cancel', False):
@@ -82,7 +82,7 @@ class Dialog(tk.Toplevel):
                 if callable(oncancel):
                     oncancel()
 
-            CanvasButton(self._canvas, text, (57, self._height - 40), onclick=cancel)
+            CanvasButton(self._canvas, text, (57, self._height - 50), onclick=cancel)
 
     def _init_message(self, message):
         title = None
