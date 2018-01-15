@@ -342,13 +342,13 @@ class NoodleSelectionFrame(tk.Frame):
         self._board = board
         self._selectable_noodles = deque(set(Noodle.select()) - set([noodle.noodle for noodle in self._board.noodles]))
 
-        noodle_frame = tk.Frame(self, width=360, height=300, bg='#000000')
+        noodle_frame = tk.Frame(self, width=360, height=290, bg='#000000')
         noodle_frame.pack(side='top')
-        self._noodle_canvas = tk.Canvas(noodle_frame, width=360, height=300, bg='#000000', highlightthickness=0)
+        self._noodle_canvas = tk.Canvas(noodle_frame, width=360, height=290, bg='#000000', highlightthickness=0)
         self._noodle_canvas.pack()
         self._fade = Fade(self._noodle_canvas)
 
-        control_frame = tk.Frame(self, width=360, height=120, bg='#000000')
+        control_frame = tk.Frame(self, width=360, height=125, bg='#000000', highlightthickness=0)
         control_frame.pack(side='top')
         self._prev, self._next, self._rotate, self._flip = self._init_buttons(control_frame)
 
@@ -444,7 +444,7 @@ class NoodleSelectionFrame(tk.Frame):
         return _on_part_press
 
     def _init_buttons(self, control_frame):
-        canvas = tk.Canvas(control_frame, width=300, height=100, bg='#000000', highlightthickness=0)
+        canvas = tk.Canvas(control_frame, width=300, height=125, bg='#000000', highlightthickness=0)
         canvas.pack()
 
         args = {
@@ -452,10 +452,10 @@ class NoodleSelectionFrame(tk.Frame):
             'disabled': True
         }
 
-        prev = CanvasButton(canvas, text='<< PREV', pos=(90, 20), onclick=self._prev_noodle, **args)
-        nxt = CanvasButton(canvas, text='NEXT >>', pos=(200, 20), onclick=self._next_noodle, **args)
-        rotate = CanvasButton(canvas, text='ROTATE', pos=(90, 70), onclick=self._rotate_noodle, **args)
-        flip = CanvasButton(canvas, text='FLIP', pos=(200, 70), onclick=self._flip_noodle, **args)
+        prev = CanvasButton(canvas, text='<< PREV', pos=(90, 30), onclick=self._prev_noodle, **args)
+        nxt = CanvasButton(canvas, text='NEXT >>', pos=(200, 30), onclick=self._next_noodle, **args)
+        rotate = CanvasButton(canvas, text='ROTATE', pos=(90, 90), onclick=self._rotate_noodle, **args)
+        flip = CanvasButton(canvas, text='FLIP', pos=(200, 90), onclick=self._flip_noodle, **args)
 
         return prev, nxt, rotate, flip
 
