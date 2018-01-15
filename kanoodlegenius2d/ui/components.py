@@ -159,13 +159,38 @@ class CanvasButton:
             'fill': '#000000'
         }
 
-        button = self._canvas.create_rectangle((bbox[0] - x_offset, bbox[1] - y_offset,
-                                                bbox[2] + x_offset, bbox[3] + y_offset),
-                                               **args)
+        button = self._round_rectangle(bbox[0] - x_offset, bbox[1] - y_offset,
+                                       bbox[2] + x_offset, bbox[3] + y_offset, **args)
 
         self._canvas.tag_raise(text)
 
         return text, button
+
+    def _round_rectangle(self, x1, y1, x2, y2, radius=25, **kwargs):
+        """Taken from: https://stackoverflow.com/a/44100075/2091925"""
+
+        points = [x1 + radius, y1,
+                  x1 + radius, y1,
+                  x2 - radius, y1,
+                  x2 - radius, y1,
+                  x2, y1,
+                  x2, y1 + radius,
+                  x2, y1 + radius,
+                  x2, y2 - radius,
+                  x2, y2 - radius,
+                  x2, y2,
+                  x2 - radius, y2,
+                  x2 - radius, y2,
+                  x1 + radius, y2,
+                  x1 + radius, y2,
+                  x1, y2,
+                  x1, y2 - radius,
+                  x1, y2 - radius,
+                  x1, y1 + radius,
+                  x1, y1 + radius,
+                  x1, y1]
+
+        return self._canvas.create_polygon(points, **kwargs, smooth=True)
 
     def _configure_button(self, disabled):
         def onpress(_):
