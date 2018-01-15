@@ -106,7 +106,7 @@ class BoardFrame(tk.Frame):
         self._hole_pressed = False
         self._holes = []
 
-        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle, height=40,
+        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle,
                                   disabled=True)
         self._solve = CanvasButton(
             self._canvas, 'SOLVE', (50, 380),
@@ -116,7 +116,7 @@ class BoardFrame(tk.Frame):
                                      title='Are you sure?',
                                      onsubmit=self._solve_puzzle,
                                      show_cancel=True),
-            height=40, disabled=True)
+            disabled=True)
 
         level_text = self._canvas.create_text(220, 130, text='Level {}'.format(board.puzzle.level.number),
                                               font=settings.fonts['gamescreen_intro'], fill='#FFFFFF')
@@ -449,7 +449,6 @@ class NoodleSelectionFrame(tk.Frame):
 
         args = {
             'width': 100,
-            'height': 40,
             'disabled': True
         }
 
