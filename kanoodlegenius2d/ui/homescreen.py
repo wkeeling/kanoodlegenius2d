@@ -52,7 +52,6 @@ class HomeScreen(tk.Frame):
 
         args = {
             'width': 170,
-            'height': 50,
         }
 
         CanvasButton(canvas, 'NEW PLAYER', (305, 280), onclick=lambda _: onnewplayer(), **args)
