@@ -19,10 +19,12 @@ class MasterScreen(tk.Tk):
         super().__init__()
 
         self.geometry('800x480+500+300')
+        if settings.touchscreen:
+            self.attributes('-fullscreen', True)
         self.attributes('-topmost', True)
         self.update()
         self.attributes('-topmost', False)
-        self.configure(background='#000000', cursor=None if settings.show_cursor else 'none')
+        self.configure(background='#000000', cursor='none' if settings.touchscreen else None)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
