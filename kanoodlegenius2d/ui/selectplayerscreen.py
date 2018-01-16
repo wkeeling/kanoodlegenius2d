@@ -117,8 +117,8 @@ class SelectPlayerScreen(tk.Frame):
                 self._paginator.remove(player)
                 self._canvas.delete(*self._canvas.find_all())
                 self._show_page()
-            Dialog(message="Are you sure you want to delete {}?".format(player.name),
-                           master=self, onsubmit=delete, show_cancel=True)
+            Dialog(self, message="Are you sure you want to delete {}?".format(player.name),
+                   onsubmit=delete, show_cancel=True)
 
         return ondelete
 

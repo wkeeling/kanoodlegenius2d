@@ -9,7 +9,9 @@ from kanoodlegenius2d.ui.selectplayerscreen import SelectPlayerScreen
 
 
 class MasterScreen(tk.Tk):
-    """The MasterScreen is responsible for coordinating switching between screens."""
+    """The MasterScreen is responsible for what gets displayed, coordinating the
+    switching between screens.
+    """
 
     def __init__(self):
         """Initialise a Masterscreen frame."""
@@ -76,7 +78,7 @@ class MasterScreen(tk.Tk):
                 switch_to_next_puzzle()
 
         if not board.auto_completed or next_puzzle is None:
-            self.after(2000, lambda: Dialog(message, title=title, master=self, onsubmit=ok))
+            self.after(2000, lambda: Dialog(self, message, title=title, onsubmit=ok))
         else:
             switch_to_next_puzzle()
 

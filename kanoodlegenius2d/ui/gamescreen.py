@@ -110,9 +110,9 @@ class BoardFrame(tk.Frame):
                                   disabled=True)
         self._solve = CanvasButton(
             self._canvas, 'SOLVE', (50, 380),
-            onclick=lambda _: Dialog(message='If you auto-solve the puzzle, it will not '
+            onclick=lambda _: Dialog(self.master,
+                                     message='If you auto-solve the puzzle, it will not '
                                              'count towards your completed puzzle total.',
-                                     master=self.master,
                                      title='Are you sure?',
                                      onsubmit=self._solve_puzzle,
                                      show_cancel=True),
@@ -367,13 +367,13 @@ class NoodleSelectionFrame(tk.Frame):
                 self._board.player.save()
 
             self.after(1000, lambda: Dialog(
+                self.master,
                 message='\n\n\nArrange the remaining noodles to fill in every remaining space on the board.\n\n'
                         'i. Manipulate the noodle using the control buttons.\n'
                         'ii. Touch the part of the noodle you want to place.\n'
                         'iii. Touch the hole on the board where you want to place it.',
                 title='Instructions',
                 justify='left',
-                master=self.master,
                 width=600,
                 height=300,
                 onsubmit=close))
