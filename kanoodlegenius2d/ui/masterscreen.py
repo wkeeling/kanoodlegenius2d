@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from kanoodlegenius2d.domain.models import Board, Puzzle
+from kanoodlegenius2d.ui import settings
 from kanoodlegenius2d.ui.components import Dialog
 from kanoodlegenius2d.ui.gamescreen import GameScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
@@ -21,7 +22,7 @@ class MasterScreen(tk.Tk):
         self.attributes('-topmost', True)
         self.update()
         self.attributes('-topmost', False)
-        self.configure(background='#000000')
+        self.configure(background='#000000', cursor=None if settings.show_cursor else 'none')
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
