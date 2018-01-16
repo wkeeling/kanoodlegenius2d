@@ -27,7 +27,7 @@ image_offsets = {
     'y': 1,
 }
 
-# System specific overrides
+# System specific overrides.
 if platform.system() == 'Darwin':  # MacOS
     fonts['homescreen_kanoodle'] = ('wood stamp', 104)
     fonts['homescreen_genius'] = ('KG Counting Stars', 78)
@@ -46,13 +46,10 @@ if platform.system() == 'Darwin':  # MacOS
     image_offsets['x'] = 0
     image_offsets['y'] = 0
 
-# Whether to show the mouse pointer
-show_cursor = None
-
-# Whether to show numbers in each hole on the board (useful for debugging)
+# Whether to show numbers in each hole on the board (useful for debugging).
 show_board_numbers = False
 
-# When admin mode is True, players can be deleted
+# When admin mode is True, players can be deleted.
 admin_mode = False
 
 
@@ -64,6 +61,3 @@ def initialise(tk):
     """
     global touchscreen
     touchscreen = platform.system() == 'Linux' and (tk.winfo_screenwidth() == 800 and tk.winfo_screenheight() == 480)
-
-    global show_cursor
-    show_cursor = not touchscreen
