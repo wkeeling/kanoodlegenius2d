@@ -197,6 +197,16 @@ class CanvasButton:
             self._canvas.itemconfigure(self._button, fill='#ffffff')
             self._canvas.itemconfigure(self._btext, fill='#000000')
 
+            # Ensure that the button is eventually released, even if
+            # the ButtonRelease event is never received. This sometimes
+            # seen on the raspberry pi touchscreen, but not normally
+            # with a mouse.
+            def release():
+                if not self._locked:
+                    self._fade.fadeout(self._button, duration=20)
+                    self._canvas.itemconfigure(self._btext, fill='#ffffff')
+            self._canvas.master.after(500, release)
+
         def onrelease(_):
             if self._lockable:
                 self._locked = not self._locked
