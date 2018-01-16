@@ -1,7 +1,7 @@
 import struct
 import tkinter as tk
 
-from kanoodlegenius2d.ui.settings import fonts
+from kanoodlegenius2d.ui import settings
 
 
 class Dialog(tk.Toplevel):
@@ -87,17 +87,28 @@ class Dialog(tk.Toplevel):
     def _init_message(self, message):
         title = None
         if self._title is not None:
-            title = self._canvas.create_text((self._width // 2, 40), text=self._title,
-                                             font=fonts['dialog_title'], width=self._width - 40,
-                                             justify='center', fill='#FFFFFF')
+            title = self._canvas.create_text(
+                (self._width // 2, 40),
+                text=self._title,
+                font=settings.fonts['dialog_title'],
+                width=self._width - 40,
+                justify='center',
+                fill='#FFFFFF'
+            )
 
         y = (self._height // 2) - 20
 
         if title:
             y = self._canvas.coords(title)[1] + 60
 
-        self._canvas.create_text(self._width // 2, y, text=message, font=fonts['dialog_message'],
-                                 width=self._width - 40, justify=self._justify, fill='#FFFFFF')
+        self._canvas.create_text(
+            self._width // 2, y,
+            text=message,
+            font=settings.fonts['dialog_message'],
+            width=self._width - 40,
+            justify=self._justify,
+            fill='#FFFFFF'
+        )
 
 
 class CanvasButton:
@@ -143,7 +154,7 @@ class CanvasButton:
             'text': text,
             'fill': self._options.get('text_colour', '#ffffff')
             if not disabled else self.DISABLED_COLOUR,
-            'font': self._options.get('font', fonts['button_standard'])
+            'font': self._options.get('font', settings.fonts['button_standard'])
         }
 
         text = self._canvas.create_text(pos[0], pos[1], **args)
@@ -197,15 +208,16 @@ class CanvasButton:
             self._canvas.itemconfigure(self._button, fill='#ffffff')
             self._canvas.itemconfigure(self._btext, fill='#000000')
 
-            # Ensure that the button is eventually released, even if
-            # the ButtonRelease event is never received. This sometimes
-            # seen on the raspberry pi touchscreen, but not normally
-            # with a mouse.
-            def release():
-                if not self._locked:
-                    self._fade.fadeout(self._button, duration=20)
-                    self._canvas.itemconfigure(self._btext, fill='#ffffff')
-            self._canvas.master.after(500, release)
+            if settings.is_touchscreen(self._canvas):
+                # Ensure that the button is eventually released, even if
+                # the ButtonRelease event is never received. This sometimes
+                # seen on the raspberry pi touchscreen, but not normally
+                # with a mouse.
+                def release():
+                    if not self._locked:
+                        self._fade.fadeout(self._button, duration=20)
+                        self._canvas.itemconfigure(self._btext, fill='#ffffff')
+                self._canvas.master.after(500, release)
 
         def onrelease(_):
             if self._lockable:

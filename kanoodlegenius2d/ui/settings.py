@@ -1,6 +1,15 @@
 import platform
 
 
+def is_touchscreen(tk):
+    """Whether we're running on the Raspberry PI touchscreen display.
+
+    Args:
+        tk: A Tkinter widget instance.
+    Returns: True if running on the Raspberry PI touchscreen, False otherwise.
+    """
+    return platform.system() == 'Linux' and (tk.winfo_screenwidth() == 800 and tk.winfo_screenheight() == 480)
+
 # Default fonts
 fonts = {
     'homescreen_kanoodle': ('wood stamp', 80),
