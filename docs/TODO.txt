@@ -1,5 +1,4 @@
 - Figure out how to expand canvas to size of its parent (shouldn't have to explicitly set width/height on canvas)
-- Change "onclick" references to "onpress"
 - Need arrow icons for shift and del
 - Logic for CanvasButton._draw_button() should not use the bounding box of the text when absolute with and height
     are specified. Because the bounding box will vary depending upon the text. Should use the centre point instead.
@@ -10,7 +9,6 @@
 - Full screen when on raspberry pi (platform specific setting)
 - Iconise all buttons
 - Create highscore page
-- Put a delayed callback in that releases a pressed button after 1s if it hasn't already been released
 
 
 Blog
