@@ -69,7 +69,7 @@ class SelectPlayerScreen(tk.Frame):
         canvas = tk.Canvas(canvas_frame, highlightthickness=0, **args)
         canvas.pack()
 
-        CanvasButton(canvas, 'EXIT', (700, 30), onclick=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', (700, 30), onpress=lambda _: self._oncancel())
 
     def _show_page(self):
         x, y = 170, 40
@@ -81,17 +81,17 @@ class SelectPlayerScreen(tk.Frame):
                                      .format(player.puzzles_completed.player_completed, Puzzle.select().count()),
                                      font=settings.fonts['puzzles_completed'], fill='#666666')
             if settings.admin_mode:
-                CanvasButton(self._canvas, ' X ', (570, y), onclick=self._create_ondelete_player(player))
+                CanvasButton(self._canvas, ' X ', (570, y), onpress=self._create_ondelete_player(player))
 
             next_puzzle = player.boards[-1].puzzle.next_puzzle()
             button_text = 'SELECT' if next_puzzle is not None else 'COMPLETE'
-            CanvasButton(self._canvas, button_text, (640, y), onclick=self._create_onselect_player(player),
+            CanvasButton(self._canvas, button_text, (640, y), onpress=self._create_onselect_player(player),
                          disabled=next_puzzle is None)
             y += 60
 
-        CanvasButton(self._canvas, '<< PREV', (345, 250), onclick=self._onprev,
+        CanvasButton(self._canvas, '<< PREV', (345, 250), onpress=self._onprev,
                      disabled=not self._paginator.has_prev_page())
-        CanvasButton(self._canvas, 'NEXT >>', (445, 250), onclick=self._onnext,
+        CanvasButton(self._canvas, 'NEXT >>', (445, 250), onpress=self._onnext,
                      disabled=not self._paginator.has_next_page())
 
     def _onnext(self, _):

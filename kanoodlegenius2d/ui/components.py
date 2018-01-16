@@ -70,7 +70,7 @@ class Dialog(tk.Toplevel):
                 if callable(onsubmit):
                     onsubmit()
 
-            CanvasButton(self._canvas, text, (self._width - 50, self._height - 50), onclick=submit)
+            CanvasButton(self._canvas, text, (self._width - 50, self._height - 50), onpress=submit)
 
     def _init_cancel_button(self, **kwargs):
         if kwargs.get('show_cancel', False):
@@ -82,7 +82,7 @@ class Dialog(tk.Toplevel):
                 if callable(oncancel):
                     oncancel()
 
-            CanvasButton(self._canvas, text, (57, self._height - 50), onclick=cancel)
+            CanvasButton(self._canvas, text, (57, self._height - 50), onpress=cancel)
 
     def _init_message(self, message):
         title = None
@@ -105,14 +105,14 @@ class CanvasButton:
 
     DISABLED_COLOUR = '#404040'
 
-    def __init__(self, canvas, text, pos, onclick, lockable=False, **kwargs):
+    def __init__(self, canvas, text, pos, onpress, lockable=False, **kwargs):
         """Initialise a new CanvasButton.
 
         Args:
             text: The text of the button.
             pos: The x,y point (2-tuple) that the button will be centred around.
-            onclick: The callback for when the button is clicked. This will receive
-                a single parameter: the text of the clicked button.
+            onpress: The callback for when the button is pressed. This will receive
+                a single parameter: the text of the pressed button.
             lockable: Whether the button is a lockable button (e.g. a caps lock key).
                 Lockable buttons remain pressed until they are pressed again.
             **kwargs: Additional arguments that can be used to configure the button:
@@ -129,7 +129,7 @@ class CanvasButton:
         self._canvas = canvas
         self._text = text
         self._pos = pos
-        self._onclick = onclick
+        self._onpress = onpress
         self._lockable = lockable
         self._options = kwargs
 
@@ -215,7 +215,7 @@ class CanvasButton:
                 self._fade.fadeout(self._button, duration=20)
                 self._canvas.itemconfigure(self._btext, fill='#ffffff')
 
-            self._onclick(self.text)
+            self._onpress(self.text)
 
         if not disabled:
             self._canvas.tag_bind(self._btext, '<ButtonPress-1>', onpress)

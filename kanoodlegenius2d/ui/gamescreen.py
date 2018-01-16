@@ -106,11 +106,11 @@ class BoardFrame(tk.Frame):
         self._hole_pressed = False
         self._holes = []
 
-        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onclick=self._undo_place_noodle,
+        self._undo = CanvasButton(self._canvas, 'UNDO', (400, 380), onpress=self._undo_place_noodle,
                                   disabled=True)
         self._solve = CanvasButton(
             self._canvas, 'SOLVE', (50, 380),
-            onclick=lambda _: Dialog(self.master,
+            onpress=lambda _: Dialog(self.master,
                                      message='If you auto-solve the puzzle, it will not '
                                              'count towards your completed puzzle total.',
                                      title='Are you sure?',
@@ -452,10 +452,10 @@ class NoodleSelectionFrame(tk.Frame):
             'disabled': True
         }
 
-        prev = CanvasButton(canvas, text='<< PREV', pos=(90, 30), onclick=self._prev_noodle, **args)
-        nxt = CanvasButton(canvas, text='NEXT >>', pos=(200, 30), onclick=self._next_noodle, **args)
-        rotate = CanvasButton(canvas, text='ROTATE', pos=(90, 90), onclick=self._rotate_noodle, **args)
-        flip = CanvasButton(canvas, text='FLIP', pos=(200, 90), onclick=self._flip_noodle, **args)
+        prev = CanvasButton(canvas, text='<< PREV', pos=(90, 30), onpress=self._prev_noodle, **args)
+        nxt = CanvasButton(canvas, text='NEXT >>', pos=(200, 30), onpress=self._next_noodle, **args)
+        rotate = CanvasButton(canvas, text='ROTATE', pos=(90, 90), onpress=self._rotate_noodle, **args)
+        flip = CanvasButton(canvas, text='FLIP', pos=(200, 90), onpress=self._flip_noodle, **args)
 
         return prev, nxt, rotate, flip
 
@@ -563,4 +563,4 @@ class InfoFrame(tk.Frame):
                            font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
         canvas.create_text(380, 26, text='PUZZLE: {}'.format(board.puzzle.number),
                            font=settings.fonts['gamescreen_status'], fill=Noodle.get(Noodle.designation == 'F').colour)
-        CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onclick=lambda _: oncancel())
+        CanvasButton(canvas, 'EXIT', pos=(715, 26), width=140, height=40, onpress=lambda _: oncancel())

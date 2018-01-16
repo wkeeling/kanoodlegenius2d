@@ -58,18 +58,18 @@ class NewPlayerScreen(tk.Frame):
         for row in rows:
             x = 150
             for char in row:
-                buttons.append(CanvasButton(self._canvas, str(char), (x, y), onclick=self._onkeypress, **button_args))
+                buttons.append(CanvasButton(self._canvas, str(char), (x, y), onpress=self._onkeypress, **button_args))
                 x += offset
             y += offset
 
         button_args['font'] = fonts['button_standard']
-        CanvasButton(self._canvas, 'DEL', (x, y - offset), onclick=self._ondelete, **button_args)
+        CanvasButton(self._canvas, 'DEL', (x, y - offset), onpress=self._ondelete, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'SHF', (x, y - offset), onclick=self._onshift, lockable=True, **button_args)
+        CanvasButton(self._canvas, 'SHF', (x, y - offset), onpress=self._onshift, lockable=True, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onclick=lambda _: self._oncancel(), **button_args)
+        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onpress=lambda _: self._oncancel(), **button_args)
         x += offset
-        CanvasButton(self._canvas, ' OK ', (x, y - offset), onclick=self._onsubmit, **button_args)
+        CanvasButton(self._canvas, ' OK ', (x, y - offset), onpress=self._onsubmit, **button_args)
 
         return buttons
 

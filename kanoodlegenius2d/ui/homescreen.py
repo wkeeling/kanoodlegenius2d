@@ -54,6 +54,6 @@ class HomeScreen(tk.Frame):
             'width': 170,
         }
 
-        CanvasButton(canvas, 'NEW PLAYER', (305, 280), onclick=lambda _: onnewplayer(), **args)
-        CanvasButton(canvas, 'EXISTING PLAYER', (495, 280), onclick=lambda _: onexistingplayer(),
+        CanvasButton(canvas, 'NEW PLAYER', (305, 280), onpress=lambda _: onnewplayer(), **args)
+        CanvasButton(canvas, 'EXISTING PLAYER', (495, 280), onpress=lambda _: onexistingplayer(),
                      disabled=len(Player.active_players()) == 0, **args)
