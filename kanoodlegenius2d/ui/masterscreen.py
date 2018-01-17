@@ -34,21 +34,21 @@ class MasterScreen(tk.Tk):
         self.mainloop()
 
     def _onnewplayer(self):
-        self._switch_screen(NewPlayerScreen(oncreate=self._oncreatenewplayer, oncancel=self._oncancel, master=self))
+        self._switch_screen(NewPlayerScreen(oncreate=self._oncreatenewplayer, onexit=self._onexit, master=self))
 
     def _onexistingplayer(self):
-        self._switch_screen(SelectPlayerScreen(onselect=self._onselectplayer, oncancel=self._oncancel,
+        self._switch_screen(SelectPlayerScreen(onselect=self._onselectplayer, onexit=self._onexit,
                                                master=self))
 
     def _oncreatenewplayer(self, board):
-        self._switch_screen(GameScreen(board, self._oncomplete, self._oncancel, self))
+        self._switch_screen(GameScreen(board, self._oncomplete, self._onexit, self))
 
     def _onselectplayer(self, board):
         if board.completed:
             board = self._configure_next_puzzle(board)
-        self._switch_screen(GameScreen(board, self._oncomplete, self._oncancel, self))
+        self._switch_screen(GameScreen(board, self._oncomplete, self._onexit, self))
 
-    def _oncancel(self):
+    def _onexit(self):
         self._switch_screen(HomeScreen(onnewplayer=self._onnewplayer, onexistingplayer=self._onexistingplayer,
                                        master=self))
 
@@ -57,7 +57,7 @@ class MasterScreen(tk.Tk):
 
         def switch_to_next_puzzle():
             new_board = self._configure_next_puzzle(board)
-            self._switch_screen(GameScreen(new_board, self._oncomplete, self._oncancel, self))
+            self._switch_screen(GameScreen(new_board, self._oncomplete, self._onexit, self))
 
         if next_puzzle is None:
             title = 'You reached the end!'
@@ -69,7 +69,7 @@ class MasterScreen(tk.Tk):
                                                                       Puzzle.select().count())
 
             def ok():
-                self._oncancel()
+                self._onexit()
         else:
             title = 'Congratulations'
             if next_puzzle.level.number != board.puzzle.level.number:
