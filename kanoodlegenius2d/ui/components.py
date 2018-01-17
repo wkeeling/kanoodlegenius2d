@@ -1,3 +1,4 @@
+import math
 import struct
 import tkinter as tk
 
@@ -355,3 +356,40 @@ class Fade:
 
         fade(red, green, blue)
 
+
+class PlayerPaginator:
+    """Helper class for paginating a list of players in memory."""
+
+    def __init__(self, players, page_size=3):
+        self._players = list(players)
+        self._page_size = page_size
+        self._current_page = 1
+        self._total_pages = self._calc_total_pages()
+
+    def _calc_total_pages(self):
+        return math.ceil(len(self._players) / self._page_size)
+
+    def players(self):
+        start = (self._current_page - 1) * self._page_size
+        end = self._current_page * self._page_size
+        return self._players[start:end]
+
+    def next_page(self):
+        self._current_page += 1
+        self._current_page = min(self._current_page, self._total_pages)
+
+    def has_next_page(self):
+        return self._total_pages and self._current_page != self._total_pages
+
+    def prev_page(self):
+        self._current_page -= 1
+        self._current_page = max(self._current_page, 1)
+
+    def has_prev_page(self):
+        return self._current_page != 1
+
+    def remove(self, player):
+        self._players.remove(player)
+        self._total_pages = self._calc_total_pages()
+        if not self.players():
+            self.prev_page()
