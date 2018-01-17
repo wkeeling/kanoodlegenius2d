@@ -5,6 +5,6 @@ from kanoodlegenius2d.ui.masterscreen import MasterScreen
 
 
 fonts.initialise()
+settings.initialise()
 models.initialise()
-master = MasterScreen()
-settings.initialise(master)
+MasterScreen()

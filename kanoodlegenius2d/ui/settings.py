@@ -1,4 +1,5 @@
 import platform
+import tkinter as tk
 
 
 # Whether we're running on the Raspberry PI touchscreen display.
@@ -53,11 +54,10 @@ show_board_numbers = False
 admin_mode = False
 
 
-def initialise(tk):
-    """Initialise the settings with a Tk widget instance.
+def initialise():
+    """Initialise the settings."""
 
-    Args:
-        tk: A Tkinter widget instance.
-    """
     global touchscreen
-    touchscreen = platform.system() == 'Linux' and (tk.winfo_screenwidth() == 800 and tk.winfo_screenheight() == 480)
+    root = tk.Tk()
+    touchscreen = platform.system() == 'Linux' and (root.winfo_screenwidth() == 800 and root.winfo_screenheight() == 480)
+    root.destroy()
