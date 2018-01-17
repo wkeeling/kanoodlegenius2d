@@ -9,20 +9,20 @@ from kanoodlegenius2d.ui.components import CanvasButton, Dialog, PlayerPaginator
 class SelectPlayerScreen(tk.Frame):
     """The screen where an existing player can be selected."""
 
-    def __init__(self, onselect, oncancel, master=None, **kwargs):
+    def __init__(self, onselect, onexit, master=None, **kwargs):
         """Initialise a new SelectPlayerScreen frame.
 
         Args:
             onselect: Callback that will be called when a new player is selected. This
                 will be passed a single argument - the board instance for the player.
-            oncancel: No-args callback that will be called when the exit button is pressed.
+            onexit: No-args callback that will be called when the exit button is pressed.
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
         super().__init__(master, width=800, height=480, bg='#000000', highlightthickness=2, **kwargs)
 
         self._onselect = onselect
-        self._oncancel = oncancel
+        self._onexit = onexit
 
         self._init_title()
         self._paginator = PlayerPaginator([game.player for game in Game.by_last_played() if not game.player.deleted])
@@ -67,7 +67,7 @@ class SelectPlayerScreen(tk.Frame):
         canvas = tk.Canvas(canvas_frame, highlightthickness=0, **args)
         canvas.pack()
 
-        CanvasButton(canvas, 'EXIT', (700, 30), onpress=lambda _: self._oncancel())
+        CanvasButton(canvas, 'EXIT', (700, 30), onpress=lambda _: self._onexit())
 
     def _show_page(self):
         x, y = 170, 40

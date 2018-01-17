@@ -13,20 +13,20 @@ MAX_NAME_LENGTH = 10
 class NewPlayerScreen(tk.Frame):
     """The screen where a new player can be entered."""
 
-    def __init__(self, oncreate, oncancel, master=None, **kwargs):
+    def __init__(self, oncreate, onexit, master=None, **kwargs):
         """Initialise a NewPlayerScreen frame.
 
         Args:
             oncreate: Callback that will be called when a new player is created. This
                 will be passed a single argument - the board instance for the player.
-            oncancel: No-args callback that will be called when the exit button is pressed.
+            onexit: No-args callback that will be called when the exit button is pressed.
             master: The parent widget.
             **kwargs: Optional keyword arguments to configure this screen.
         """
         super().__init__(master, highlightthickness=2, **kwargs)
 
         self._oncreate = oncreate
-        self._oncancel = oncancel
+        self._onexit = onexit
 
         self._canvas = tk.Canvas(self, width=800, height=480, bg='#000000', highlightthickness=0)
         self._canvas.pack()
@@ -67,7 +67,7 @@ class NewPlayerScreen(tk.Frame):
         x += offset
         CanvasButton(self._canvas, 'SHF', (x, y - offset), onpress=self._onshift, lockable=True, **button_args)
         x += offset
-        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onpress=lambda _: self._oncancel(), **button_args)
+        CanvasButton(self._canvas, 'EXIT', (x, y - offset), onpress=lambda _: self._onexit(), **button_args)
         x += offset
         CanvasButton(self._canvas, ' OK ', (x, y - offset), onpress=self._onsubmit, **button_args)
 
