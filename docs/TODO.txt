@@ -9,6 +9,7 @@
 - Full screen when on raspberry pi (platform specific setting)  -- check
 - Iconise all buttons
 - Create highscore page
+- Tweak screen init signature: master should not have a default and should be first in arg list
 
 
 Blog
