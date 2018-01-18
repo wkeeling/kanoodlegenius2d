@@ -31,6 +31,8 @@ class MasterScreen(tk.Tk):
         self._current_screen = None
         self._switch_screen(HomeScreen(onnewplayer=self._onnewplayer, onexistingplayer=self._onexistingplayer,
                                        master=self))
+
+    def main_loop(self):
         self.mainloop()
 
     def _onnewplayer(self):

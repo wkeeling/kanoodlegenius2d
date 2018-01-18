@@ -1,2 +1,4 @@
 peewee==2.10.2
 pillow==5.0.0
+cookiecutter==1.6.0
+briefcase==0.2.1
