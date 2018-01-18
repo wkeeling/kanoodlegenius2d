@@ -9,7 +9,7 @@ from kanoodlegenius2d.ui.settings import fonts
 class HomeScreen(tk.Frame):
     """The starting screen."""
 
-    def __init__(self, onnewplayer, onexistingplayer, master=None, **kwargs):
+    def __init__(self, onnewplayer, onexistingplayer, onhighscores, master=None, **kwargs):
         """Initialise a HomeScreen frame.
 
         Args:
@@ -56,4 +56,6 @@ class HomeScreen(tk.Frame):
 
         CanvasButton(canvas, 'NEW PLAYER', (305, 280), onpress=lambda _: onnewplayer(), **args)
         CanvasButton(canvas, 'EXISTING PLAYER', (495, 280), onpress=lambda _: onexistingplayer(),
+                     disabled=len(Player.active_players()) == 0, **args)
+        CanvasButton(canvas, 'HIGH SCORES', (400, 350), onpress=lambda _: onhighscores(),
                      disabled=len(Player.active_players()) == 0, **args)
