@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from kanoodlegenius2d.domain.models import Player, Puzzle
 from kanoodlegenius2d.ui import settings
 from kanoodlegenius2d.ui.components import CanvasButton, PlayerPaginator
 
@@ -20,7 +21,9 @@ class HighScoreScreen(tk.Frame):
         self._onexit = onexit
 
         self._init_title()
-        self._paginator = PlayerPaginator([game.player for game in Game.by_last_played() if not game.player.deleted])
+        players = sorted(Player.active_players(),
+                         key=lambda p: (p.puzzles_completed.player_completed * -1, p.name))
+        self._paginator = PlayerPaginator(players, page_size=4)
         self._init_player_list()
         self._init_exit()
 
@@ -33,7 +36,7 @@ class HighScoreScreen(tk.Frame):
         title_frame = tk.Frame(self, highlightthickness=0, **args)
         title_frame.pack()
 
-        title = tk.Label(title_frame, width=800, height=2, text='Select Player', bg='#000000', fg='#FFFFFF',
+        title = tk.Label(title_frame, width=800, height=2, text='High Scores', bg='#000000', fg='#FFFFFF',
                          font=settings.fonts['screen_title'])
         title.pack()
 
@@ -65,7 +68,7 @@ class HighScoreScreen(tk.Frame):
         CanvasButton(canvas, 'EXIT', (700, 30), onpress=lambda _: self._onexit())
 
     def _show_page(self):
-        x, y = 170, 40
+        x, y = 170, 20
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
@@ -73,14 +76,8 @@ class HighScoreScreen(tk.Frame):
             self._canvas.create_text(x + 220, y, text=' {}/{} puzzles completed'
                                      .format(player.puzzles_completed.player_completed, Puzzle.select().count()),
                                      font=settings.fonts['puzzles_completed'], fill='#666666')
-            if settings.admin_mode:
-                CanvasButton(self._canvas, ' X ', (570, y), onpress=self._create_ondelete_player(player))
 
-            next_puzzle = player.boards[-1].puzzle.next_puzzle()
-            button_text = 'SELECT' if next_puzzle is not None else 'COMPLETE'
-            CanvasButton(self._canvas, button_text, (640, y), onpress=self._create_onselect_player(player),
-                         disabled=next_puzzle is None)
-            y += 60
+            y += 50
 
         CanvasButton(self._canvas, '<< PREV', (345, 250), onpress=self._onprev,
                      disabled=not self._paginator.has_prev_page())
