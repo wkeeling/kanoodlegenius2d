@@ -452,9 +452,9 @@ class NoodleSelectionFrame(tk.Frame):
             'disabled': True
         }
 
-        prev = CanvasButton(canvas, text='<< PREV', pos=(90, 30), onpress=self._prev_noodle, **args)
+        prev = CanvasButton(canvas, text='<< PREV', pos=(92, 30), onpress=self._prev_noodle, **args)
         nxt = CanvasButton(canvas, text='NEXT >>', pos=(200, 30), onpress=self._next_noodle, **args)
-        rotate = CanvasButton(canvas, text='ROTATE', pos=(90, 90), onpress=self._rotate_noodle, **args)
+        rotate = CanvasButton(canvas, text='ROTATE', pos=(92, 90), onpress=self._rotate_noodle, **args)
         flip = CanvasButton(canvas, text='FLIP', pos=(200, 90), onpress=self._flip_noodle, **args)
 
         return prev, nxt, rotate, flip
