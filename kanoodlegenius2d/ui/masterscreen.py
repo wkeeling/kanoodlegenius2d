@@ -4,6 +4,7 @@ from kanoodlegenius2d.domain.models import Board, Puzzle
 from kanoodlegenius2d.ui import settings
 from kanoodlegenius2d.ui.components import Dialog
 from kanoodlegenius2d.ui.gamescreen import GameScreen
+from kanoodlegenius2d.ui.highscorescreen import HighScoreScreen
 from kanoodlegenius2d.ui.homescreen import HomeScreen
 from kanoodlegenius2d.ui.newplayerscreen import NewPlayerScreen
 from kanoodlegenius2d.ui.selectplayerscreen import SelectPlayerScreen
@@ -30,7 +31,7 @@ class MasterScreen(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
         self._current_screen = None
         self._switch_screen(HomeScreen(onnewplayer=self._onnewplayer, onexistingplayer=self._onexistingplayer,
-                                       master=self))
+                                       onhighscores=self._onhighscores, master=self))
         self.mainloop()
 
     def _onnewplayer(self):
@@ -39,6 +40,9 @@ class MasterScreen(tk.Tk):
     def _onexistingplayer(self):
         self._switch_screen(SelectPlayerScreen(onselect=self._onselectplayer, onexit=self._onexit,
                                                master=self))
+
+    def _onhighscores(self):
+        self._switch_screen(HighScoreScreen(onexit=self._onexit, master=self))
 
     def _oncreatenewplayer(self, board):
         self._switch_screen(GameScreen(board, self._oncomplete, self._onexit, self))
@@ -50,7 +54,7 @@ class MasterScreen(tk.Tk):
 
     def _onexit(self):
         self._switch_screen(HomeScreen(onnewplayer=self._onnewplayer, onexistingplayer=self._onexistingplayer,
-                                       master=self))
+                                       onhighscores=self._onhighscores, master=self))
 
     def _oncomplete(self, board):
         next_puzzle = board.puzzle.next_puzzle()
