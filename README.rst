@@ -16,7 +16,8 @@ Play on the desktop
 .. image:: docs/images/sequence.gif
     :align: center
 
-
+|
+|  
 
 Play on the Raspberry PI touchscreen
 ------------------------------------
