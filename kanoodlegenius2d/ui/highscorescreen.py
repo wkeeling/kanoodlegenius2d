@@ -68,13 +68,14 @@ class HighScoreScreen(tk.Frame):
         CanvasButton(canvas, 'EXIT', (700, 30), onpress=lambda _: self._onexit())
 
     def _show_page(self):
-        x, y = 170, 20
+        x, y = 200, 20
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
                                      fill='#ffffff')
-            self._canvas.create_text(x + 220, y, text=' {}/{} puzzles completed'
-                                     .format(player.puzzles_completed.player_completed, Puzzle.select().count()),
+            self._canvas.create_text(x + 220, y, text=' {} puzzles completed, {} auto-solved'
+                                     .format(player.puzzles_completed.player_completed,
+                                             player.puzzles_completed.auto_completed),
                                      font=settings.fonts['puzzles_completed'], fill='#666666')
 
             y += 50
