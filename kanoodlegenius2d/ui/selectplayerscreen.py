@@ -1,7 +1,6 @@
 import tkinter as tk
 
-from kanoodlegenius2d.domain.models import (Game,
-                                            Puzzle)
+from kanoodlegenius2d.domain.models import Board, Game, Puzzle
 from kanoodlegenius2d.ui import settings
 from kanoodlegenius2d.ui.components import CanvasButton, Dialog, PlayerPaginator
 
@@ -75,8 +74,9 @@ class SelectPlayerScreen(tk.Frame):
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
                                      fill='#ffffff')
-            self._canvas.create_text(x + 220, y, text=' {}/{} puzzles completed'
-                                     .format(player.puzzles_completed.player_completed, Puzzle.select().count()),
+            latest_board = player.boards.order_by(Board.id)[-1]
+            self._canvas.create_text(x + 220, y, text=' Puzzle {}, Level {}'
+                                     .format(latest_board.puzzle.level.number, latest_board.puzzle.number),
                                      font=settings.fonts['puzzles_completed'], fill='#666666')
             if settings.admin_mode:
                 CanvasButton(self._canvas, ' X ', (570, y), onpress=self._create_ondelete_player(player))
