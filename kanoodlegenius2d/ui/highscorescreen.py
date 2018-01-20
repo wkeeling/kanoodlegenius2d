@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from kanoodlegenius2d.domain.models import Player, Puzzle
+from kanoodlegenius2d.domain.models import Player
 from kanoodlegenius2d.ui import settings
 from kanoodlegenius2d.ui.components import CanvasButton, PlayerPaginator
 
