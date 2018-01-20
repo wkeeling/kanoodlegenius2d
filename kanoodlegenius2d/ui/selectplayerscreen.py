@@ -75,7 +75,7 @@ class SelectPlayerScreen(tk.Frame):
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
                                      fill='#ffff00')
             latest_board = player.boards.order_by(Board.id)[-1]
-            self._canvas.create_text(x + 220, y, text=' Puzzle {}, Level {}'
+            self._canvas.create_text(x + 220, y, text=' Level {}, Puzzle {}'
                                      .format(latest_board.puzzle.level.number, latest_board.puzzle.number),
                                      font=settings.fonts['puzzles_completed'], fill='#666666')
             if settings.admin_mode:
