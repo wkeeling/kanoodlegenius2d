@@ -10,12 +10,18 @@ An electronic version of the excellent `Kanoodle Genius <https://www.educational
 
 
 
-Play on your desktop
+Play on the desktop
 --------------------
 
 .. image:: docs/images/sequence.gif
     :align: center
 
 
+
 Play on the Raspberry PI touchscreen
 ------------------------------------
+
+Kanoodle Genius 2D has been optimised for the `Raspberry PI touch display <https://www.raspberrypi.org/products/raspberry-pi-touch-display/>`_.
+
+.. image:: docs/images/rasp.gif
+    :align: center
