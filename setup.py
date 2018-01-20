@@ -32,6 +32,7 @@ setup(
             'django'
         ]
     ),
+    include_package_data = True,
     classifiers=[
         'Development Status :: 1 - Planning',
         'License :: OSI Approved :: MIT license',
@@ -40,7 +41,7 @@ setup(
     ],
     options={
         'app': {
-            'formal_name': 'Kanoodle Genius 2D',
+            'formal_name': 'kanoodlegenius2d',
             'bundle': 'com.zifferent'
         },
 
