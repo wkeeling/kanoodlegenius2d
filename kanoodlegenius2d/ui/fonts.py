@@ -4,7 +4,7 @@ from shutil import copyfile
 
 def initialise():
     """Initialise the game fonts, placing them into the necessary directory."""
-    fonts_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'fonts')
+    fonts_dir = os.path.join(os.path.dirname(__file__), 'fonts')
     target_dir = os.path.join(os.path.expanduser('~'), '.fonts')
 
     if not os.path.exists(target_dir):
