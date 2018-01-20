@@ -17,7 +17,7 @@ Play on the desktop
     :align: center
 
 |
-|  
+|
 
 Play on the Raspberry PI touchscreen
 ------------------------------------
