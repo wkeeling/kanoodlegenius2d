@@ -188,6 +188,8 @@ class BoardFrame(tk.Frame):
 
                     def draw_complete():
                         self._noodle_frame.board_initialised()
+                        self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles) or
+                                           self._board.auto_completed)
                         if oncomplete:
                             oncomplete()
 
@@ -234,8 +236,6 @@ class BoardFrame(tk.Frame):
                               onfaded=show_image(self._holes[last_position]))
             self._canvas.itemconfig(self._holes[last_position], outline='#4d4d4d', width=2)
 
-        self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles) or self._board.auto_completed)
-
     def _create_on_hole_press(self, hole_index, hole_id):
         def _on_hole_press(_):
             if not self._hole_pressed and self._canvas.itemcget(hole_id, 'fill') == '#000000':
@@ -278,6 +278,8 @@ class BoardFrame(tk.Frame):
         def commit():
             self._draw_noodle(noodle, root_index, fade_duration=40)
             self._hole_pressed = False
+            self._undo.disable(len(self._board.noodles) <= len(self._board.puzzle.noodles) or
+                               self._board.auto_completed)
 
         self.after(500, commit)
 
