@@ -68,7 +68,7 @@ class HighScoreScreen(tk.Frame):
         CanvasButton(canvas, 'EXIT', (700, 30), onpress=lambda _: self._onexit())
 
     def _show_page(self):
-        x, y = 200, 20
+        x, y = 210, 20
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
