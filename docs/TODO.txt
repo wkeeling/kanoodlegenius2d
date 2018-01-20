@@ -10,6 +10,8 @@
 - Iconise all buttons
 - Create highscore page
 - Tweak screen init signature: master should not have a default and should be first in arg list
+- Fix mouse cursor on raspberry pi popups
+- Fix undo button not properly disabling
 
 
 Blog
