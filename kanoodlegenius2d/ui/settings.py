@@ -14,7 +14,7 @@ fonts = {
     'gamescreen_intro': ('wood stamp', 60),
     'gamescreen_player': ('wood stamp', 28),
     'gamescreen_status': ('wood stamp', 22),
-    'player_name': ('FreeSans', 18, 'bold'),
+    'player_name': ('wood stamp', 28),
     'puzzles_completed': ('FreeSans', 16),
     'button_standard': ('wood stamp', 24),
     'button_keyboard': ('FreeSans', 16),
@@ -36,7 +36,7 @@ if platform.system() == 'Darwin':  # MacOS
     fonts['screen_title'] = ('wood stamp', 48)
     fonts['button_standard'] = ('wood stamp', 30)
     fonts['button_keyboard'] = ('helvetica', 18)
-    fonts['player_name'] = ('helvetica', 22, 'bold')
+    fonts['player_name'] = ('wood stamp', 40)
     fonts['puzzles_completed'] = ('helvetica', 18)
     fonts['gamescreen_intro'] = ('wood stamp', 80)
     fonts['gamescreen_player'] = ('wood stamp', 38)

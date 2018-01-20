@@ -35,7 +35,7 @@ class NewPlayerScreen(tk.Frame):
                                  justify='center', fill='#FFFFFF')
 
         self._player_name = self._canvas.create_text(400, 120, text='', font=fonts['player_name'],
-                                                     justify='center', fill='#666666')
+                                                     justify='center', fill='#ffff00')
 
         self._buttons = self._init_keyboard()
 

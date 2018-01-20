@@ -73,7 +73,7 @@ class SelectPlayerScreen(tk.Frame):
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
-                                     fill='#ffffff')
+                                     fill='#ffff00')
             latest_board = player.boards.order_by(Board.id)[-1]
             self._canvas.create_text(x + 220, y, text=' Puzzle {}, Level {}'
                                      .format(latest_board.puzzle.level.number, latest_board.puzzle.number),

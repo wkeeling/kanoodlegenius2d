@@ -72,7 +72,7 @@ class HighScoreScreen(tk.Frame):
 
         for player in self._paginator.players():
             self._canvas.create_text(x, y, text=player.name, font=settings.fonts['player_name'],
-                                     fill='#ffffff')
+                                     fill='#ffff00')
             self._canvas.create_text(x + 220, y, text=' {} puzzles completed, {} auto-solved'
                                      .format(player.puzzles_completed.player_completed,
                                              player.puzzles_completed.auto_completed),
