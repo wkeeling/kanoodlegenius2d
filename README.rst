@@ -17,7 +17,7 @@ An electronic version of the excellent `Kanoodle Genius <https://www.educational
 
 This game covers the first three levels of Kanoodle Genius (the 2-D levels), with 24 puzzles per level plus an extra 9 bonus puzzles at the end.
 
-It runs in an 800x480 window which is optimised to run on the Rasperry PI touchscreen, but will just as easily run on your deskop or laptop.
+It runs in an 800x480 window which is optimised to run on the `Raspberry PI touchscreen <https://www.raspberrypi.org/products/raspberry-pi-touch-display/>`_, but will just as easily run on your deskop or laptop.
 
 I was inspired to create this version of Kanoodle Genius after watching my daughter beat me at the real life version by figuring out far more puzzles than me. In desperation I reached for the one thing I am reasonable at - solving problems in software. Each puzzle has a "solve" button which you can press in emergencies when frustration gets the better of you.
 
