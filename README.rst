@@ -26,9 +26,9 @@ I was inspired to create this version of Kanoodle Genius after watching my daugh
 Why Tkinter?
 ------------
 
-- It comes with Python and is easy to get started with.
-- The game did not need a lot of animation, which may otherwise have required PyGame or similar.
-- I wanted to increase my Tkinter knowledge, whist demonstrating what is possible with the toolkit.
+- It comes with Python and is easy to get started with - minimal dependencies etc.
+- Tkinter can handle the simple animation required by the game.
+- I wanted to increase my Tkinter knowledge, whilst demonstrating what is possible with the toolkit.
 
 |
 
