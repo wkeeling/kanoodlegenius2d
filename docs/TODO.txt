@@ -5,11 +5,5 @@
 - Installer for Mac/Windows/Linux?
 - Message vertical alignment/centering in dialog doesn't work so well. Review this logic.
 - May need special indicator for final 9 bonus puzzles (currently part of level 3)?
-- Hide mouse cursor (when screensize is raspberry pi)  -- check
-- Full screen when on raspberry pi (platform specific setting)  -- check
-- Iconise all buttons
-- Create highscore page
 - Tweak screen init signature: master should not have a default and should be first in arg list
-- Fix mouse cursor on raspberry pi popups
-- Fix undo button not properly disabling
 
