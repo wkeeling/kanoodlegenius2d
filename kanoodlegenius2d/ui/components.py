@@ -40,6 +40,8 @@ class Dialog(tk.Toplevel):
         self.overrideredirect(True)
         # Make the geometry update
         self.update_idletasks()
+        # Hide the cursor on the popup
+        self.configure(cursor='none' if settings.touchscreen else None)
 
         self._title = kwargs.get('title')
         self._width = kwargs.get('width', master.winfo_width() // 2)
