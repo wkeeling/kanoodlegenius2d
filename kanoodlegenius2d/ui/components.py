@@ -219,7 +219,8 @@ class CanvasButton:
                 def release():
                     if not self._locked:
                         self._fade.fadeout(self._button, duration=20)
-                        self._canvas.itemconfigure(self._btext, fill='#ffffff')
+                        if self._canvas.itemcget(self._btext, 'fill') != '#404040':
+                            self._canvas.itemconfigure(self._btext, fill='#ffffff')
                 self._canvas.master.after(500, release)
 
         def onrelease(_):
